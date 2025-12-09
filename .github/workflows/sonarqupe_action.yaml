@@ -29,6 +29,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=graduation-project-SenioCare-2026_senio_care
-            -Dsonar.organization=graduation-project-SenioCare-2026
+            -Dsonar.projectKey=graduation-project-senioCare-2026_senio_care
+            -Dsonar.organization=graduation-project-seniocare-2026
             -Dsonar.dart.lcov.reportPaths=coverage/lcov.info
