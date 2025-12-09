@@ -1,0 +1,34 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.4'
+          channel: 'stable'
+
+      - run: flutter pub get
+
+      - run: flutter test --coverage
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=graduation-project-SenioCare-2026_senio_care
+            -Dsonar.organization=graduation-project-SenioCare-2026
+            -Dsonar.dart.lcov.reportPaths=coverage/lcov.info
