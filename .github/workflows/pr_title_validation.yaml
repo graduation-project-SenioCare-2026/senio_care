@@ -1,0 +1,45 @@
+name: Validate PR Title
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+jobs:
+  validate-pr-title:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Validate PR title
+        run: |
+          echo "Validating PR Title: ${{ github.event.pull_request.title }}"
+
+          PR_title="${{ github.event.pull_request.title }}"
+          BASE_BRANCH="${{ github.base_ref }}"
+
+          echo "Base branch: $BASE_BRANCH"
+          
+          # Skip validation for main and dev branches
+          if [[ "$BASE_BRANCH" == "main" || "$BASE_BRANCH" == "dev" ]]; then
+            echo "PR targeting '$BASE_BRANCH' is exempt from PR title validation."
+            exit 0
+          fi
+
+          # NEW regex format: Type/Short-Description (NO NUMBER)
+          pattern='^(Fix|Release|Hotfix|Test|Feature|Docs|Chore|Refactor|Bugfix|Perf)\/[A-Za-z0-9_-]+$'
+
+          # Validate PR title using regex
+          if ! [[ "$PR_title" =~ $pattern ]]; then
+            echo "❌ PR title does not match the expected format: 'Type/Short-Description'"
+            echo "Example: 'Feature/Add-Login-Screen'"
+            echo "Allowed types: Fix, Release, Hotfix, Test, Feature, Docs, Chore, Refactor, Bugfix, Perf"
+            exit 1
+          fi
+
+          echo "✅ PR title is valid."
