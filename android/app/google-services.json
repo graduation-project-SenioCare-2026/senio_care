@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "673300569004",
+    "project_id": "senio-care",
+    "storage_bucket": "senio-care.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:673300569004:android:9e3331946a55511b773809",
+        "android_client_info": {
+          "package_name": "com.example.senio_care"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwj6yz86MXhdvNC69V4pACDDCXr0Igosg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
