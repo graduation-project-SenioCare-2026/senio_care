@@ -27,7 +27,7 @@ jobs:
           echo "🔍 Validating branch name: $BRANCH_NAME"
           
           # Exempt main and dev
-          if [[ "$BRANCH_NAME" == "main" || "$BRANCH_NAME" == "dev" ]]; then
+          if [[ "$BRANCH_NAME" == "main" || "$BRANCH_NAME" == "development" ]]; then
             echo "⚪ Branch '$BRANCH_NAME' is exempt from validation."
             exit 0
           fi

@@ -26,7 +26,7 @@ jobs:
           echo "Base branch: $BASE_BRANCH"
           
           # Skip validation for main and dev branches
-          if [[ "$BASE_BRANCH" == "main" || "$BASE_BRANCH" == "dev" ]]; then
+          if [[ "$BASE_BRANCH" == "main" || "$BASE_BRANCH" == "development" ]]; then
             echo "PR targeting '$BASE_BRANCH' is exempt from PR title validation."
             exit 0
           fi
