@@ -42,6 +42,25 @@ android {
     }
 }
 
+signingConfigs {
+    teamDebug {
+        storeFile file(System.getenv("KEYSTORE_PATH"))
+        storePassword System.getenv("KEYSTORE_PASSWORD")
+        keyAlias System.getenv("KEY_ALIAS")
+        keyPassword System.getenv("KEY_PASSWORD")
+    }
+}
+
+buildTypes {
+    debug {
+        signingConfig signingConfigs.teamDebug
+    }
+    release {
+        signingConfig signingConfigs.teamDebug
+    }
+}
+
+
 flutter {
     source = "../.."
 }
