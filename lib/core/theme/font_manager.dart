@@ -23,8 +23,8 @@ class FontSize {
   static const double s32 = 32.0;
   static const double s34 = 34.0;
   static const double s36 = 36.0;
-  static const double s38 = 33.0;
+  static const double s38 = 38.0;
   static const double s40 = 40.0;
-  static const double s42 = 40.0;
-  static const double s44 = 40.0;
+  static const double s42 = 42.0;
+  static const double s44 = 44.0;
 }

@@ -23,11 +23,14 @@ void main() async {
   runApp(
     DevicePreview(
       enabled: true,
-      builder: (context) => ChangeNotifierProvider.value(
-        value: appLanguageConfig,
-        child: MyApp(),
+      builder: (context) {
+        return ChangeNotifierProvider.value(
+            value: appLanguageConfig,
+            child: MyApp(),
+        );
+      },
+
       ),
-    ),
   );
 }
 
@@ -48,8 +51,8 @@ class MyApp extends StatelessWidget {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         locale: Locale(appLanguageConfig.selectedLocal),
         theme: AppTheme.lightTheme,
-        initialRoute:RoutesNames.rolesScreen,
-         onGenerateRoute: Routes.onGenerate,
+        initialRoute: RoutesNames.rolesScreen,
+        onGenerateRoute: Routes.onGenerate,
       ),
     );
   }

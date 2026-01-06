@@ -50,7 +50,14 @@ class AuthBg extends StatelessWidget {
           midGradientAlpha: midGradientAlpha,
         ),
 
-        child,
+        SafeArea(
+          child: Scaffold(
+            body: SizedBox(
+              width: context.setWidth(double.infinity),
+              child: SingleChildScrollView(child: child),
+            ),
+          ),
+        ),
       ],
     );
   }

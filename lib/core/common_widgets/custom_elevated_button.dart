@@ -6,25 +6,27 @@ import 'package:senio_care/core/theme/font_style.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   final void Function()? onPressed;
-  final String buttonTitle;
+  final String buttonLabel;
+  final Color? labelColor;
   final Color? backgroundColor;
   final double? height, width;
   final TextStyle? titleStyle;
   final Color? borderColor;
   final bool isText;
-  final Widget? child;
+  final String? buttonIcon;
 
   const CustomElevatedButton({
     super.key,
     required this.onPressed,
-    required this.buttonTitle,
+    required this.buttonLabel,
+    this.labelColor,
     this.backgroundColor,
     this.height,
     this.width,
     this.titleStyle,
     this.borderColor,
     this.isText = true,
-    this.child,
+    this.buttonIcon,
   });
 
   @override
@@ -40,23 +42,45 @@ class CustomElevatedButton extends StatelessWidget {
         side: borderColor != null ? BorderSide(color: borderColor!) : null,
         minimumSize: Size(
           width ?? double.infinity,
-          height ?? context.setHeight(48),
+          height ?? context.setHeight(55),
         ),
       ),
       onPressed: onPressed,
       child: isText
           ? FittedBox(
               child: Text(
-                buttonTitle,
+                buttonLabel,
                 style:
                     titleStyle ??
                     getRegularStyle(
-                      color: AppColors.white,
-                      fontSize:context.setSp(FontSize.s18),
+                      color: labelColor ?? AppColors.white,
+                      fontSize: context.setSp(FontSize.s18),
                     ),
               ),
             )
-          : child,
+          : Center(
+              child: FittedBox(
+                child: Row(
+                  children: [
+                    Image.asset(
+                      buttonIcon!,
+                      height: context.setHeight(25),
+                      width: context.setWidth(25),
+                    ),
+                    SizedBox(width: context.setWidth(10)),
+                    Text(
+                      buttonLabel,
+                      style:
+                          titleStyle ??
+                          getRegularStyle(
+                            color: labelColor ?? AppColors.white,
+                            fontSize: context.setSp(FontSize.s18),
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 }

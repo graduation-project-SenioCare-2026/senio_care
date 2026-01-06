@@ -10,19 +10,23 @@ class BlurContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(context.setWidth(20)),
+      padding: EdgeInsets.symmetric(vertical: context.setHeight(20),horizontal: context.setWidth(30)),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(context.setWidth(30)),
         child: Container(
           color: AppColors.white.withAlpha(180),
           width: double.infinity,
-          padding: EdgeInsets.symmetric(
-            vertical: context.setHeight(10),
-            horizontal: context.setWidth(18),
-          ),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            child: child,
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: context.setHeight(30),
+                left: context.setWidth(20),
+                right: context.setWidth(20),
+                bottom: context.setHeight(10),
+              ),
+              child: child,
+            ),
           ),
         ),
       ),

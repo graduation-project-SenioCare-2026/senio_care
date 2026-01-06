@@ -1,5 +1,5 @@
 abstract class RoutesNames {
-  static const String rolesScreen = "role";
-  static const String googleLoginScreen = "role";
+  static const String rolesScreen = "roles";
+  static const String loginScreen = "login";
 
 }
