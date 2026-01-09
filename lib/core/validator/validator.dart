@@ -1,277 +1,174 @@
-import 'package:flutter/material.dart';
-import 'package:senio_care/core/extension/app_localization_extension.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class Validator {
   Validator._();
 
   // Email Validator
-  static String? validateEmail(BuildContext context, String? val) {
+  static String? validateEmail(String? val) {
     if (val == null || val.trim().isEmpty) {
-      return context.locale.emailRequired;
+      return 'emailRequired'.tr();
     } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val)) {
-      return context.locale.emailNotValid;
-    } else {
-      return null;
+      return 'emailNotValid'.tr();
     }
+    return null;
   }
 
   // Password Validator
-  static String? validatePassword(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return context.locale.passwordRequired;
-    }
-
-    if (val.length < 8) {
-      return context.locale.passwordMinLength;
-    }
-
-    if (!RegExp(r'[A-Z]').hasMatch(val)) {
-      return context.locale.passwordUppercase;
-    }
-
-    if (!RegExp(r'[a-z]').hasMatch(val)) {
-      return context.locale.passwordMustContainLowerCase;
-    }
-
-    if (!RegExp(r'[0-9]').hasMatch(val)) {
-      return context.locale.passwordNumber;
-    }
-
-    if (!RegExp(r'[#?!@$%^&*-]').hasMatch(val)) {
-      return context.locale.passwordMustContainSpecialChar;
-    }
-
+  static String? validatePassword(String? val) {
+    if (val == null || val.isEmpty) return 'passwordRequired'.tr();
+    if (val.length < 8) return 'passwordMinLength'.tr();
+    if (!RegExp(r'[A-Z]').hasMatch(val)) return 'passwordUppercase'.tr();
+    if (!RegExp(r'[a-z]').hasMatch(val)) return 'passwordMustContainLowerCase'.tr();
+    if (!RegExp(r'[0-9]').hasMatch(val)) return 'passwordNumber'.tr();
+    if (!RegExp(r'[#?!@$%^&*-]').hasMatch(val)) return 'passwordMustContainSpecialChar'.tr();
     return null;
   }
 
   // Confirm Password Validator
-  static String? validateConfirmPassword(
-      BuildContext context, String? val, String? password) {
-    if (val == null || val.isEmpty) {
-      return context.locale.fieldRequired;
-    } else if (val != password) {
-      return context.locale.passwordsNotMatch;
-    } else {
-      return null;
-    }
-  }
-
-  // Username Validator
-  static String? validateUsername(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return context.locale.usernameRequired;
-    } else if (!RegExp(r'^[a-zA-Z0-9,.-]+$').hasMatch(val)) {
-      return context.locale.usernameNotValid;
-    } else {
-      return null;
-    }
-  }
-
-  // Full Name Validator
-  static String? validateFullName(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return context.locale.fullnameRequired;
-    }
-    if (val.trim().length < 3) {
-      return context.locale.fullnameMinLength;
-    } else {
-      return null;
-    }
-  }
-
-  // Phone Number Validator
-  static String? validatePhoneNumber(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return context.locale.phoneRequired;
-    } else if (!RegExp(r'^[0-9+\-() ]+$').hasMatch(val.trim())) {
-      return context.locale.phoneNumbersOnly;
-    } else if (val.trim().replaceAll(RegExp(r'[^\d]'), '').length < 10) {
-      return context.locale.phoneLength;
-    } else {
-      return null;
-    }
-  }
-
-  // Number Validator
-  static String? validateNumber(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return context.locale.numberRequired;
-    } else if (int.tryParse(val.trim()) == null) {
-      return context.locale.numberOnly;
-    } else {
-      return null;
-    }
-  }
-
-  // Service Description Validator (for "Add New Service" screen)
-  static String? validateServiceDescription(BuildContext context, String? val) {
-    if (val == null || val.trim().isEmpty) {
-      return 'Service description is required';
-    }
-    if (val.trim().length < 10) {
-      return 'Description must be at least 10 characters';
-    }
-    if (val.trim().length > 500) {
-      return 'Description must not exceed 500 characters';
-    }
+  static String? validateConfirmPassword(String? val, String? password) {
+    if (val == null || val.isEmpty) return 'fieldRequired'.tr();
+    if (val != password) return 'passwordsNotMatch'.tr();
     return null;
   }
 
-  // Location Validator (for registration form)
-  static String? validateLocation(BuildContext context, String? val) {
-    if (val == null || val.trim().isEmpty) {
-      return 'Location is required';
-    }
-    if (val.trim().length < 3) {
-      return 'Location must be at least 3 characters';
-    }
+  // Username Validator
+  static String? validateUsername(String? val) {
+    if (val == null || val.isEmpty) return 'usernameRequired'.tr();
+    if (!RegExp(r'^[a-zA-Z0-9,.-]+$').hasMatch(val)) return 'usernameNotValid'.tr();
+    return null;
+  }
+
+  // Full Name Validator
+  static String? validateFullName(String? val) {
+    if (val == null || val.isEmpty) return 'fullnameRequired'.tr();
+    if (val.trim().length < 3) return 'fullnameMinLength'.tr();
+    return null;
+  }
+
+  // Phone Number Validator
+  static String? validatePhoneNumber(String? val) {
+    if (val == null || val.isEmpty) return 'phoneRequired'.tr();
+    if (!RegExp(r'^[0-9+\-() ]+$').hasMatch(val.trim())) return 'phoneNumbersOnly'.tr();
+    if (val.trim().replaceAll(RegExp(r'[^\d]'), '').length < 10) return 'phoneLength'.tr();
+    return null;
+  }
+
+  // Number Validator
+  static String? validateNumber(String? val) {
+    if (val == null || val.isEmpty) return 'numberRequired'.tr();
+    if (int.tryParse(val.trim()) == null) return 'numberOnly'.tr();
+    return null;
+  }
+
+  // Service Description Validator
+  static String? validateServiceDescription(String? val) {
+    if (val == null || val.trim().isEmpty) return 'serviceDescriptionRequired'.tr();
+    if (val.trim().length < 10) return 'serviceDescriptionMinLength'.tr();
+    if (val.trim().length > 500) return 'serviceDescriptionMaxLength'.tr();
+    return null;
+  }
+
+  // Location Validator
+  static String? validateLocation(String? val) {
+    if (val == null || val.trim().isEmpty) return 'locationRequired'.tr();
+    if (val.trim().length < 3) return 'locationMinLength'.tr();
     return null;
   }
 
   // Specialization Validator
-  static String? validateSpecialization(BuildContext context, String? val) {
-    if (val == null || val.trim().isEmpty) {
-      return 'Specialization is required';
-    }
-    if (val.trim().length < 3) {
-      return 'Specialization must be at least 3 characters';
-    }
+  static String? validateSpecialization(String? val) {
+    if (val == null || val.trim().isEmpty) return 'specializationRequired'.tr();
+    if (val.trim().length < 3) return 'specializationMinLength'.tr();
     return null;
   }
 
-  // Age Validator (for Medical History form)
-  static String? validateAge(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'Age is required';
-    }
+  // Age Validator
+  static String? validateAge(String? val) {
+    if (val == null || val.isEmpty) return 'ageRequired'.tr();
     final age = int.tryParse(val.trim());
-    if (age == null) {
-      return 'Age must be a number';
-    }
-    if (age < 0 || age > 150) {
-      return 'Please enter a valid age';
-    }
+    if (age == null) return 'ageMustBeNumber'.tr();
+    if (age < 0 || age > 150) return 'ageNotValid'.tr();
     return null;
   }
 
   // Weight Validator
-  static String? validateWeight(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'Weight is required';
-    }
+  static String? validateWeight(String? val) {
+    if (val == null || val.isEmpty) return 'weightRequired'.tr();
     final weight = double.tryParse(val.trim());
-    if (weight == null) {
-      return 'Weight must be a number';
-    }
-    if (weight < 1 || weight > 500) {
-      return 'Please enter a valid weight (1-500 kg)';
-    }
+    if (weight == null) return 'weightMustBeNumber'.tr();
+    if (weight < 1 || weight > 500) return 'weightNotValid'.tr();
     return null;
   }
 
   // Height Validator
-  static String? validateHeight(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'Height is required';
-    }
+  static String? validateHeight(String? val) {
+    if (val == null || val.isEmpty) return 'heightRequired'.tr();
     final height = double.tryParse(val.trim());
-    if (height == null) {
-      return 'Height must be a number';
-    }
-    if (height < 50 || height > 300) {
-      return 'Please enter a valid height (50-300 cm)';
-    }
+    if (height == null) return 'heightMustBeNumber'.tr();
+    if (height < 50 || height > 300) return 'heightNotValid'.tr();
     return null;
   }
 
-  // Medicine Name Validator (for "Add Reminder" screen)
-  static String? validateMedicineName(BuildContext context, String? val) {
-    if (val == null || val.trim().isEmpty) {
-      return 'Medicine name is required';
-    }
-    if (val.trim().length < 2) {
-      return 'Medicine name must be at least 2 characters';
-    }
+  // Medicine Name Validator
+  static String? validateMedicineName(String? val) {
+    if (val == null || val.trim().isEmpty) return 'medicineNameRequired'.tr();
+    if (val.trim().length < 2) return 'medicineNameMinLength'.tr();
     return null;
   }
 
-  // Document Name Validator (for "Add Document" screen)
-  static String? validateDocumentName(BuildContext context, String? val) {
-    if (val == null || val.trim().isEmpty) {
-      return 'Document name is required';
-    }
-    if (val.trim().length < 3) {
-      return 'Document name must be at least 3 characters';
-    }
+  // Document Name Validator
+  static String? validateDocumentName(String? val) {
+    if (val == null || val.trim().isEmpty) return 'documentNameRequired'.tr();
+    if (val.trim().length < 3) return 'documentNameMinLength'.tr();
     return null;
   }
 
   // Elder Token Validator
-  static String? validateElderToken(BuildContext context, String? val) {
-    if (val == null || val.trim().isEmpty) {
-      return 'Elder token is required';
-    }
-    if (val.trim().length < 6) {
-      return 'Elder token must be at least 6 characters';
-    }
-    // You can add specific pattern validation if tokens have a specific format
+  static String? validateElderToken(String? val) {
+    if (val == null || val.trim().isEmpty) return 'elderTokenRequired'.tr();
+    if (val.trim().length < 6) return 'elderTokenMinLength'.tr();
     return null;
   }
 
   // Generic Required Field Validator
-  static String? validateRequired(BuildContext context, String? val, {String? fieldName}) {
-    if (val == null || val.trim().isEmpty) {
-      return '${fieldName ?? "This field"} is required';
-    }
+  static String? validateRequired(String? val, {String? fieldName}) {
+    if (val == null || val.trim().isEmpty) return (fieldName ?? 'fieldRequired').tr();
     return null;
   }
 
   // Dropdown/Selection Validator
-  static String? validateSelection(BuildContext context, dynamic val, {String? fieldName}) {
-    if (val == null) {
-      return 'Please select ${fieldName ?? "an option"}';
-    }
+  static String? validateSelection(dynamic val, {String? fieldName}) {
+    if (val == null) return 'pleaseSelect ${fieldName ?? 'anOption'}'.tr();
     return null;
   }
 
-  // Time Validator (for medicine reminders)
-  static String? validateTime(BuildContext context, String? val) {
-    if (val == null || val.trim().isEmpty) {
-      return 'Time is required';
-    }
-    // You can add more specific time format validation if needed
+  // Time Validator
+  static String? validateTime(String? val) {
+    if (val == null || val.trim().isEmpty) return 'timeRequired'.tr();
     return null;
   }
 
   // Date Validator
-  static String? validateDate(BuildContext context, String? val) {
-    if (val == null || val.trim().isEmpty) {
-      return 'Date is required';
-    }
+  static String? validateDate(String? val) {
+    if (val == null || val.trim().isEmpty) return 'dateRequired'.tr();
     return null;
   }
 
-  // Chronic Disease Validator (optional field but with validation if filled)
-  static String? validateChronicDisease(BuildContext context, String? val) {
-    if (val != null && val.trim().isNotEmpty && val.trim().length < 3) {
-      return 'Please provide more details (at least 3 characters)';
-    }
+  // Chronic Disease Validator
+  static String? validateChronicDisease(String? val) {
+    if (val != null && val.trim().isNotEmpty && val.trim().length < 3) return 'chronicDiseaseTooShort'.tr();
     return null;
   }
 
-  // Allergy Validator (optional field but with validation if filled)
-  static String? validateAllergy(BuildContext context, String? val) {
-    if (val != null && val.trim().isNotEmpty && val.trim().length < 3) {
-      return 'Please provide more details (at least 3 characters)';
-    }
+  // Allergy Validator
+  static String? validateAllergy(String? val) {
+    if (val != null && val.trim().isNotEmpty && val.trim().length < 3) return 'allergyTooShort'.tr();
     return null;
   }
 
-  // Gender Validator (for radio button selections)
-  static String? validateGender(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'Please select a gender';
-    }
+  // Gender Validator
+  static String? validateGender(String? val) {
+    if (val == null || val.isEmpty) return 'pleaseSelectGender'.tr();
     return null;
   }
 }

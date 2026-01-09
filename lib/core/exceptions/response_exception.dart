@@ -1,22 +1,21 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:dio/dio.dart';
-import 'package:senio_care/core/l10n/translations/app_localizations.dart';
 
 class ResponseException {
   const ResponseException({required this.message});
-
   final String message;
 
-  static ResponseException empty( AppLocalizations locale) =>
-      ResponseException(message:locale.noResponseReceivedMessage);
+  static ResponseException empty() =>
+      ResponseException(message: 'noResponseReceivedMessage'.tr());
 
-  factory ResponseException.handleException({required Response? response,required AppLocalizations locale}) {
+  factory ResponseException.handleException({required Response? response}) {
     if (response != null && response.data is Map<String, dynamic>) {
       final data = response.data as Map<String, dynamic>;
       return ResponseException(
-        message: data['error'] ??locale.anUnknownErrorOccurred,
+        message: data['error'] ?? 'anUnknownErrorOccurred'.tr(),
       );
     } else {
-      return empty(locale);
+      return empty();
     }
   }
 }

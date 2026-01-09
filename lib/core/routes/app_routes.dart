@@ -1,5 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:senio_care/core/extension/app_localization_extension.dart';
 import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/features/auth/presentation/views/screens/login_screen.dart';
 import 'package:senio_care/features/auth/presentation/views/screens/roles_screen.dart';
@@ -21,7 +21,7 @@ abstract class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return Scaffold(
-              body: Center(child: Text(context.locale.noRouteFound)),
+              body: Center(child: Text('noRouteFound'.tr())),
             );
           },
         );
