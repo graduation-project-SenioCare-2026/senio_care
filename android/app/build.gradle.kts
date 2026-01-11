@@ -38,7 +38,7 @@ android {
 
     buildTypes {
         getByName("debug") {
-            signingConfig = signingConfigs.getByName("teamDebug")
+            // signingConfig = signingConfigs.getByName("teamDebug")  <-- احذفي السطر ده
         }
         getByName("release") {
             signingConfig = signingConfigs.getByName("teamDebug")
@@ -46,6 +46,7 @@ android {
             isShrinkResources = false
         }
     }
+
 }
 
 flutter {
