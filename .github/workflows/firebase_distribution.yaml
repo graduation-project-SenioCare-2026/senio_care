@@ -58,18 +58,12 @@ jobs:
       - name: Generate files with build_runner
         run: flutter pub run build_runner build --delete-conflicting-outputs
 
-      # Decode keystore from secret
+      # - name: Run Our Test
+      #   run: flutter test
+
       - name: Decode keystore
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > ./team_debug.keystore
-
-      # Set keystore environment variables
-      - name: Set keystore env
-        run: |
-          echo "KEYSTORE_PATH=$(pwd)/team_debug.keystore" >> $GITHUB_ENV
-          echo "KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> $GITHUB_ENV
-          echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> $GITHUB_ENV
-          echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> $GITHUB_ENV
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > $GITHUB_WORKSPACE/team_debug.keystore
 
       - name: Build APK
         run: flutter build apk --release
@@ -82,4 +76,4 @@ jobs:
           appId: ${{secrets.APP_ID}}
           serviceCredentialsFileContent: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
           groups: testers
-          file: build/app/outputs/flutter-apk/app-debug.apk
+          file: build/app/outputs/flutter-apk/app-release.apk

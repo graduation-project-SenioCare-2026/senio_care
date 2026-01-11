@@ -29,16 +29,17 @@ android {
 
     signingConfigs {
         create("teamDebug") {
-            storeFile = file(System.getenv("KEYSTORE_PATH"))
+            storeFile = file("$rootDir/team_debug.keystore")
             storePassword = System.getenv("KEYSTORE_PASSWORD")
             keyAlias = System.getenv("KEY_ALIAS")
             keyPassword = System.getenv("KEY_PASSWORD")
         }
     }
 
+
     buildTypes {
         getByName("debug") {
-            // signingConfig = signingConfigs.getByName("teamDebug")  <-- احذفي السطر ده
+            signingConfig = signingConfigs.getByName("teamDebug")
         }
         getByName("release") {
             signingConfig = signingConfigs.getByName("teamDebug")
@@ -46,7 +47,6 @@ android {
             isShrinkResources = false
         }
     }
-
 }
 
 flutter {
