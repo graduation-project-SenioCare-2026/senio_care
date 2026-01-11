@@ -1,6 +1,5 @@
 import 'package:injectable/injectable.dart';
 import 'package:senio_care/core/cache/secure_storage_service.dart';
-import 'package:senio_care/core/exceptions/response_exception.dart';
 import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/core/safe_call/safe_call.dart';
 import 'package:senio_care/features/auth/api/client/auth_api_services.dart';

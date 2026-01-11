@@ -62,7 +62,7 @@ jobs:
       #   run: flutter test
 
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --debug
 
       - run: ls build/app/outputs/flutter-apk
       - name: Upload artifact to Firebase App Distribution

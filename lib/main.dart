@@ -29,7 +29,7 @@ void main() async {
         Locale('en'),
         Locale('ar'),
       ],
-      startLocale: Locale('ar'),
+      startLocale: Locale('en'),
       child: DevicePreview(
         enabled: true,
         builder: (_) => const MyApp(),
