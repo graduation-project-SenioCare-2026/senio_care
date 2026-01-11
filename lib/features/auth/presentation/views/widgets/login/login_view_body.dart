@@ -1,17 +1,18 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:senio_care/core/common_widgets/blur_container.dart';
-import 'package:senio_care/core/common_widgets/custom_elevated_button.dart';
 import 'package:senio_care/core/common_widgets/gradient_icon_container.dart';
 import 'package:senio_care/core/common_widgets/header_text.dart';
 import 'package:senio_care/core/constants/app_icons.dart';
-import 'package:senio_care/core/extension/app_localization_extension.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
 import 'package:senio_care/core/theme/font_style.dart';
+import 'package:senio_care/features/auth/presentation/views/widgets/login/continue_with_google_button.dart';
 
 class LoginViewBody extends StatelessWidget {
-  const LoginViewBody({super.key});
+  final String role;
+  const LoginViewBody({required this.role, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +22,9 @@ class LoginViewBody extends StatelessWidget {
       children: [
         SizedBox(height: context.setHeight(70)),
         HeaderText(
-          title: context.locale.welcomeToSenioCare,
+          title: 'welcomeToSenioCare'.tr(),
           titleSize: FontSize.s32,
-          subTitle: context.locale.signInToContinueYourCareJourney,
+          subTitle: 'signInToContinueYourCareJourney'.tr(),
           subTitleSize: FontSize.s20,
           titlePadding: 20,
         ),
@@ -43,9 +44,8 @@ class LoginViewBody extends StatelessWidget {
               ),
               SizedBox(height: context.setHeight(10)),
               Text(
-                context
-                    .locale
-                    .signInWithYourGoogleAccountToAccessPersonalizedCareServices,
+                'signInWithYourGoogleAccountToAccessPersonalizedCareServices'
+                    .tr(),
                 style: getBoldStyle(
                   color: AppColors.black,
                   fontSize: context.setSp(FontSize.s18),
@@ -54,14 +54,7 @@ class LoginViewBody extends StatelessWidget {
                 maxLines: 3,
               ),
               SizedBox(height: context.setHeight(30)),
-              CustomElevatedButton(
-                onPressed: () {},
-                buttonLabel: context.locale.continueWithGoogle,
-                backgroundColor: AppColors.white,
-                isText: false,
-                buttonIcon: AppIcons.google,
-                labelColor: AppColors.black,
-              ),
+              ContinueWithGoogleButton(role: role),
               SizedBox(height: context.setHeight(40)),
             ],
           ),

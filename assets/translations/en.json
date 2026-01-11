@@ -75,6 +75,7 @@
   "outOfRange": "Out of range.",
   "unknownErrorMessage": "An unknown error occurred.",
 
+
   "senioCare": "SenioCare",
   "chooseYourRole": "Choose your role",
   "elder": "Elder",
@@ -83,10 +84,14 @@
   "supportAndManageLovedOneCare": "Support and manage your loved one's wellbeing",
   "serviceProvider": "Service Provider",
   "provideMedicalServicesForElder": "Provide medical services for elders",
+
   "welcomeToSenioCare": "Welcome to SenioCare",
   "signInToContinueYourCareJourney": "Sign in to continue your care journey",
   "signInWithYourGoogleAccountToAccessPersonalizedCareServices": "Sign in with your Google account to access personalized care services",
   "continueWithGoogle": "Continue with Google",
+  "loginSuccess": "Login successful!",
+  "googleSignInCancelled":"Google sign in cancelled",
+
   "medicalHistory": "Medical History",
   "pleaseProvideYourMedicalInformation": "Please provide your medical information",
   "age": "Age",

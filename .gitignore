@@ -99,3 +99,4 @@ macos/Flutter/GeneratedPluginRegistrant.swift
 lib/core/l10n/translations/app_localizations.dart
 lib/core/l10n/translations/app_localizations_ar.dart
 lib/core/l10n/translations/app_localizations_en.dart
+.lock

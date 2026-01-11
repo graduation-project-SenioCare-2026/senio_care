@@ -75,7 +75,7 @@
   "outOfRange": "خارج النطاق.",
   "unknownErrorMessage": "حدث خطأ غير معروف.",
 
-  "senioCare": "سينيور كير",
+  "senioCare": "SenioCare",
   "chooseYourRole": "اختر دورك",
   "elder": "كبير السن",
   "accessYourHealthRecordsAndConnectWithCaregivers": "الوصول إلى سجلاتك الصحية والتواصل مع مقدمي الرعاية",
@@ -83,10 +83,13 @@
   "supportAndManageLovedOneCare": "دعم وإدارة رعاية أحبائك",
   "serviceProvider": "مقدم خدمة",
   "provideMedicalServicesForElder": "تقديم الخدمات الطبية لكبار السن",
-  "welcomeToSenioCare": "مرحباً بك في سينيور كير",
+  "welcomeToSenioCare": "مرحباً بك في SenioCare",
   "signInToContinueYourCareJourney": "سجل الدخول لمتابعة رحلتك الصحية",
   "signInWithYourGoogleAccountToAccessPersonalizedCareServices": "سجل الدخول عبر حساب Google للوصول إلى خدمات رعاية مخصصة",
   "continueWithGoogle": "المتابعة باستخدام Google",
+  "loginSuccess": "تم تسجيل الدخول بنجاح!",
+  "googleSignInCancelled":"لم يتم اختيار أي حساب Google",
+
   "medicalHistory": "التاريخ الطبي",
   "pleaseProvideYourMedicalInformation": "يرجى تزويدنا بمعلوماتك الطبية",
   "age": "العمر",

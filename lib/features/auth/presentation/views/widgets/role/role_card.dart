@@ -9,11 +9,13 @@ import 'package:senio_care/core/theme/font_style.dart';
 
 class RoleCard extends StatelessWidget {
   final String roleIcon;
-  final String role;
+  final String roleValue;
+  final String displayRole;
   final String description;
   const RoleCard({
     required this.roleIcon,
-    required this.role,
+    required this.roleValue,
+    required this.displayRole,
     required this.description,
     super.key,
   });
@@ -24,7 +26,7 @@ class RoleCard extends StatelessWidget {
       onTap: () => Navigator.pushNamed(
         context,
         RoutesNames.loginScreen,
-        arguments: role,
+        arguments: roleValue,
       ),
       child: CustomCard(
         enableElevation: false,
@@ -44,7 +46,7 @@ class RoleCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    role,
+                    displayRole,
                     style: getBoldStyle(
                       color: AppColors.black,
                       fontSize: context.setSp(FontSize.s20),

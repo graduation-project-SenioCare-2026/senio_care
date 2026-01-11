@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
@@ -14,6 +15,7 @@ class CustomElevatedButton extends StatelessWidget {
   final Color? borderColor;
   final bool isText;
   final String? buttonIcon;
+  final bool isLoading;
 
   const CustomElevatedButton({
     super.key,
@@ -27,6 +29,7 @@ class CustomElevatedButton extends StatelessWidget {
     this.borderColor,
     this.isText = true,
     this.buttonIcon,
+    this.isLoading = false,
   });
 
   @override
@@ -45,8 +48,17 @@ class CustomElevatedButton extends StatelessWidget {
           height ?? context.setHeight(55),
         ),
       ),
-      onPressed: onPressed,
-      child: isText
+      onPressed: isLoading ? null : onPressed, // ← Disable button when loading
+      child: isLoading
+          ? SizedBox(
+              height: context.setHeight(25),
+              width: context.setHeight(25),
+              child: LoadingAnimationWidget.discreteCircle(
+                color: AppColors.gradientMiddle,
+                size: context.setWidth(30),
+              ),
+            )
+          : isText
           ? FittedBox(
               child: Text(
                 buttonLabel,

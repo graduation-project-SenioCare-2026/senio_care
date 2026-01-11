@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:senio_care/core/common_widgets/blur_container.dart';
 import 'package:senio_care/core/common_widgets/header_text.dart';
 import 'package:senio_care/core/constants/app_icons.dart';
+import 'package:senio_care/core/constants/constants.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
 import 'package:senio_care/features/auth/presentation/views/widgets/role/role_card.dart';
@@ -32,17 +33,20 @@ class RolesViewBody extends StatelessWidget {
                 children: [
                   RoleCard(
                     roleIcon: AppIcons.elder,
-                    role: 'elder'.tr(),
+                    roleValue: Constants.elder,
+                    displayRole: 'elder'.tr(),
                     description:'accessYourHealthRecordsAndConnectWithCaregivers'.tr(),
                   ),
                   RoleCard(
                     roleIcon: AppIcons.caregiver,
-                    role: 'caregivers'.tr(),
+                    roleValue: Constants.caregiver,
+                    displayRole: 'caregiver'.tr(),
                     description: 'supportAndManageLovedOneCare'.tr(),
                   ),
                   RoleCard(
                     roleIcon: AppIcons.serviceProvider,
-                    role: 'serviceProvider'.tr(),
+                    roleValue: Constants.serviceProvider,
+                    displayRole: 'serviceProvider'.tr(),
                     description: 'provideMedicalServicesForElder'.tr(),
                   ),
                 ],

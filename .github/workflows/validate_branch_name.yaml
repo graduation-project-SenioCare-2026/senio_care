@@ -33,7 +33,7 @@ jobs:
           fi
           
           # New pattern: type/short-description
-          PATTERN='^(feature|bugfix|release|hotfix|docs|chore|refactor)\/[a-zA-Z0-9_-]+$'
+          PATTERN='^(feature|bugfix|release|hotfix|docs|chore|refactor|test)\/[a-zA-Z0-9_-]+$'
 
           if [[ "$BRANCH_NAME" =~ $PATTERN ]]; then
             echo "✅ Branch name is valid."
