@@ -29,7 +29,7 @@ android {
 
     signingConfigs {
         create("teamDebug") {
-            storeFile = file("$rootDir/team_debug.keystore")
+            storeFile = file("$rootDir/android/team_debug.keystore")
             storePassword = System.getenv("KEYSTORE_PASSWORD")
             keyAlias = System.getenv("KEY_ALIAS")
             keyPassword = System.getenv("KEY_PASSWORD")
