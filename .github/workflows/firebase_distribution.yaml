@@ -65,8 +65,11 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > $GITHUB_WORKSPACE/android/team_debug.keystore
 
+      - name: Verify keystore exists
+        run: ls android
+
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --debug
 
       - run: ls build/app/outputs/flutter-apk
 
@@ -76,4 +79,4 @@ jobs:
           appId: ${{secrets.APP_ID}}
           serviceCredentialsFileContent: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
           groups: testers
-          file: build/app/outputs/flutter-apk/app-release.apk
+          file: build/app/outputs/flutter-apk/app-debug.apk
