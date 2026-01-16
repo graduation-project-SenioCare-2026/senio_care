@@ -90,6 +90,11 @@
   "loginSuccess": "تم تسجيل الدخول بنجاح!",
   "googleSignInCancelled":"لم يتم اختيار أي حساب Google",
 
+  "onboardingBasicTitle": "دعنا نتعرف عليك",
+  "onboardingBasicSubtitle": "سنحتاج إلى بعض المعلومات الأساسية للبدء.",
+  "doYouHaveCaregiver": "هل لديك مقدمو رعاية؟",
+  "caregiverId": "ID مقدم الرعاية",
+  "enterAgeHint": "أدخل عمرك هنا",
   "medicalHistory": "التاريخ الطبي",
   "pleaseProvideYourMedicalInformation": "يرجى تزويدنا بمعلوماتك الطبية",
   "age": "العمر",

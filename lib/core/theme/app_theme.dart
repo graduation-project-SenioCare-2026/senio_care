@@ -10,6 +10,8 @@ class AppTheme {
     radioTheme: RadioThemeData(
       fillColor: WidgetStatePropertyAll((AppColors.black)),
       overlayColor: WidgetStatePropertyAll((AppColors.black)),
+      splashRadius: 0,
+
     ),
 
     cardTheme: CardThemeData(
@@ -19,6 +21,8 @@ class AppTheme {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-    )
+    ),
+
+
   );
 }

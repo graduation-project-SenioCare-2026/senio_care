@@ -92,6 +92,11 @@
   "loginSuccess": "Login successful!",
   "googleSignInCancelled":"Google sign in cancelled",
 
+  "elderOnboardingBasicTitle": "Let’s get to know you",
+  "elderOnboardingBasicSubtitle": "Just a few details to get started.",
+  "doYouHaveCaregiver": "Do you have caregivers?",
+  "caregiverId": "Caregiver ID",
+  "enterAgeHint": "Enter your age here",
   "medicalHistory": "Medical History",
   "pleaseProvideYourMedicalInformation": "Please provide your medical information",
   "age": "Age",
