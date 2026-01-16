@@ -66,11 +66,9 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // لو في controller استخدمه، وإلا انشئ واحد فارغ
     final TextEditingController internalController =
         controller ?? TextEditingController();
 
-    // لو في initialValue وما في نص موجود بالفعل
     if (initialValue != null && internalController.text.isEmpty) {
       internalController.text = initialValue!;
     }
@@ -82,75 +80,72 @@ class CustomTextFormField extends StatelessWidget {
           selectionHandleColor: AppColors.blue[300],
         ),
       ),
-      child: SizedBox(
-        height: context.setHeight(40),
-        child: TextFormField(
-          controller: internalController,
-          onTap: onTap,
-          cursorColor: AppColors.gray[600],
-          selectionControls: materialTextSelectionControls,
-          style: style ??
+      child: TextFormField(
+        controller: internalController,
+        onTap: onTap,
+        cursorColor: AppColors.gray[600],
+        selectionControls: materialTextSelectionControls,
+        style: style ??
+            getRegularStyle(
+              color: AppColors.black,
+              fontSize: context.setSp(FontSize.s18),
+            ),
+        keyboardType: keyboardType,
+        obscureText: obscureText,
+        obscuringCharacter: obscuringCharacter,
+        textInputAction: textInputAction,
+        readOnly: isReadOnly ?? false,
+        maxLength: maxLength,
+        maxLines: maxLines,
+        validator: validator,
+        onChanged: onChanged,
+        onSaved: onSaved,
+        enabled: enabled,
+        decoration: InputDecoration(
+          floatingLabelBehavior: floatingLabelBehavior,
+          contentPadding: contentPadding ?? EdgeInsets.all( context.setWidth(8)),
+          filled: isReadOnly,
+          fillColor:isReadOnly == true ? AppColors.gray[10]?.withAlpha(50) : null,
+          label: label != null
+              ? FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              label!,
+              style: labelStyle ??
+                  getRegularStyle(
+                    color: AppColors.gray,
+                    fontSize: context.setSp(FontSize.s12),
+                  ),
+            ),
+          )
+              : null,
+          hintText: hintText,
+          hintStyle: hintStyle ??
               getRegularStyle(
-                color: AppColors.black,
-                fontSize: context.setSp(FontSize.s18),
+                color: AppColors.gray,
+                fontSize: context.setSp(FontSize.s12),
               ),
-          keyboardType: keyboardType,
-          obscureText: obscureText,
-          obscuringCharacter: obscuringCharacter,
-          textInputAction: textInputAction,
-          readOnly: isReadOnly ?? false,
-          maxLength: maxLength,
-          maxLines: maxLines,
-          validator: validator,
-          onChanged: onChanged,
-          onSaved: onSaved,
-          enabled: enabled,
-          decoration: InputDecoration(
-            floatingLabelBehavior: floatingLabelBehavior,
-            contentPadding: contentPadding ?? EdgeInsets.symmetric(horizontal: context.setWidth(8)),
-            filled: isReadOnly,
-            fillColor:isReadOnly == true ? AppColors.gray[10]?.withAlpha(50) : null,
-            label: label != null
-                ? FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                label!,
-                style: labelStyle ??
-                    getRegularStyle(
-                      color: AppColors.gray,
-                      fontSize: context.setSp(FontSize.s12),
-                    ),
-              ),
-            )
-                : null,
-            hintText: hintText,
-            hintStyle: hintStyle ??
-                getRegularStyle(
-                  color: AppColors.gray,
-                  fontSize: context.setSp(FontSize.s12),
-                ),
-            focusedBorder: buildOutlinedBorder(context, AppColors.black),
-            enabledBorder: buildOutlinedBorder(context, AppColors.black),
-            focusedErrorBorder: buildOutlinedBorder(context, AppColors.red),
-            errorBorder: buildOutlinedBorder(context, AppColors.red),
-            disabledBorder: buildOutlinedBorder(context, AppColors.black),
-            prefixIcon: prefixIcon != null
-                ? Padding(
-              padding: EdgeInsets.only(left: context.setWidth(16), right: context.setWidth(8)),
-              child: prefixIcon,
-            )
-                : null,
-            suffixIcon: suffixIcon != null
-                ? Padding(
-              padding: EdgeInsets.only(left: context.setWidth(16), right: context.setWidth(8)),
-              child: suffixIcon,
-            )
-                : null,
-            prefixIconConstraints: prefixIconConstraints ?? const BoxConstraints(),
-            suffixIconConstraints: suffixIconConstraints ?? const BoxConstraints(),
-            errorStyle: getRegularStyle(color: AppColors.red),
-            errorMaxLines: 3,
-          ),
+          focusedBorder: buildOutlinedBorder(context, AppColors.black),
+          enabledBorder: buildOutlinedBorder(context, AppColors.black),
+          focusedErrorBorder: buildOutlinedBorder(context, AppColors.red),
+          errorBorder: buildOutlinedBorder(context, AppColors.red),
+          disabledBorder: buildOutlinedBorder(context, AppColors.black),
+          prefixIcon: prefixIcon != null
+              ? Padding(
+            padding: EdgeInsets.only(left: context.setWidth(16), right: context.setWidth(8)),
+            child: prefixIcon,
+          )
+              : null,
+          suffixIcon: suffixIcon != null
+              ? Padding(
+            padding: EdgeInsets.only(left: context.setWidth(16), right: context.setWidth(8)),
+            child: suffixIcon,
+          )
+              : null,
+          prefixIconConstraints: prefixIconConstraints ?? const BoxConstraints(),
+          suffixIconConstraints: suffixIconConstraints ?? const BoxConstraints(),
+          errorStyle: getRegularStyle(color: AppColors.red),
+          errorMaxLines: 3,
         ),
       ),
     );

@@ -87,7 +87,7 @@ class Validator {
     if (val == null || val.isEmpty) return 'ageRequired'.tr();
     final age = int.tryParse(val.trim());
     if (age == null) return 'ageMustBeNumber'.tr();
-    if (age < 0 || age > 150) return 'ageNotValid'.tr();
+    if (age < 30 || age > 110) return 'ageNotValid'.tr();
     return null;
   }
 
@@ -168,7 +168,15 @@ class Validator {
 
   // Gender Validator
   static String? validateGender(String? val) {
-    if (val == null || val.isEmpty) return 'pleaseSelectGender'.tr();
+    if (val == null || val.isEmpty) return 'genderIsRequired'.tr();
     return null;
   }
+
+  // Id Validator
+  static String? validateId(String? val) {
+    if (val == null || val.trim().isEmpty) return 'fieldRequired'.tr();
+    if (!RegExp(r'^[a-f0-9]{24}$').hasMatch(val.trim())) return 'invalidId'.tr();
+    return null;
+  }
+
 }

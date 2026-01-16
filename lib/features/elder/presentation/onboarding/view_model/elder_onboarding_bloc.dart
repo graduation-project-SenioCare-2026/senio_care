@@ -14,20 +14,56 @@ class ElderOnboardingBloc
   final SubmitElderOnboardingDataUseCse _submitElderOnboardingDataUseCse;
 
   ElderOnboardingBloc(this._submitElderOnboardingDataUseCse)
-      : super(ElderOnboardingState()) {
-    on<SubmitElderOnboardingDataEvent>(_submitElderOnboardingData);
+    : super(ElderOnboardingState()) {
+    on<SetGenderEvent>(_setGender);
     on<SetHasCaregiverEvent>(_setHasCaregiver);
     on<AddCaregiverIdEvent>(_addCaregiverId);
     on<RemoveCareGiverEvent>(_removeCaregiver);
+    on<SubmitElderOnboardingDataEvent>(_submitElderOnboardingData);
   }
   final ageController = TextEditingController();
   final caregiverIdController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  void _setGender(SetGenderEvent event, Emitter<ElderOnboardingState> emit) {
+    emit(state.copyWith(selectedGender: event.gender));
+  }
+
+  void _setHasCaregiver(
+    SetHasCaregiverEvent event,
+    Emitter<ElderOnboardingState> emit,
+  ) {
+    if (!event.value) {
+      emit(state.copyWith(hasCaregiver: false, caregiverIds: []));
+    } else {
+      emit(state.copyWith(hasCaregiver: true));
+    }
+  }
+
+  void _addCaregiverId(
+    AddCaregiverIdEvent event,
+    Emitter<ElderOnboardingState> emit,
+  ) {
+    if (event.id.isEmpty) return;
+    if (state.caregiverIds.contains(event.id)) return;
+
+    emit(state.copyWith(caregiverIds: [...state.caregiverIds, event.id]));
+  }
+
+  void _removeCaregiver(
+    RemoveCareGiverEvent event,
+    Emitter<ElderOnboardingState> emit,
+  ) {
+    final updatedList = List<String>.from(state.caregiverIds)
+      ..removeAt(event.indexToRemove);
+
+    emit(state.copyWith(caregiverIds: updatedList));
+  }
+
   Future<void> _submitElderOnboardingData(
-      SubmitElderOnboardingDataEvent event,
-      Emitter<ElderOnboardingState> emit,
-      ) async {
+    SubmitElderOnboardingDataEvent event,
+    Emitter<ElderOnboardingState> emit,
+  ) async {
     emit(state.copyWith(elderOnboardingStatus: StateStatus.loading()));
 
     final result = await _submitElderOnboardingDataUseCse(event.request);
@@ -42,49 +78,11 @@ class ElderOnboardingBloc
       case Failure<ElderOnboardingEntity>():
         emit(
           state.copyWith(
-            elderOnboardingStatus:
-            StateStatus.failure(result.responseException),
+            elderOnboardingStatus: StateStatus.failure(
+              result.responseException,
+            ),
           ),
         );
     }
-  }
-
-  void _setHasCaregiver(
-      SetHasCaregiverEvent event,
-      Emitter<ElderOnboardingState> emit,
-      ) {
-    if (!event.value) {
-      emit(state.copyWith(
-        hasCaregiver: false,
-        caregiverIds: [],
-      ));
-    } else {
-      emit(state.copyWith(hasCaregiver: true));
-    }
-  }
-
-  void _addCaregiverId(
-      AddCaregiverIdEvent event,
-      Emitter<ElderOnboardingState> emit,
-      ) {
-    if (event.id.isEmpty) return;
-    if (state.caregiverIds.contains(event.id)) return;
-
-    emit(
-      state.copyWith(
-        caregiverIds: [...state.caregiverIds, event.id],
-      ),
-    );
-  }
-
-  void _removeCaregiver(
-      RemoveCareGiverEvent event,
-      Emitter<ElderOnboardingState> emit,
-      ) {
-
-    final updatedList = List<String>.from(state.caregiverIds)
-      ..removeAt(event.indexToRemove);
-
-    emit(state.copyWith(caregiverIds: updatedList));
   }
 }

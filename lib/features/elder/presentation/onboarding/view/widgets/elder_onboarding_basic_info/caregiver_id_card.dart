@@ -12,7 +12,11 @@ import 'package:senio_care/features/elder/presentation/onboarding/view_model/eld
 class CaregiverIdCard extends StatelessWidget {
   final int cardIndex;
   final String caregiverId;
-  const CaregiverIdCard({required this.cardIndex,required this.caregiverId,super.key});
+  const CaregiverIdCard({
+    required this.cardIndex,
+    required this.caregiverId,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +26,11 @@ class CaregiverIdCard extends StatelessWidget {
           CircleAvatar(
             backgroundColor: AppColors.blue.withAlpha(80),
             child: Text(
-                '${cardIndex + 1}',
-                style:getBoldStyle(color: AppColors.blue,fontSize: context.setSp(FontSize.s18))
+              '${cardIndex + 1}',
+              style: getBoldStyle(
+                color: AppColors.blue,
+                fontSize: context.setSp(FontSize.s18),
+              ),
             ),
           ),
 
@@ -34,15 +41,19 @@ class CaregiverIdCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                    'caregiverId'.tr(),
-                    style:getRegularStyle(color: AppColors.blue,fontSize: context.setSp(FontSize.s14))
-
+                  'caregiverId'.tr(),
+                  style: getRegularStyle(
+                    color: AppColors.blue,
+                    fontSize: context.setSp(FontSize.s14),
+                  ),
                 ),
                 SizedBox(height: context.setHeight(4)),
                 Text(
-                    caregiverId,
-                    style:getRegularStyle(color: AppColors.black,fontSize: context.setSp(FontSize.s14))
-
+                  caregiverId,
+                  style: getRegularStyle(
+                    color: AppColors.black,
+                    fontSize: context.setSp(FontSize.s14),
+                  ),
                 ),
               ],
             ),
@@ -50,17 +61,15 @@ class CaregiverIdCard extends StatelessWidget {
 
           IconButton(
             onPressed: () {
-              context
-                  .read<ElderOnboardingBloc>()
-                  .add(RemoveCareGiverEvent(cardIndex));
+              context.read<ElderOnboardingBloc>().add(
+                RemoveCareGiverEvent(cardIndex),
+              );
             },
-            icon: const Icon(
-              Icons.close,
-              color: AppColors.red,
-            ),
+            icon: const Icon(Icons.close, color: AppColors.red),
           ),
         ],
       ),
-    );;
+    );
+
   }
 }
