@@ -124,9 +124,16 @@ class Validator {
   }
 
   // Elder Token Validator
-  static String? validateElderToken(String? val) {
-    if (val == null || val.trim().isEmpty) return 'elderTokenRequired'.tr();
-    if (val.trim().length < 6) return 'elderTokenMinLength'.tr();
+  // static String? validateElderToken(String? val) {
+  //   if (val == null || val.trim().isEmpty) return 'elderTokenRequired'.tr();
+  //   if (val.trim().length < 6) return 'elderTokenMinLength'.tr();
+  //   return null;
+  // }
+
+  // Id Validator
+  static String? validateId(String? val) {
+    if (val == null || val.trim().isEmpty) return 'fieldRequired'.tr();
+    if (!RegExp(r'^[a-f0-9]{24}$').hasMatch(val.trim())) return 'invalidId'.tr();
     return null;
   }
 

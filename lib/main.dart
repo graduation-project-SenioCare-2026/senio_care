@@ -21,7 +21,7 @@ void main() async {
 
   // final userSession = getIt<UserSessionHandler>();
   // final isLoggedIn = await userSession.checkIfUserLoggedIn();
-  //
+
   runApp(
     EasyLocalization(
       path: 'assets/translations',

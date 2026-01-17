@@ -130,7 +130,7 @@
   "personalInformation": "Personal Information",
   "medicalDocuments": "Medical Documents",
   "logOut": "Log Out",
-  "elderToken": "Elder Token",
+  "elderId": "Elder ID",
   "caregivers": "Caregivers",
   "editProfile": "Edit Profile",
   "done": "Done",
@@ -152,6 +152,7 @@
   "serviceDescription": "Service Description",
   "editPost": "Edit Post",
   "saveChanges": "Save Changes",
+  "relationship": "RelationShip",
 
   "emailRequired": "Email is required",
   "emailNotValid": "Please enter a valid email",
