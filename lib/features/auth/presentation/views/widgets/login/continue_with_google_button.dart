@@ -6,6 +6,7 @@ import 'package:senio_care/core/common_widgets/custom_elevated_button.dart';
 import 'package:senio_care/core/constants/app_icons.dart';
 import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/features/auth/presentation/view_model/login_view_model/auth_bloc.dart';
 import 'package:senio_care/features/auth/presentation/view_model/login_view_model/auth_event.dart';
@@ -24,6 +25,7 @@ class ContinueWithGoogleButton extends StatelessWidget {
             message: "loginSuccess".tr(),
             context: context,
           );
+          Navigator.pushNamed(context, RoutesNames.serviceProviderOnboardingScreen);
         }
         if (state.loginStatus.isFailure) {
           Loaders.showErrorMessage(
