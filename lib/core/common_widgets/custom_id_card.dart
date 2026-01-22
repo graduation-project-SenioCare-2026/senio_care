@@ -1,21 +1,23 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:senio_care/core/common_widgets/custom_card.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
 import 'package:senio_care/core/theme/font_style.dart';
-import 'package:senio_care/features/elder/presentation/onboarding/view_model/elder_onboarding_bloc.dart';
-import 'package:senio_care/features/elder/presentation/onboarding/view_model/elder_onboarding_event.dart';
 
-class CaregiverIdCard extends StatelessWidget {
-  final int cardIndex;
-  final String caregiverId;
-  const CaregiverIdCard({
-    required this.cardIndex,
-    required this.caregiverId,
+class CustomIdCard extends StatelessWidget {
+  final int index;
+  final String title;
+  final String value;
+  final VoidCallback? onRemove;
+
+  const CustomIdCard({
     super.key,
+    required this.index,
+    required this.title,
+    required this.value,
+    this.onRemove,
   });
 
   @override
@@ -26,7 +28,7 @@ class CaregiverIdCard extends StatelessWidget {
           CircleAvatar(
             backgroundColor: AppColors.blue.withAlpha(80),
             child: Text(
-              '${cardIndex + 1}',
+              '${index + 1}',
               style: getBoldStyle(
                 color: AppColors.blue,
                 fontSize: context.setSp(FontSize.s18),
@@ -41,7 +43,7 @@ class CaregiverIdCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'caregiverId'.tr(),
+                  title.tr(),
                   style: getRegularStyle(
                     color: AppColors.blue,
                     fontSize: context.setSp(FontSize.s14),
@@ -49,7 +51,7 @@ class CaregiverIdCard extends StatelessWidget {
                 ),
                 SizedBox(height: context.setHeight(4)),
                 Text(
-                  caregiverId,
+                  value,
                   style: getRegularStyle(
                     color: AppColors.black,
                     fontSize: context.setSp(FontSize.s14),
@@ -59,17 +61,16 @@ class CaregiverIdCard extends StatelessWidget {
             ),
           ),
 
-          IconButton(
-            onPressed: () {
-              context.read<ElderOnboardingBloc>().add(
-                RemoveCareGiverEvent(cardIndex),
-              );
-            },
-            icon: const Icon(Icons.close, color: AppColors.red),
-          ),
+          if (onRemove != null)
+            IconButton(
+              onPressed: onRemove,
+              icon: const Icon(
+                Icons.close,
+                color: AppColors.red,
+              ),
+            ),
         ],
       ),
     );
-
   }
 }

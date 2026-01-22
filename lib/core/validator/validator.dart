@@ -7,7 +7,7 @@ class Validator {
   static String? validateEmail(String? val) {
     if (val == null || val.trim().isEmpty) {
       return 'emailRequired'.tr();
-    } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val)) {
+    } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val)) {
       return 'emailNotValid'.tr();
     }
     return null;
@@ -96,7 +96,7 @@ class Validator {
     if (val == null || val.isEmpty) return 'weightRequired'.tr();
     final weight = double.tryParse(val.trim());
     if (weight == null) return 'weightMustBeNumber'.tr();
-    if (weight < 1 || weight > 500) return 'weightNotValid'.tr();
+    if (weight < 30 || weight > 200) return 'weightNotValid'.tr();
     return null;
   }
 

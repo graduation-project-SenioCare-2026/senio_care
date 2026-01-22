@@ -1,0 +1,8 @@
+{
+  "mobility_status": [
+    { "ar": "مستقل في الحركة\n\n", "en": "Independent\n\n" },
+    { "ar": "يستخدم عصا أو مشاية\n\n", "en": "Uses cane or walker\n\n" },
+    { "ar": "يعتمد على كرسي متحرك\n\n", "en": "Uses wheelchair\n\n" },
+    { "ar": "يحتاج لمساعدة شخص آخر\n\n", "en": "Needs assistance\n\n" }
+  ]
+}

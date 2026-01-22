@@ -34,6 +34,7 @@ class CustomTextFormField extends StatelessWidget {
     this.disabledBorderColor,
     this.isReadOnly = false,
     this.floatingLabelBehavior = FloatingLabelBehavior.auto,
+    this.autovalidateMode,
   });
 
   final String? initialValue;
@@ -63,6 +64,7 @@ class CustomTextFormField extends StatelessWidget {
   final Color? disabledBorderColor;
   final bool? isReadOnly;
   final FloatingLabelBehavior floatingLabelBehavior;
+  final AutovalidateMode? autovalidateMode;
 
   @override
   Widget build(BuildContext context) {
@@ -101,11 +103,12 @@ class CustomTextFormField extends StatelessWidget {
         onChanged: onChanged,
         onSaved: onSaved,
         enabled: enabled,
+        autovalidateMode: autovalidateMode,
         decoration: InputDecoration(
           floatingLabelBehavior: floatingLabelBehavior,
-          contentPadding: contentPadding ?? EdgeInsets.all( context.setWidth(8)),
+          contentPadding: contentPadding ?? EdgeInsets.all(context.setWidth(8)),
           filled: isReadOnly,
-          fillColor:isReadOnly == true ? AppColors.gray[10]?.withAlpha(50) : null,
+          fillColor: isReadOnly == true ? AppColors.gray[10]?.withAlpha(50) : null,
           label: label != null
               ? FittedBox(
             fit: BoxFit.scaleDown,

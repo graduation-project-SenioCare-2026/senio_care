@@ -25,7 +25,7 @@ class ContinueWithGoogleButton extends StatelessWidget {
             message: "loginSuccess".tr(),
             context: context,
           );
-          Navigator.pushNamedAndRemoveUntil(context, RoutesNames.elderOnboardingBasicInfo, (route) => false,);
+          Navigator.pushNamedAndRemoveUntil(context, RoutesNames.elderOnboarding, (route) => false,);
         }
         if (state.loginStatus.isFailure) {
           Loaders.showErrorMessage(

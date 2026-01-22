@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/features/auth/presentation/views/screens/login_screen.dart';
 import 'package:senio_care/features/auth/presentation/views/screens/roles_screen.dart';
-import 'package:senio_care/features/elder/presentation/onboarding/view/screens/elder_onboarding_basic_info.dart';
-import 'package:senio_care/features/elder/presentation/onboarding/view/screens/elder_onboarding_medical_info.dart';
+import 'package:senio_care/features/elder/presentation/onboarding/view/screens/elder_onboarding_screen.dart';
+import 'package:senio_care/features/elder/presentation/onboarding/view/screens/test.dart';
 
 abstract class Routes {
   static final GlobalKey<NavigatorState> navigatorKey =
@@ -19,14 +19,15 @@ abstract class Routes {
         String role = setting.arguments as String;
         return MaterialPageRoute(builder: (_) => LoginScreen(role: role));
 
-      case RoutesNames.elderOnboardingBasicInfo:
+      case RoutesNames.elderOnboarding:
         return MaterialPageRoute(
-          builder: (context) => ElderOnboardingBasicInfo(),
+          builder: (context) => ElderOnboardingScreen(),
         );
 
-      case RoutesNames.elderOnboardingMedicalInfo:
+
+      case RoutesNames.home:
         return MaterialPageRoute(
-          builder: (context) => ElderOnboardingMedicalInfo(),
+          builder: (context) => Test(),
         );
 
       default:

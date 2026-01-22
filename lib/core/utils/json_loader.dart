@@ -11,6 +11,7 @@ class AssetJsonLoader implements JsonLoader {
   @override
   Future<Map<String, dynamic>> loadJson(String path) async {
     final jsonString = await rootBundle.loadString(path);
-    return json.decode(jsonString);
+    final Map<String, dynamic> jsonData = json.decode(jsonString);
+    return jsonData;
   }
 }

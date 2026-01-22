@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/theme/font_manager.dart';
+import 'package:senio_care/core/theme/font_style.dart';
 
 abstract class Loaders {
   static void showSuccessMessage({
@@ -70,10 +73,20 @@ abstract class Loaders {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (title != null) DefaultTextStyle(style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white), child: title),
+                if (title != null)
+                  DefaultTextStyle(
+                    style: getRegularStyle(
+                      color: Colors.white,
+                      fontSize: context.setSp(FontSize.s16),
+                    ),
+                    child: title,
+                  ),
                 Text(
                   message,
-                  style: const TextStyle(color: Colors.white),
+                  style: getRegularStyle(
+                    color: Colors.white,
+                    fontSize: context.setSp(FontSize.s16),
+                  ),
                 ),
               ],
             ),
@@ -82,9 +95,7 @@ abstract class Loaders {
       ),
       behavior: SnackBarBehavior.floating,
       margin: const EdgeInsets.all(8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
