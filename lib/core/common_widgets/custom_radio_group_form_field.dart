@@ -26,6 +26,7 @@ class CustomRadioGroupFormField<T> extends StatelessWidget {
     return FormField<T>(
       initialValue: value,
       validator: validator,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       builder: (state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

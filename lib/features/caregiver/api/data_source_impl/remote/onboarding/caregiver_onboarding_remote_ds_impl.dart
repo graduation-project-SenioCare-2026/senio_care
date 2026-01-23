@@ -21,7 +21,7 @@ class CaregiverOnboardingRemoteDsImpl implements CaregiverOnboardingRemoteDS {
   ) async {
     return safeCall<CaregiverEntity>(() async {
       final response = await _caregiverApiService.caregiverOnboarding(request);
-      return response.caregiver!.toEntity();
+      return response.toEntity();
     });
   }
 }

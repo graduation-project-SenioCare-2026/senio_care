@@ -11,11 +11,14 @@ class CaregiverFormField extends StatelessWidget {
   final TextEditingController controller;
   final String labelKey;
   final String? Function(String?)? validator;
+  final TextInputType keyboardType;
+
 
   const CaregiverFormField({
     required this.controller,
     required this.labelKey,
     required this.validator,
+    this.keyboardType = TextInputType.text,
     super.key,
   });
 
@@ -32,7 +35,13 @@ class CaregiverFormField extends StatelessWidget {
           ),
           textAlign: TextAlign.start,
         ),
-        CustomTextFormField(controller: controller, validator: validator),
+        CustomTextFormField(
+          controller: controller,
+          validator: validator,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          keyboardType: keyboardType,
+        ),
+        SizedBox(height: context.setHeight(15)),
       ],
     );
   }

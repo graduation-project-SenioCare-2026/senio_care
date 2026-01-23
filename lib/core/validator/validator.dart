@@ -7,7 +7,7 @@ class Validator {
   static String? validateEmail(String? val) {
     if (val == null || val.trim().isEmpty) {
       return 'emailRequired'.tr();
-    } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val)) {
+    } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val)) {
       return 'emailNotValid'.tr();
     }
     return null;
@@ -45,13 +45,29 @@ class Validator {
     return null;
   }
 
-  // Phone Number Validator
+  // Egyptian Phone Number Validator (Local only)
   static String? validatePhoneNumber(String? val) {
-    if (val == null || val.isEmpty) return 'phoneRequired'.tr();
-    if (!RegExp(r'^[0-9+\-() ]+$').hasMatch(val.trim())) return 'phoneNumbersOnly'.tr();
-    if (val.trim().replaceAll(RegExp(r'[^\d]'), '').length < 10) return 'phoneLength'.tr();
+    if (val == null || val.trim().isEmpty) {
+      return 'phoneRequired'.tr();
+    }
+
+    final phone = val.trim();
+
+    if (!RegExp(r'^\d+$').hasMatch(phone)) {
+      return 'phoneNumbersOnly'.tr();
+    }
+
+    if (phone.length != 11) {
+      return 'phoneLength'.tr();
+    }
+
+    if (!RegExp(r'^01[0125]').hasMatch(phone)) {
+      return 'invalidEgyptianPhone'.tr();
+    }
+
     return null;
   }
+
 
   // Number Validator
   static String? validateNumber(String? val) {
