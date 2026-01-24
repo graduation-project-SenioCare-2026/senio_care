@@ -62,7 +62,6 @@
   "captchaCheckFailed": "فشل التحقق من Captcha.",
   "googleLoginCanceled": "تم إلغاء تسجيل الدخول عبر Google.",
 
-
   "permissionDenied": "تم رفض الإذن.",
   "unavailable": "الخدمة غير متاحة.",
   "notFound": "العنصر غير موجود.",
@@ -104,6 +103,9 @@
   "genderIsRequired": "الرجاء تحديد النوع",
   "completeLater": "اكمل لاحقًا",
   "continue": "متابعة",
+  "phoneNumbersOnly": "رقم الهاتف يجب أن يحتوي على أرقام فقط",
+  "phoneLength": "رقم الهاتف يجب أن يكون 11 رقم",
+  "invalidEgyptianPhone": "رقم الهاتف غير صالح",
   "medicalHistory": "التاريخ الطبي",
   "pleaseProvideYourMedicalInformation": "يرجى تزويدنا بمعلوماتك الطبية",
   "age": "العمر",

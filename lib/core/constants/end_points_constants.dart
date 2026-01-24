@@ -3,5 +3,6 @@ abstract class EndPointsConstants {
   static const String googleSignIn="auth/google";
   static const String postElder="elders";
   static const String serviceProviderOnboarding="/service-providers";
+  static const String caregiverOnboarding="/caregivers";
 
 }

@@ -45,13 +45,29 @@ class Validator {
     return null;
   }
 
-  // Phone Number Validator
+  // Egyptian Phone Number Validator (Local only)
   static String? validatePhoneNumber(String? val) {
-    if (val == null || val.isEmpty) return 'phoneRequired'.tr();
-    if (!RegExp(r'^[0-9+\-() ]+$').hasMatch(val.trim())) return 'phoneNumbersOnly'.tr();
-    if (val.trim().replaceAll(RegExp(r'[^\d]'), '').length < 10) return 'phoneLength'.tr();
+    if (val == null || val.trim().isEmpty) {
+      return 'phoneRequired'.tr();
+    }
+
+    final phone = val.trim();
+
+    if (!RegExp(r'^\d+$').hasMatch(phone)) {
+      return 'phoneNumbersOnly'.tr();
+    }
+
+    if (phone.length != 11) {
+      return 'phoneLength'.tr();
+    }
+
+    if (!RegExp(r'^01[0125]').hasMatch(phone)) {
+      return 'invalidEgyptianPhone'.tr();
+    }
+
     return null;
   }
+
 
   // Number Validator
   static String? validateNumber(String? val) {
@@ -124,9 +140,16 @@ class Validator {
   }
 
   // Elder Token Validator
-  static String? validateElderToken(String? val) {
-    if (val == null || val.trim().isEmpty) return 'elderTokenRequired'.tr();
-    if (val.trim().length < 6) return 'elderTokenMinLength'.tr();
+  // static String? validateElderToken(String? val) {
+  //   if (val == null || val.trim().isEmpty) return 'elderTokenRequired'.tr();
+  //   if (val.trim().length < 6) return 'elderTokenMinLength'.tr();
+  //   return null;
+  // }
+
+  // Id Validator
+  static String? validateId(String? val) {
+    if (val == null || val.trim().isEmpty) return 'fieldRequired'.tr();
+    if (!RegExp(r'^[a-f0-9]{24}$').hasMatch(val.trim())) return 'invalidId'.tr();
     return null;
   }
 
