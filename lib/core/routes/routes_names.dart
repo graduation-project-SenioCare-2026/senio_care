@@ -5,4 +5,6 @@ abstract class RoutesNames {
   static const String home="home";
 
 
+  static const String serviceProviderOnboardingScreen = "serviceProviderOnboarding";
+
 }

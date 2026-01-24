@@ -5,6 +5,7 @@ import 'package:senio_care/features/auth/presentation/views/screens/login_screen
 import 'package:senio_care/features/auth/presentation/views/screens/roles_screen.dart';
 import 'package:senio_care/features/elder/presentation/onboarding/view/screens/elder_onboarding_screen.dart';
 import 'package:senio_care/features/elder/presentation/onboarding/view/screens/test.dart';
+import 'package:senio_care/features/service_provider/presentation/onboarding/views/screens/service_provider_onboarding_screen.dart';
 
 abstract class Routes {
   static final GlobalKey<NavigatorState> navigatorKey =
@@ -12,8 +13,9 @@ abstract class Routes {
   static Route onGenerate(RouteSettings setting) {
     final url = Uri.parse(setting.name ?? "");
     switch (url.path) {
+
       case RoutesNames.rolesScreen:
-        return MaterialPageRoute(builder: (_) => RolesScreen());
+        return MaterialPageRoute(builder: (_) => RolesScreen(),);
 
       case RoutesNames.loginScreen:
         String role = setting.arguments as String;
@@ -30,10 +32,14 @@ abstract class Routes {
           builder: (context) => Test(),
         );
 
+      case RoutesNames.serviceProviderOnboardingScreen:
+        return MaterialPageRoute(builder: (_) => ServiceProviderOnboardingScreen(),);
       default:
         return MaterialPageRoute(
           builder: (context) {
-            return Scaffold(body: Center(child: Text('noRouteFound'.tr())));
+            return Scaffold(
+              body: Center(child: Text('noRouteFound'.tr())),
+            );
           },
         );
     }
