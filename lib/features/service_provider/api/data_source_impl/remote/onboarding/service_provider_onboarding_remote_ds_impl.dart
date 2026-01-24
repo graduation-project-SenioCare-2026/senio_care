@@ -20,7 +20,7 @@ class ServiceProviderOnboardingRemoteDSImpl
     return safeCall<ServiceProviderEntity>(() async {
       final response = await _serviceProviderApiServices
           .serviceProviderOnboarding(request);
-      return response.serviceProvider!.toEntity();
+      return response.toEntity();
     });
   }
 }

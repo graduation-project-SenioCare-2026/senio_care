@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/core/common_widgets/custom_text_form_field.dart';
+import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/validator/validator.dart';
 import 'package:senio_care/features/service_provider/api/models/request/onboarding/service_provider_onboarding_request.dart';
@@ -23,10 +24,19 @@ class ServiceProviderOnboardingBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final bloc = context.read<ServiceProviderOnboardingBloc>();
 
-    return BlocBuilder<
+    return BlocConsumer<
       ServiceProviderOnboardingBloc,
       ServiceProviderOnboardingState
     >(
+      listener: (context, state) {
+        if (state.serviceProviderOnboardingState.isFailure) {
+          Loaders.showErrorMessage(message: state.serviceProviderOnboardingState.error!.message, context: context);
+        }
+
+        if(state.serviceProviderOnboardingState.isSuccess){
+          return Loaders.showSuccessMessage(message: "welcomeToSenioCare".tr(), context: context);
+        }
+      },
       builder: (BuildContext context, state) {
         return Form(
           key: bloc.formKey,
