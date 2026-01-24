@@ -203,8 +203,6 @@
   "fullnameRequired": "Full name is required",
   "fullnameMinLength": "Full name must be at least 3 characters",
   "phoneRequired": "Phone number is required",
-  "phoneNumbersOnly": "Phone number must contain only numbers and valid characters",
-  "phoneLength": "Phone number must be at least 10 digits",
   "numberRequired": "Number is required",
   "numberOnly": "This field must contain only numbers",
   "serviceDescriptionRequired": "Service description is required",

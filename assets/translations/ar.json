@@ -199,8 +199,6 @@
   "fullnameRequired": "الاسم الكامل مطلوب",
   "fullnameMinLength": "يجب أن يتكون الاسم الكامل من 3 أحرف على الأقل",
   "phoneRequired": "رقم الهاتف مطلوب",
-  "phoneNumbersOnly": "يجب أن يحتوي رقم الهاتف على أرقام وأحرف صالحة فقط",
-  "phoneLength": "يجب أن يتكون رقم الهاتف من 10 أرقام على الأقل",
   "numberRequired": "الرقم مطلوب",
   "numberOnly": "يجب أن يحتوي هذا الحقل على أرقام فقط",
   "serviceDescriptionRequired": "وصف الخدمة مطلوب",

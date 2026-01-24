@@ -195,11 +195,5 @@ class Validator {
     return null;
   }
 
-  // Id Validator
-  static String? validateId(String? val) {
-    if (val == null || val.trim().isEmpty) return 'fieldRequired'.tr();
-    if (!RegExp(r'^[a-f0-9]{24}$').hasMatch(val.trim())) return 'invalidId'.tr();
-    return null;
-  }
 
 }

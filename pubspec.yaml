@@ -51,7 +51,6 @@ dependencies:
   internet_connection_checker: ^1.0.0
   percent_indicator: ^4.2.5
   dropdown_search: ^6.0.2
-  font_awesome_flutter: ^10.12.0
   skeletonizer: ^2.1.2
 
 dev_dependencies:
