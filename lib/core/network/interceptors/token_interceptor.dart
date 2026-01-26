@@ -9,16 +9,16 @@ class TokenInterceptor extends Interceptor {
   TokenInterceptor(this._secureStorage);
 
   @override
-  void onRequest(
-    RequestOptions options,
-    RequestInterceptorHandler handler,
-  ) async {
+  Future<void> onRequest(
+      RequestOptions options,
+      RequestInterceptorHandler handler,
+      ) async {
     final token = await _secureStorage.getToken();
 
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
     }
 
-    super.onRequest(options, handler);
+    handler.next(options);
   }
 }

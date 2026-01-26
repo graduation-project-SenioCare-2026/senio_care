@@ -5,12 +5,8 @@ class ServiceProviderEntity extends Equatable {
   final String? phoneNumber;
   final String? specialization;
 
-  const ServiceProviderEntity({
-    this.id,
-    this.phoneNumber,
-    this.specialization,
-  });
+  const ServiceProviderEntity({this.id, this.phoneNumber, this.specialization});
 
   @override
-  List<Object?> get props => [id, phoneNumber,specialization];
+  List<Object?> get props => [id, phoneNumber, specialization];
 }

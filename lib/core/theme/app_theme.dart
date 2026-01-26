@@ -6,7 +6,6 @@ import 'app_colors.dart';
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: Colors.transparent,
-
     radioTheme: RadioThemeData(
       fillColor: WidgetStatePropertyAll((AppColors.black)),
       overlayColor: WidgetStatePropertyAll((AppColors.black)),

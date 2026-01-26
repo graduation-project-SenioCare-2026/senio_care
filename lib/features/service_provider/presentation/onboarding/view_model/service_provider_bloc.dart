@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
-import 'package:senio_care/features/service_provider/domain/entity/onboarding/service_provider_onboarding_entity.dart';
+import 'package:senio_care/features/auth/domain/entity/service_provider_entity.dart';
 import 'package:senio_care/features/service_provider/domain/use_case/onboarding/submit_service_provider_onboarding_data.dart';
 import 'package:senio_care/features/service_provider/presentation/onboarding/view_model/service_provider_event.dart';
 import 'package:senio_care/features/service_provider/presentation/onboarding/view_model/service_provider_state.dart';

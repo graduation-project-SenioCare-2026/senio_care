@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:senio_care/core/user/user_manager.dart';
 
 class UserEntity extends Equatable{
   final String? id;
   final String? name;
   final String? email;
   final String? avatar;
-  final String? role;
+  final UserRole? role;
 
   const UserEntity ({
     this.id,

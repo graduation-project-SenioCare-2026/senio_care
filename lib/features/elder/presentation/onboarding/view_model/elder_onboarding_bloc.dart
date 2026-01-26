@@ -4,10 +4,10 @@ import 'package:injectable/injectable.dart';
 import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
+import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/allergy_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/blood_type_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/disease_entity.dart';
-import 'package:senio_care/features/elder/domain/entity/onboarding/elder_onboarding_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/mobility_status_entity.dart';
 import 'package:senio_care/features/elder/domain/use_case/onboarding/get_allergy_use_case.dart';
 import 'package:senio_care/features/elder/domain/use_case/onboarding/get_blood_types_use_case.dart';
@@ -267,14 +267,14 @@ class ElderOnboardingBloc
     final result = await _submitElderOnboardingDataUseCse(event.request);
 
     switch (result) {
-      case Success<ElderOnboardingEntity>():
+      case Success<ElderEntity>():
         emit(
           state.copyWith(
             elderOnboardingStatus: StateStatus.success(result.data),
-            destination: RoutesNames.home,
+            destination: RoutesNames.elderHome,
           ),
         );
-      case Failure<ElderOnboardingEntity>():
+      case Failure<ElderEntity>():
         emit(
           state.copyWith(
             elderOnboardingStatus: StateStatus.failure(

@@ -8,12 +8,12 @@ import 'package:senio_care/core/common_widgets/custom_elevated_button.dart';
 import 'package:senio_care/core/common_widgets/custom_radio_group_form_field.dart';
 import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/validator/validator.dart';
 import 'package:senio_care/features/caregiver/api/models/request/onboarding/caregiver_onboarding_request.dart';
 import 'package:senio_care/features/caregiver/presentation/onboarding/view_model/caregiver_onboarding_bloc.dart';
 import 'package:senio_care/features/caregiver/presentation/onboarding/view_model/caregiver_onboarding_event.dart';
-import 'package:senio_care/features/caregiver/presentation/onboarding/views/widgets/caregiver_form_field.dart';
 
 import '../../../../../../core/common_widgets/header_text.dart';
 import '../../../../../../core/theme/font_manager.dart';
@@ -36,7 +36,8 @@ class CaregiverOnboardingBody extends StatelessWidget {
         }
 
         if (state.caregiverOnboardingState.isSuccess) {
-          return Loaders.showSuccessMessage(
+          Navigator.pushReplacementNamed(context, RoutesNames.caregiverHome);
+           Loaders.showSuccessMessage(
             message: "welcomeToSenioCare".tr(),
             context: context,
           );

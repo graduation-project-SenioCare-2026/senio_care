@@ -20,7 +20,14 @@ class LoginViewBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: [
-        SizedBox(height: context.setHeight(70)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(width: context.setWidth(10),),
+            IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back_ios,color: AppColors.white,size: context.setWidth(25),)),
+          ],
+        ),
+        SizedBox(height: context.setHeight(10)),
         HeaderText(
           title: 'welcomeToSenioCare'.tr(),
           titleSize: FontSize.s32,

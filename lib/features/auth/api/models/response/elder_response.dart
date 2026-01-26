@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:senio_care/features/elder/domain/entity/onboarding/elder_onboarding_entity.dart';
+import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
 
-part 'elder_onboarding_response.g.dart';
+part 'elder_response.g.dart';
 
 @JsonSerializable()
-class ElderOnboardingResponse {
+class ElderResponse {
   @JsonKey(name: "_id")
   final String? id;
   @JsonKey(name: "age")
@@ -26,7 +26,7 @@ class ElderOnboardingResponse {
   @JsonKey(name: "mobilityStatus")
   final String? mobilityStatus;
 
-  ElderOnboardingResponse({
+  ElderResponse ({
     this.id,
     this.age,
     this.weight,
@@ -39,16 +39,16 @@ class ElderOnboardingResponse {
     this.mobilityStatus,
   });
 
-  factory ElderOnboardingResponse.fromJson(Map<String, dynamic> json) {
-    return _$ElderOnboardingResponseFromJson(json);
+  factory ElderResponse.fromJson(Map<String, dynamic> json) {
+    return _$ElderResponseFromJson(json);
   }
 
   Map<String, dynamic> toJson() {
-    return _$ElderOnboardingResponseToJson(this);
+    return _$ElderResponseToJson(this);
   }
 
-  ElderOnboardingEntity toEntity() {
-    return ElderOnboardingEntity(
+  ElderEntity toEntity(){
+    return ElderEntity(
       id: id,
       age: age,
       weight: weight,
@@ -56,9 +56,11 @@ class ElderOnboardingResponse {
       gender: gender,
       chronicDiseases: chronicDiseases,
       allergies: allergies,
-      caregiverIds: caregiverIds,
       bloodType: bloodType,
       mobilityStatus: mobilityStatus,
+      caregiverIds: caregiverIds
     );
   }
 }
+
+

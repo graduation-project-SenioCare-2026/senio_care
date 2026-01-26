@@ -18,9 +18,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await configureDependencies();
-
-  // final userSession = getIt<UserSessionHandler>();
-  // final isLoggedIn = await userSession.checkIfUserLoggedIn();
+// In your app, add a button or run this once
+//   await getIt<SecureStorageService>(). clearSession();
 
   runApp(
     EasyLocalization(
@@ -29,6 +28,7 @@ void main() async {
         Locale('en'),
         Locale('ar'),
       ],
+      startLocale: Locale("en"),
       child: DevicePreview(
         enabled: true,
         builder: (_) => const MyApp(),
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
         supportedLocales: context.supportedLocales,
         localizationsDelegates: context.localizationDelegates,
         theme: AppTheme.lightTheme,
-        initialRoute: RoutesNames.rolesScreen,
+        initialRoute: RoutesNames.splashScreen,
         onGenerateRoute: Routes.onGenerate,
       ),
     );

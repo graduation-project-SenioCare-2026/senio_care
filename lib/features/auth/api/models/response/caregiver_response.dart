@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-
-import '../../../../domain/entity/onboarding/caregiver_onboarding_entity.dart';
+import 'package:senio_care/features/auth/domain/entity/caregiver_entity.dart';
 
 part 'caregiver_response.g.dart';
 
@@ -8,20 +7,16 @@ part 'caregiver_response.g.dart';
 class CaregiverResponse {
   @JsonKey(name: "_id")
   final String? id;
-
   @JsonKey(name: "phone_number")
   final String? phoneNumber;
-
   @JsonKey(name: "gender")
   final String? gender;
-
   @JsonKey(name: "relationship")
   final String? relationship;
-
   @JsonKey(name: "elder_ids")
   final List<String>? elderIds;
 
-  CaregiverResponse({
+  CaregiverResponse ({
     this.id,
     this.phoneNumber,
     this.gender,
@@ -29,20 +24,23 @@ class CaregiverResponse {
     this.elderIds,
   });
 
-  factory CaregiverResponse.fromJson(Map<String, dynamic> json) =>
-      _$CaregiverResponseFromJson(json);
+  factory CaregiverResponse.fromJson(Map<String, dynamic> json) {
+    return _$CaregiverResponseFromJson(json);
+  }
 
-  Map<String, dynamic> toJson() =>
-      _$CaregiverResponseToJson(this);
+  Map<String, dynamic> toJson() {
+    return _$CaregiverResponseToJson(this);
+  }
 
-
-  CaregiverEntity toEntity() {
+  CaregiverEntity toEntity(){
     return CaregiverEntity(
       id: id,
       phoneNumber: phoneNumber,
       gender: gender,
       relationship: relationship,
-      elderIds: elderIds,
+      elderIds: elderIds
     );
   }
 }
+
+

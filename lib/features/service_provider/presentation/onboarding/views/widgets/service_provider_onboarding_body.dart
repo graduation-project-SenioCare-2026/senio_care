@@ -1,9 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:senio_care/core/common_widgets/custom_text_form_field.dart';
 import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/core/validator/validator.dart';
 import 'package:senio_care/features/service_provider/api/models/request/onboarding/service_provider_onboarding_request.dart';
 import 'package:senio_care/features/service_provider/presentation/onboarding/view_model/service_provider_bloc.dart';
@@ -30,11 +32,23 @@ class ServiceProviderOnboardingBody extends StatelessWidget {
     >(
       listener: (context, state) {
         if (state.serviceProviderOnboardingState.isFailure) {
-          Loaders.showErrorMessage(message: state.serviceProviderOnboardingState.error!.message, context: context);
+          Loaders.showErrorMessage(
+            message: state.serviceProviderOnboardingState.error!.message,
+            context: context,
+          );
         }
 
-        if(state.serviceProviderOnboardingState.isSuccess){
-          return Loaders.showSuccessMessage(message: "welcomeToSenioCare".tr(), context: context);
+        if (state.serviceProviderOnboardingState.isSuccess) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            RoutesNames.serviceProviderHome,
+                (route) => false,
+          );
+          Loaders.showSuccessMessage(
+            message: "welcomeToSenioCare".tr(),
+            context: context,
+          );
+
         }
       },
       builder: (BuildContext context, state) {
@@ -68,7 +82,7 @@ class ServiceProviderOnboardingBody extends StatelessWidget {
                         bloc.phoneNumberController.text,
                       ),
                     ),
-                    SizedBox(height: context.setHeight(10),),
+                    SizedBox(height: context.setHeight(10)),
                     Text(
                       'specialization'.tr(),
                       style: getBoldStyle(
@@ -83,23 +97,30 @@ class ServiceProviderOnboardingBody extends StatelessWidget {
                         bloc.specializationController.text,
                       ),
                     ),
-                    SizedBox(height: context.setHeight(20),)
+                    SizedBox(height: context.setHeight(20)),
                   ],
                 ),
               ),
-              CustomElevatedButton(
-                width: context.setWidth(300),
-                onPressed: () {
-                  if (bloc.formKey.currentState!.validate()) {
-                    final request = ServiceProviderOnboardingRequest(
-                      phoneNumber: bloc.phoneNumberController.text,
-                      specialization: bloc.specializationController.text,
-                    );
-                    bloc.add(ServiceProviderSubmitDataEvent(request));
-                  }
-                },
-                buttonLabel: 'save'.tr(),
-              ),
+              if (state.serviceProviderOnboardingState.isLoading)
+                LoadingAnimationWidget.flickr(
+                  leftDotColor: AppColors.gradientEnd,
+                  rightDotColor: AppColors.gradientMiddle,
+                  size: context.setWidth(30),
+                )
+              else
+                CustomElevatedButton(
+                  width: context.setWidth(300),
+                  onPressed: () {
+                    if (bloc.formKey.currentState!.validate()) {
+                      final request = ServiceProviderOnboardingRequest(
+                        phoneNumber: bloc.phoneNumberController.text,
+                        specialization: bloc.specializationController.text,
+                      );
+                      bloc.add(ServiceProviderSubmitDataEvent(request));
+                    }
+                  },
+                  buttonLabel: 'save'.tr(),
+                ),
             ],
           ),
         );

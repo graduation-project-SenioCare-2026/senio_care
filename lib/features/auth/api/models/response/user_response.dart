@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:senio_care/core/user/user_manager.dart';
 import 'package:senio_care/features/auth/domain/entity/user_entity.dart';
 
 part 'user_response.g.dart';
@@ -32,13 +33,32 @@ class UserResponse {
     return _$UserResponseToJson(this);
   }
 
-  UserEntity toEntity(){
+  UserRole? mapRole(String? role) {
+    switch (role) {
+      case 'elder':
+        return UserRole.elder;
+      case 'caregiver':
+        return UserRole.caregiver;
+      case 'serviceProvider':
+      case 'service_provider':
+        return UserRole.serviceProvider;
+      default:
+        return null;
+    }
+  }
+  UserEntity toEntity() {
+    final mappedRole = mapRole(role);
+
+    if (mappedRole == null) {
+      throw Exception('Invalid user role: $role');
+    }
+
     return UserEntity(
       id: id,
       name: name,
       email: email,
       avatar: avatar,
-      role: role
+      role: mappedRole,
     );
   }
 }

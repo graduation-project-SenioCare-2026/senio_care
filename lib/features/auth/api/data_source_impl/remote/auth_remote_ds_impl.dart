@@ -4,7 +4,13 @@ import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/core/safe_call/safe_call.dart';
 import 'package:senio_care/features/auth/api/client/auth_api_services.dart';
 import 'package:senio_care/features/auth/api/models/request/google_sign_in_request.dart';
+import 'package:senio_care/features/auth/api/models/response/elder_response.dart';
+import 'package:senio_care/features/auth/api/models/response/get_caregiver_response.dart';
+import 'package:senio_care/features/auth/api/models/response/service_provider_response.dart';
 import 'package:senio_care/features/auth/data/data_source/remote/auth_remote_ds.dart';
+import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
+import 'package:senio_care/features/auth/domain/entity/get_caregiver_entity.dart';
+import 'package:senio_care/features/auth/domain/entity/service_provider_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/user_entity.dart';
 
 @Injectable(as: AuthRemoteDs)
@@ -24,7 +30,39 @@ class AuthRemoteDsImpl implements AuthRemoteDs {
       if (response.token != null) {
         await _secureStorage.saveToken(response.token!);
       }
+
+      if(response.user != null){
+        await _secureStorage.saveRole(response.user!.role!);
+      }
+
       return response.user!.toEntity();
     });
+  }
+
+  @override
+  Future<Result<ElderEntity>> getElderById(String id) {
+    return safeCall(() async{
+      ElderResponse response= await _authApiServices.getElderById(id);
+
+      return response.toEntity();
+    },);
+  }
+
+
+  @override
+  Future<Result<GetCaregiverEntity>> getCaregiverById(String id) {
+    return safeCall(() async{
+      GetCaregiverResponse response= await _authApiServices.getCaregiverById(id);
+      return response.toEntity();
+    },);
+  }
+
+
+  @override
+  Future<Result<ServiceProviderEntity>> getServiceProviderById(String id) {
+   return safeCall(()async {
+     ServiceProviderResponse response=await _authApiServices.getServiceProviderById(id);
+     return response.toEntity();
+   },);
   }
 }

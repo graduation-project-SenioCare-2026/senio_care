@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class ElderOnboardingEntity extends Equatable {
+class ElderEntity extends Equatable {
   final String? id;
   final int? age;
   final int? weight;
@@ -12,7 +12,7 @@ class ElderOnboardingEntity extends Equatable {
   final String? bloodType;
   final String? mobilityStatus;
 
-  const ElderOnboardingEntity({
+  const ElderEntity({
     this.id,
     this.age,
     this.weight,

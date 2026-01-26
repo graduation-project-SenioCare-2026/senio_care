@@ -5,4 +5,24 @@ class SignInWithGoogleEvent extends AuthEvent {
   SignInWithGoogleEvent(this.role);
 }
 
+class GetElderByIdEvent extends AuthEvent{
+  String id;
+
+  GetElderByIdEvent(this.id);
+}
+
+class GetCaregiverByIdEvent extends AuthEvent{
+  String id;
+
+  GetCaregiverByIdEvent(this.id);
+}
+
+class GetServiceProviderByIdEvent extends AuthEvent{
+  String id;
+
+  GetServiceProviderByIdEvent(this.id);
+}
+
+class InitSessionEvent extends AuthEvent{}
+
 class SignOutEvent extends AuthEvent {}

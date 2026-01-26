@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
-import 'package:senio_care/features/caregiver/domain/entity/onboarding/caregiver_onboarding_entity.dart';
+import 'package:senio_care/features/auth/domain/entity/caregiver_entity.dart';
 
 class CaregiverOnboardingState extends Equatable {
   final StateStatus<CaregiverEntity> caregiverOnboardingState;

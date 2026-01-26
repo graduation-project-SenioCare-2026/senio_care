@@ -33,7 +33,7 @@ class ElderOnboardingBody extends StatelessWidget {
             message: "welcomeToSenioCare".tr(),
             context: context,
           );
-          Navigator.pushReplacementNamed(context, RoutesNames.home);
+          Navigator.pushReplacementNamed(context, RoutesNames.elderHome);
         }
 
         if (state.elderOnboardingStatus.isFailure) {

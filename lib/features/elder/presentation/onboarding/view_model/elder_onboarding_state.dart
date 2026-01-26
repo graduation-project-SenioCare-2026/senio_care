@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
+import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/allergy_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/blood_type_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/disease_entity.dart';
-import 'package:senio_care/features/elder/domain/entity/onboarding/elder_onboarding_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/mobility_status_entity.dart';
 
 class ElderOnboardingState extends Equatable {
-  final StateStatus<ElderOnboardingEntity> elderOnboardingStatus;
+  final StateStatus<ElderEntity> elderOnboardingStatus;
   final StateStatus<List<AllergyEntity>> allergiesStatus;
   final List<AllergyEntity> selectedAllergies;
   final StateStatus<List<DiseaseEntity>> diseasesStatus;
@@ -44,7 +44,7 @@ class ElderOnboardingState extends Equatable {
   });
 
   ElderOnboardingState copyWith({
-    StateStatus<ElderOnboardingEntity>? elderOnboardingStatus,
+    StateStatus<ElderEntity>? elderOnboardingStatus,
     StateStatus<List<AllergyEntity>>? allergiesStatus,
     List<AllergyEntity>? selectedAllergies,
     StateStatus<List<DiseaseEntity>>? diseasesStatus,
