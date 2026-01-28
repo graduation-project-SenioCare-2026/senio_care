@@ -4,8 +4,8 @@ import 'package:senio_care/core/extensions/user_role_mapper.dart';
 import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/core/user/user_manager.dart';
+import 'package:senio_care/features/auth/domain/entity/caregiver_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
-import 'package:senio_care/features/auth/domain/entity/get_caregiver_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/service_provider_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/user_entity.dart';
 import 'package:senio_care/features/auth/domain/use_case/get_profile_use_case_resolver.dart';
@@ -74,11 +74,11 @@ class UserSessionHandler {
       case UserRole.elder:
         final elder = data as ElderEntity;
         ProfileManager().elder = elder;
-        UserManager().setUser(UserEntity(id: elder.id, role: UserRole.elder));
+        UserManager().setUser(UserEntity(id: elder.id, role: UserRole.elder,));
         break;
 
       case UserRole.caregiver:
-        final caregiver = data as GetCaregiverEntity;
+        final caregiver = data as CaregiverEntity;
         ProfileManager().caregiver = caregiver;
         UserManager().setUser(UserEntity(id: caregiver.id, role: UserRole.caregiver));
         break;

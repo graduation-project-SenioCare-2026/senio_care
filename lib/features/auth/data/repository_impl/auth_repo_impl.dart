@@ -6,8 +6,8 @@ import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/features/auth/api/client/google_auth_services.dart';
 import 'package:senio_care/features/auth/api/models/request/google_sign_in_request.dart';
 import 'package:senio_care/features/auth/data/data_source/remote/auth_remote_ds.dart';
+import 'package:senio_care/features/auth/domain/entity/caregiver_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
-import 'package:senio_care/features/auth/domain/entity/get_caregiver_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/service_provider_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/user_entity.dart';
 import 'package:senio_care/features/auth/domain/repository/auth_repo.dart';
@@ -47,7 +47,7 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<Result<GetCaregiverEntity>> getCaregiverById(String id) {
+  Future<Result<CaregiverEntity>> getCaregiverById(String id) {
     return _remoteDs.getCaregiverById(id);
   }
 

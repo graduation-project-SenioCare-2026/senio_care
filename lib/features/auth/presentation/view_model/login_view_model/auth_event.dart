@@ -23,6 +23,3 @@ class GetServiceProviderByIdEvent extends AuthEvent{
   GetServiceProviderByIdEvent(this.id);
 }
 
-class InitSessionEvent extends AuthEvent{}
-
-class SignOutEvent extends AuthEvent {}

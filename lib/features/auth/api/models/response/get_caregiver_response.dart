@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:senio_care/features/auth/api/models/response/elder_response.dart';
-import 'package:senio_care/features/auth/domain/entity/get_caregiver_entity.dart';
+import 'package:senio_care/features/auth/domain/entity/caregiver_entity.dart';
 
 part 'get_caregiver_response.g.dart';
 
@@ -21,7 +21,6 @@ class GetCaregiverResponse {
   @JsonKey(name: "updatedAt")
   final String? updatedAt;
 
-
   GetCaregiverResponse({
     this.id,
     this.phoneNumber,
@@ -30,7 +29,6 @@ class GetCaregiverResponse {
     this.elderIds,
     this.createdAt,
     this.updatedAt,
-
   });
 
   factory GetCaregiverResponse.fromJson(Map<String, dynamic> json) {
@@ -41,8 +39,8 @@ class GetCaregiverResponse {
     return _$GetCaregiverResponseToJson(this);
   }
 
-  GetCaregiverEntity toEntity() {
-    return GetCaregiverEntity(
+  CaregiverEntity toEntity() {
+    return CaregiverEntity(
       id: id,
       phoneNumber: phoneNumber,
       gender: gender,
@@ -51,6 +49,3 @@ class GetCaregiverResponse {
     );
   }
 }
-
-
-

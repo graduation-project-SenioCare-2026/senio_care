@@ -17,6 +17,10 @@ class UserManager {
   bool get isLoggedIn => _user != null;
   UserRole? get role => _user?.role;
 
+  String? get name => _user?.name;
+  String? get email => _user?.email;
+  String? get avatar => _user?.avatar;
+
   void setUser(UserEntity user) => _user = user;
   void clear() => _user = null;
 }

@@ -8,8 +8,8 @@ import 'package:senio_care/features/auth/api/models/response/elder_response.dart
 import 'package:senio_care/features/auth/api/models/response/get_caregiver_response.dart';
 import 'package:senio_care/features/auth/api/models/response/service_provider_response.dart';
 import 'package:senio_care/features/auth/data/data_source/remote/auth_remote_ds.dart';
+import 'package:senio_care/features/auth/domain/entity/caregiver_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
-import 'package:senio_care/features/auth/domain/entity/get_caregiver_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/service_provider_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/user_entity.dart';
 
@@ -27,6 +27,9 @@ class AuthRemoteDsImpl implements AuthRemoteDs {
     return safeCall<UserEntity>(() async {
       final response = await _authApiServices.signInWithGoogle(request);
 
+      if(response.user != null){
+        await _secureStorage.saveUser(response.user!.toEntity());
+      }
       if (response.token != null) {
         await _secureStorage.saveToken(response.token!);
       }
@@ -50,7 +53,7 @@ class AuthRemoteDsImpl implements AuthRemoteDs {
 
 
   @override
-  Future<Result<GetCaregiverEntity>> getCaregiverById(String id) {
+  Future<Result<CaregiverEntity>> getCaregiverById(String id) {
     return safeCall(() async{
       GetCaregiverResponse response= await _authApiServices.getCaregiverById(id);
       return response.toEntity();

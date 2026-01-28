@@ -16,6 +16,25 @@ class UserEntity extends Equatable{
     this.role,
   });
 
+
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'email': email,
+    'avatar': avatar,
+    'role': role?.name,
+  };
+
+
+  factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
+    id: json['id'],
+    name: json['name'],
+    email: json['email'],
+    avatar: json['avatar'],
+    role: json['role'] != null ? UserRole.values.firstWhere((r) => r.name == json['role']) : null,
+  );
+
   @override
   List<Object?> get props => [id,name,email,avatar,role];
 }

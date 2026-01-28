@@ -24,7 +24,6 @@ class _ElderHomeState extends State<ElderHome> {
 
   @override
   Widget build(BuildContext context) {
-    // ElderEntity? elder = ProfileManager().elder;
     return Stack(
       children: [
         BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
@@ -33,30 +32,32 @@ class _ElderHomeState extends State<ElderHome> {
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.all(15),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(25),
-              child: BottomNavigationBar(
-                currentIndex: currentIndex,
-                type: BottomNavigationBarType.fixed,
-                elevation: 10,
-                backgroundColor: AppColors.white,
-                selectedItemColor: AppColors.gradientEnd,
-                unselectedItemColor: AppColors.black.withAlpha(150),
-                selectedIconTheme: IconThemeData(size: 30),
-                unselectedIconTheme: IconThemeData(size: 25),
-                showUnselectedLabels: false,
-                showSelectedLabels: false,
-                onTap: (index) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                },
-                items: [
-                  BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-                  BottomNavigationBarItem(icon: Icon(Icons.sos), label: ""),
-                  BottomNavigationBarItem(icon: Icon(Icons.medical_services), label: ""),
-                  BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
-                ],
-              )
+                borderRadius: BorderRadius.circular(25),
+                child: BottomNavigationBar(
+                  currentIndex: currentIndex,
+                  type: BottomNavigationBarType.fixed,
+                  elevation: 10,
+                  backgroundColor: AppColors.white,
+                  selectedItemColor: AppColors.gradientEnd,
+                  unselectedItemColor: AppColors.black.withAlpha(150),
+                  selectedIconTheme: IconThemeData(size: 30),
+                  unselectedIconTheme: IconThemeData(size: 25),
+                  showUnselectedLabels: false,
+                  showSelectedLabels: false,
+                  onTap: (index) {
+                    setState(() {
+                      currentIndex = index;
+                    });
+                  },
+                  items: [
+                    BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
+                    BottomNavigationBarItem(icon: Icon(Icons.sos), label: ""),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.medical_services), label: ""),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.person), label: ""),
+                  ],
+                )
             ),
           ),
         ),

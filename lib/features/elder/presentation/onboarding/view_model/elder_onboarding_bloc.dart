@@ -4,7 +4,10 @@ import 'package:injectable/injectable.dart';
 import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
+import 'package:senio_care/core/user/profile_manager.dart';
+import 'package:senio_care/core/user/user_manager.dart';
 import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
+import 'package:senio_care/features/auth/domain/entity/user_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/allergy_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/blood_type_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/disease_entity.dart';
@@ -273,6 +276,10 @@ class ElderOnboardingBloc
             elderOnboardingStatus: StateStatus.success(result.data),
             destination: RoutesNames.elderHome,
           ),
+        );
+        ProfileManager().elder = result.data;
+        UserManager().setUser(
+          UserEntity(id: result.data.id, role: UserRole.serviceProvider),
         );
       case Failure<ElderEntity>():
         emit(

@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/routes/app_routes.dart';
 import 'package:senio_care/core/routes/routes_names.dart';
@@ -9,6 +10,8 @@ import 'package:senio_care/core/theme/app_theme.dart';
 import 'package:senio_care/firebase_options.dart';
 import 'config/di/di.dart';
 import 'core/responsive/size_provider.dart';
+import 'features/auth/presentation/view_model/user_session_view_model/user_session_bloc.dart';
+import 'features/auth/presentation/view_model/user_session_view_model/user_session_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +34,9 @@ void main() async {
       startLocale: Locale("en"),
       child: DevicePreview(
         enabled: true,
-        builder: (_) => const MyApp(),
+        builder: (_) => BlocProvider(
+          create: (_) => getIt<SessionBloc>()..add(InitSessionEvent()),
+            child: const MyApp()),
       ),
     ),
   );

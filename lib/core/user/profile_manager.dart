@@ -1,5 +1,5 @@
+import 'package:senio_care/features/auth/domain/entity/caregiver_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
-import 'package:senio_care/features/auth/domain/entity/get_caregiver_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/service_provider_entity.dart';
 
 class ProfileManager {
@@ -8,7 +8,7 @@ class ProfileManager {
   ProfileManager._internal();
 
   ElderEntity? elder;
-  GetCaregiverEntity? caregiver;
+  CaregiverEntity? caregiver;
   ServiceProviderEntity? serviceProvider;
 
   void clear() {
