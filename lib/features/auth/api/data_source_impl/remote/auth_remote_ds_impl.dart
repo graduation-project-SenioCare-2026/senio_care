@@ -27,17 +27,21 @@ class AuthRemoteDsImpl implements AuthRemoteDs {
     return safeCall<UserEntity>(() async {
       final response = await _authApiServices.signInWithGoogle(request);
 
-      if(response.user != null){
-        await _secureStorage.saveUser(response.user!.toEntity());
-      }
       if (response.token != null) {
         await _secureStorage.saveToken(response.token!);
       }
-
       if(response.user != null){
         await _secureStorage.saveRole(response.user!.role!);
       }
-
+      if (response.user?.name != null) {
+        await _secureStorage.saveName(response.user?.name!);
+      }
+      if (response.user?.email != null) {
+        await _secureStorage.saveEmail(response.user?.email!);
+      }
+      if (response.user?.avatar != null) {
+        await _secureStorage.saveAvatar(response.user?.avatar!);
+      }
       return response.user!.toEntity();
     });
   }

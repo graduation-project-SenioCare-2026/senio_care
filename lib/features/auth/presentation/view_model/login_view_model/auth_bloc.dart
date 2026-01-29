@@ -23,11 +23,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final GetServiceProviderByIdUseCase _getServiceProviderUseCase;
 
   AuthBloc(
-    this._googleSignInUseCase,
-    this._getElderByIdUseCase,
-    this._getCaregiverByIdUseCase,
-    this._getServiceProviderUseCase,
-  ) : super(AuthState()) {
+      this._googleSignInUseCase,
+      this._getElderByIdUseCase,
+      this._getCaregiverByIdUseCase,
+      this._getServiceProviderUseCase,
+      ) : super(AuthState()) {
     on<SignInWithGoogleEvent>(_signInWithGoogle);
     on<GetElderByIdEvent>(_getElderById);
     on<GetCaregiverByIdEvent>(_getCaregiverById);
@@ -35,87 +35,135 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _signInWithGoogle(
-    SignInWithGoogleEvent event,
-    Emitter<AuthState> emit,
-  ) async {
+      SignInWithGoogleEvent event,
+      Emitter<AuthState> emit,
+      ) async {
     emit(state.copyWith(loginStatus: StateStatus.loading()));
+
     final result = await _googleSignInUseCase(event.role);
+
     switch (result) {
       case Success<UserEntity>():
-        emit(state.copyWith(loginStatus: StateStatus.success(result.data)));
+        UserManager().setUser(
+          UserEntity(
+            name: result.data.name,
+            email: result.data.email,
+            avatar: result.data.avatar,
+          ),
+        );
+
+        emit(state.copyWith(
+          loginStatus: StateStatus.success(result.data),
+        ));
+        break;
+
       case Failure<UserEntity>():
         emit(
           state.copyWith(
             loginStatus: StateStatus.failure(result.responseException),
           ),
         );
+        break;
     }
   }
 
   Future<void> _getElderById(
-    GetElderByIdEvent event,
-    Emitter<AuthState> emit,
-  ) async {
+      GetElderByIdEvent event,
+      Emitter<AuthState> emit,
+      ) async {
     emit(state.copyWith(getElderStatus: StateStatus.loading()));
-    final result = await _getElderByIdUseCase.call(event.id);
+
+    final result = await _getElderByIdUseCase(event.id);
+
     switch (result) {
       case Success<ElderEntity>():
-        emit(state.copyWith(getElderStatus: StateStatus.success(result.data)));
         ProfileManager().elder = result.data;
+
+        final currentUser = UserManager().user!;
         UserManager().setUser(
-          UserEntity(id: result.data.id, role: UserRole.elder),
+          currentUser.copyWith(
+            id: result.data.id,
+            role: UserRole.elder,
+          ),
         );
+
+        emit(state.copyWith(
+          getElderStatus: StateStatus.success(result.data),
+        ));
+        break;
+
       case Failure<ElderEntity>():
         emit(
           state.copyWith(
             getElderStatus: StateStatus.failure(result.responseException),
           ),
         );
+        break;
     }
   }
 
   Future<void> _getCaregiverById(
-    GetCaregiverByIdEvent event,
-    Emitter<AuthState> emit,
-  ) async {
+      GetCaregiverByIdEvent event,
+      Emitter<AuthState> emit,
+      ) async {
     emit(state.copyWith(getCaregiverStatus: StateStatus.loading()));
-    final result = await _getCaregiverByIdUseCase.call(event.id);
+
+    final result = await _getCaregiverByIdUseCase(event.id);
+
     switch (result) {
       case Success<CaregiverEntity>():
-        emit(
-          state.copyWith(getCaregiverStatus: StateStatus.success(result.data)),
-        );
         ProfileManager().caregiver = result.data;
+
+        final currentUser = UserManager().user!;
         UserManager().setUser(
-          UserEntity(id: result.data.id,
-              role: UserRole.caregiver,),
+          currentUser.copyWith(
+            id: result.data.id,
+            role: UserRole.caregiver,
+          ),
         );
+
+        emit(state.copyWith(
+          getCaregiverStatus: StateStatus.success(result.data),
+        ));
+        break;
+
       case Failure<CaregiverEntity>():
         emit(
           state.copyWith(
-            getCaregiverStatus: StateStatus.failure(result.responseException),
+            getCaregiverStatus:
+            StateStatus.failure(result.responseException),
           ),
         );
+        break;
     }
   }
 
   Future<void> _getServiceProviderById(
-    GetServiceProviderByIdEvent event,
-    Emitter<AuthState> emit,
-  ) async {
+      GetServiceProviderByIdEvent event,
+      Emitter<AuthState> emit,
+      ) async {
     emit(state.copyWith(getServiceProviderStatus: StateStatus.loading()));
-    final result = await _getServiceProviderUseCase.call(event.id);
+
+    final result = await _getServiceProviderUseCase(event.id);
+
     switch (result) {
       case Success<ServiceProviderEntity>():
-        emit(
-          state.copyWith(
-            getServiceProviderStatus: StateStatus.success(result.data),
+        ProfileManager().serviceProvider = result.data;
+
+        final currentUser = UserManager().user!;
+        UserManager().setUser(
+          currentUser.copyWith(
+            id: result.data.id,
+            role: UserRole.serviceProvider,
           ),
         );
-        ProfileManager().serviceProvider = result.data;
-        UserManager().setUser(
-          UserEntity(id: result.data.id, role: UserRole.serviceProvider),
-        );
+
+        emit(state.copyWith(
+          getServiceProviderStatus:
+          StateStatus.success(result.data),
+        ));
+        break;
+
       case Failure<ServiceProviderEntity>():
         emit(
           state.copyWith(
@@ -124,6 +172,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             ),
           ),
         );
+        break;
     }
   }
 }

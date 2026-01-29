@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:senio_care/core/cache/secure_storage_service.dart';
 import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/core/user/user_manager.dart';
 import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
-import 'package:senio_care/features/auth/domain/entity/user_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/allergy_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/blood_type_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/disease_entity.dart';
@@ -28,15 +28,16 @@ class ElderOnboardingBloc
   final GetDiseasesUseCase _getDiseasesUseCase;
   final GetBloodTypesUseCase _getBloodTypesUseCase;
   final GetMobilityStatusUseCase _getMobilityStatusUseCase;
+  final SecureStorageService _secureStorage;
 
   ElderOnboardingBloc(
     this._submitElderOnboardingDataUseCse,
     this._getAllergyUseCase,
-      this._getDiseasesUseCase,
-      this._getBloodTypesUseCase,
-      this._getMobilityStatusUseCase
+    this._getDiseasesUseCase,
+    this._getBloodTypesUseCase,
+    this._getMobilityStatusUseCase,
+    this._secureStorage,
   ) : super(ElderOnboardingState()) {
-
     on<SetGenderEvent>(_setGender);
     on<SetHasCaregiverEvent>(_setHasCaregiver);
     on<AddCaregiverIdEvent>(_addCaregiverId);
@@ -59,7 +60,6 @@ class ElderOnboardingBloc
     add(GetDiseasesEvent());
     add(GetBloodTypesEvent());
     add(GetMobilityStatusEvent());
-
   }
   final ageController = TextEditingController();
   final weightController = TextEditingController();
@@ -134,10 +134,8 @@ class ElderOnboardingBloc
 
     switch (result) {
       case Success<List<AllergyEntity>>():
-
         emit(state.copyWith(allergiesStatus: StateStatus.success(result.data)));
       case Failure<List<AllergyEntity>>():
-
         emit(
           state.copyWith(
             allergiesStatus: StateStatus.failure(result.responseException),
@@ -163,19 +161,17 @@ class ElderOnboardingBloc
   }
 
   Future<void> _getDiseases(
-      GetDiseasesEvent event,
-      Emitter<ElderOnboardingState> emit,
-      ) async {
+    GetDiseasesEvent event,
+    Emitter<ElderOnboardingState> emit,
+  ) async {
     emit(state.copyWith(diseasesStatus: StateStatus.loading()));
 
     final result = await _getDiseasesUseCase.call();
 
     switch (result) {
       case Success<List<DiseaseEntity>>():
-
         emit(state.copyWith(diseasesStatus: StateStatus.success(result.data)));
       case Failure<List<DiseaseEntity>>():
-
         emit(
           state.copyWith(
             diseasesStatus: StateStatus.failure(result.responseException),
@@ -185,25 +181,25 @@ class ElderOnboardingBloc
   }
 
   void _setSelectedDiseases(
-      SetSelectedDiseasesEvent event,
-      Emitter<ElderOnboardingState> emit,
-      ) {
+    SetSelectedDiseasesEvent event,
+    Emitter<ElderOnboardingState> emit,
+  ) {
     emit(state.copyWith(selectedDiseases: event.diseases));
   }
 
   void _removeDisease(
-      RemoveDiseaseEvent event,
-      Emitter<ElderOnboardingState> emit,
-      ) {
+    RemoveDiseaseEvent event,
+    Emitter<ElderOnboardingState> emit,
+  ) {
     final updatedList = List<DiseaseEntity>.from(state.selectedDiseases)
       ..remove(event.disease);
     emit(state.copyWith(selectedDiseases: updatedList));
   }
 
   Future<void> _getBloodTypes(
-      GetBloodTypesEvent event,
-      Emitter<ElderOnboardingState> emit,
-      ) async {
+    GetBloodTypesEvent event,
+    Emitter<ElderOnboardingState> emit,
+  ) async {
     emit(state.copyWith(bloodTypeStatus: StateStatus.loading()));
 
     final result = await _getBloodTypesUseCase.call();
@@ -222,24 +218,25 @@ class ElderOnboardingBloc
   }
 
   void _setSelectedBloodType(
-      SetSelectedBloodTypeEvent event,
-      Emitter<ElderOnboardingState> emit,
-      ) {
+    SetSelectedBloodTypeEvent event,
+    Emitter<ElderOnboardingState> emit,
+  ) {
     emit(state.copyWith(selectedBloodType: event.bloodType));
   }
 
   Future<void> _getMobilityStatus(
-      GetMobilityStatusEvent event,
-      Emitter<ElderOnboardingState> emit,
-      ) async {
+    GetMobilityStatusEvent event,
+    Emitter<ElderOnboardingState> emit,
+  ) async {
     emit(state.copyWith(mobilityStatusState: StateStatus.loading()));
-
 
     final result = await _getMobilityStatusUseCase.call();
 
     switch (result) {
       case Success<List<MobilityStatusEntity>>():
-        emit(state.copyWith(mobilityStatusState: StateStatus.success(result.data)));
+        emit(
+          state.copyWith(mobilityStatusState: StateStatus.success(result.data)),
+        );
       case Failure<List<MobilityStatusEntity>>():
         emit(
           state.copyWith(
@@ -249,16 +246,18 @@ class ElderOnboardingBloc
     }
   }
 
-
   void _selectMobilityStatusEvent(
-      SelectMobilityStatusEvent event,
-      Emitter<ElderOnboardingState> emit,
-      ) {
+    SelectMobilityStatusEvent event,
+    Emitter<ElderOnboardingState> emit,
+  ) {
     final list = state.mobilityStatusState.data ?? [];
 
-    emit(state.copyWith(
+    emit(
+      state.copyWith(
         selectedMobilityIndex: event.index,
-      selectedMobilityState: list[event.index],));
+        selectedMobilityState: list[event.index],
+      ),
+    );
   }
 
   Future<void> _submitElderOnboardingData(
@@ -271,16 +270,23 @@ class ElderOnboardingBloc
 
     switch (result) {
       case Success<ElderEntity>():
+        ProfileManager().elder = result.data;
+
+        await _secureStorage.saveElderId(result.data.id ?? '');
+        await _secureStorage.saveRole(UserRole.elder.name);
+
+        final currentUser = UserManager().user!;
+        UserManager().setUser(
+          currentUser.copyWith(id: result.data.id, role: UserRole.elder),
+        );
+
         emit(
           state.copyWith(
             elderOnboardingStatus: StateStatus.success(result.data),
             destination: RoutesNames.elderHome,
           ),
         );
-        ProfileManager().elder = result.data;
-        UserManager().setUser(
-          UserEntity(id: result.data.id, role: UserRole.serviceProvider),
-        );
+
       case Failure<ElderEntity>():
         emit(
           state.copyWith(
@@ -300,5 +306,4 @@ class ElderOnboardingBloc
     caregiverIdController.dispose();
     return super.close();
   }
-
 }

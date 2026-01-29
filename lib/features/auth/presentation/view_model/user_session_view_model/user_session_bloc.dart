@@ -43,6 +43,20 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
       return;
     }
 
+    final name = await _secureStorage.getName();
+    final email = await _secureStorage.getEmail();
+    final avatar = await _secureStorage.getAvatar();
+
+    if (name != null || email != null) {
+      UserManager().setUser(
+        UserEntity(
+          name: name,
+          email: email,
+          avatar: avatar,
+        ),
+      );
+    }
+
     final role = (await _secureStorage.getRole())?.toUserRole();
     final entityId = role != null ? await _getEntityId(role) : null;
 
@@ -57,9 +71,15 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
         switch (result) {
           case Success<ElderEntity>():
             ProfileManager().elder = result.data;
+
+            final currentUser = UserManager().user!;
             UserManager().setUser(
-              UserEntity(id: result.data.id, role: UserRole.elder),
+              currentUser.copyWith(
+                id: result.data.id,
+                role: UserRole.elder,
+              ),
             );
+
             emit(state.copyWith(
               elderStatus: StateStatus.success(result.data),
               role: role,
@@ -75,9 +95,15 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
         switch (result) {
           case Success<CaregiverEntity>():
             ProfileManager().caregiver = result.data;
+
+            final currentUser = UserManager().user!;
             UserManager().setUser(
-              UserEntity(id: result.data.id, role: UserRole.caregiver),
+              currentUser.copyWith(
+                id: result.data.id,
+                role: UserRole.caregiver,
+              ),
             );
+
             emit(state.copyWith(
               caregiverStatus: StateStatus.success(result.data),
               role: role,
@@ -93,9 +119,15 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
         switch (result) {
           case Success<ServiceProviderEntity>():
             ProfileManager().serviceProvider = result.data;
+
+            final currentUser = UserManager().user!;
             UserManager().setUser(
-              UserEntity(id: result.data.id, role: UserRole.serviceProvider),
+              currentUser.copyWith(
+                id: result.data.id,
+                role: UserRole.serviceProvider,
+              ),
             );
+
             emit(state.copyWith(
               serviceProviderStatus: StateStatus.success(result.data),
               role: role,

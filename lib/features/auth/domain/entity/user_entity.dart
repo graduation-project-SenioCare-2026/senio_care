@@ -17,6 +17,21 @@ class UserEntity extends Equatable{
   });
 
 
+  UserEntity copyWith({
+    String? id,
+    String? name,
+    String? email,
+    String? avatar,
+    UserRole? role,
+  }) {
+    return UserEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      avatar: avatar ?? this.avatar,
+      role: role ?? this.role,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     'id': id,

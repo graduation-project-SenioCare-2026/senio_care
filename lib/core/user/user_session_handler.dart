@@ -18,75 +18,91 @@ class UserSessionHandler {
   UserSessionHandler(this._secureStorage, this._resolver);
 
   Future<bool> initSession() async {
-  //read token
     final token = await _secureStorage.getToken();
-    if (token == null) {
-      await logout();
-      return false;
+    if (token == null) return false;
+
+    final name = await _secureStorage.getName();
+    final email = await _secureStorage.getEmail();
+    final avatar = await _secureStorage.getAvatar();
+
+    if (name != null || email != null) {
+      UserManager().setUser(
+        UserEntity(
+          name: name,
+          email: email,
+          avatar: avatar,
+        ),
+      );
     }
 
-    //read role
     final roleString = await _secureStorage.getRole();
-    if (roleString == null) {
-      await logout();
-      return false;
-    }
+    final role = roleString?.toUserRole();
+    if (role == null) return false;
 
-    //pattern matching
-    final role = roleString.toUserRole();
-    if (role == null) {
-      await logout();
-      return false;
-    }
-
-    //read id based on role
     final entityId = await _getEntityId(role);
-    if (entityId == null) {
-      await logout();
-      return false;
-    }
+    if (entityId == null) return false;
 
-    //get profile
     final result = await _resolver(role, entityId);
-    if (result is! Success) {
-      await logout();
-      return false;
-    }
+    if (result is! Success) return false;
 
-   //save data
     _saveProfile(role, result.data);
     return true;
   }
-
   Future<String?> _getEntityId(UserRole role) async {
     switch (role) {
       case UserRole.elder:
-        return await _secureStorage.getElderId();
+        return _secureStorage.getElderId();
       case UserRole.caregiver:
-        return await _secureStorage.getCaregiverId();
+        return _secureStorage.getCaregiverId();
       case UserRole.serviceProvider:
-        return await _secureStorage.getServiceProviderId();
+        return _secureStorage.getServiceProviderId();
     }
   }
 
   void _saveProfile(UserRole role, dynamic data) {
+    final currentUser = UserManager().user;
+
     switch (role) {
       case UserRole.elder:
         final elder = data as ElderEntity;
         ProfileManager().elder = elder;
-        UserManager().setUser(UserEntity(id: elder.id, role: UserRole.elder,));
+
+        if (currentUser != null) {
+          UserManager().setUser(
+            currentUser.copyWith(
+              id: elder.id,
+              role: UserRole.elder,
+            ),
+          );
+        }
         break;
 
       case UserRole.caregiver:
         final caregiver = data as CaregiverEntity;
         ProfileManager().caregiver = caregiver;
-        UserManager().setUser(UserEntity(id: caregiver.id, role: UserRole.caregiver));
+
+        if (currentUser != null) {
+          UserManager().setUser(
+            currentUser.copyWith(
+              id: caregiver.id,
+              role: UserRole.caregiver,
+            ),
+          );
+        }
         break;
 
       case UserRole.serviceProvider:
         final sp = data as ServiceProviderEntity;
         ProfileManager().serviceProvider = sp;
-        UserManager().setUser(UserEntity(id: sp.id, role: UserRole.serviceProvider));
+
+        if (currentUser != null) {
+          UserManager().setUser(
+            currentUser.copyWith(
+              id: sp.id,
+              role: UserRole.serviceProvider,
+            ),
+          );
+        }
         break;
     }
   }

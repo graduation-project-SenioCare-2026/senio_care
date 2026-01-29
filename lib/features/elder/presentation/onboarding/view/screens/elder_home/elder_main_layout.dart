@@ -16,7 +16,7 @@ class ElderHome extends StatefulWidget {
 class _ElderHomeState extends State<ElderHome> {
   int currentIndex = 0;
   List<Widget> taps = [
-    ElderHomeTap(),
+    ElderHomeTab(),
     SosTab(),
     ServicesTab(),
     ElderProfileTap(),
