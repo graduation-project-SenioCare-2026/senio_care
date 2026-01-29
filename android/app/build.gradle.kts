@@ -1,4 +1,3 @@
-
 plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
@@ -30,16 +29,19 @@ android {
 
     signingConfigs {
         create("teamDebug") {
-            storeFile = file(System.getenv("KEYSTORE_PATH"))
+            storeFile = file("$rootDir/team_debug.keystore")
             storePassword = System.getenv("KEYSTORE_PASSWORD")
             keyAlias = System.getenv("KEY_ALIAS")
             keyPassword = System.getenv("KEY_PASSWORD")
         }
     }
 
+
     buildTypes {
         getByName("debug") {
             signingConfig = signingConfigs.getByName("teamDebug")
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
         getByName("release") {
             signingConfig = signingConfigs.getByName("teamDebug")
