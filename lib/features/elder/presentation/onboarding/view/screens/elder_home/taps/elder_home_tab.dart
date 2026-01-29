@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:senio_care/config/di/di.dart';
+import 'package:senio_care/core/common_widgets/gradient_icon_container.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/core/user/user_manager.dart';
-import 'package:senio_care/features/auth/presentation/view_model/login_view_model/auth_bloc.dart';
-import 'package:senio_care/features/auth/presentation/view_model/login_view_model/auth_state.dart';
 
 class ElderHomeTab extends StatelessWidget {
   const ElderHomeTab({super.key});
@@ -27,16 +24,24 @@ class ElderHomeTab extends StatelessWidget {
             const SizedBox(height: 20),
 
             // Avatar
-            CircleAvatar(
-              radius: 55,
-              backgroundImage: (user?.avatar != null &&
-                  user!.avatar!.isNotEmpty)
-                  ? NetworkImage(user.avatar!)
-                  : null,
-              child: (user?.avatar == null ||
-                  user!.avatar!.isEmpty)
-                  ? const Icon(Icons.person, size: 50)
-                  : null,
+            GradientIconContainer(
+              width: 100,
+              height: 100,
+              radius: 100,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: (user?.avatar != null && user!.avatar!.isNotEmpty)
+                    ? Image.network(
+                  user.avatar!,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                )
+                    : Container(
+                  color: Colors.grey[300],
+                  child: const Icon(Icons.person, size: 50),
+                ),
+              ),
             ),
 
             const SizedBox(height: 16),

@@ -9,10 +9,8 @@ import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/core/theme/app_theme.dart';
 import 'package:senio_care/firebase_options.dart';
 import 'config/di/di.dart';
-import 'core/cache/secure_storage_service.dart';
 import 'core/responsive/size_provider.dart';
 import 'features/auth/presentation/view_model/user_session_view_model/user_session_bloc.dart';
-import 'features/auth/presentation/view_model/user_session_view_model/user_session_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +34,7 @@ void main() async {
       child: DevicePreview(
         enabled: true,
         builder: (_) => BlocProvider(
-          create: (_) => getIt<SessionBloc>()..add(InitSessionEvent()),
+          create: (_) => getIt<SessionBloc>(),
             child: const MyApp()),
       ),
     ),

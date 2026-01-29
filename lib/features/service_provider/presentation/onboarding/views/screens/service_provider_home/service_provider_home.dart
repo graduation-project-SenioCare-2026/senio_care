@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:senio_care/config/di/di.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/core/user/user_manager.dart';
-import 'package:senio_care/features/auth/presentation/view_model/login_view_model/auth_bloc.dart';
-import 'package:senio_care/features/auth/presentation/view_model/login_view_model/auth_state.dart';
 
 class ServiceProviderHome extends StatelessWidget {
   const ServiceProviderHome({super.key});
