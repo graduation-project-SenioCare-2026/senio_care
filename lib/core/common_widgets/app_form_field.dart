@@ -8,22 +8,24 @@ import 'package:senio_care/core/theme/font_style.dart';
 
 class AppFormField extends StatelessWidget {
   final String label;
-  final String hint;
+  final String? hint;
   final TextInputType keyboardType;
   final String? suffix;
   final String? Function(String?)? validator;
   final TextEditingController? controller;
   final AutovalidateMode? autoValidateMode;
+  final String? initialFormFieldValue;
 
   const AppFormField({
     super.key,
     required this.label,
-    required this.hint,
+     this.hint,
     this.keyboardType = TextInputType.text,
     this.suffix,
     this.validator,
     this.controller,
     this.autoValidateMode,
+    this.initialFormFieldValue
   });
 
   @override
@@ -41,9 +43,10 @@ class AppFormField extends StatelessWidget {
         SizedBox(height: context.setHeight(8)),
         CustomTextFormField(
           controller: controller,
+          initialValue: initialFormFieldValue,
           validator: validator,
           keyboardType: keyboardType,
-          hintText: hint.tr(),
+          hintText: hint?.tr()??"",
           hintStyle: getRegularStyle(
             color: AppColors.gray[800] ?? AppColors.gray,
           ),

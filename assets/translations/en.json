@@ -137,6 +137,7 @@
   "heightNotValid": "Height is not valid",
   "invalidId": "id should be 24 length",
   "itemAlreadyExists":"Item already exists",
+  "noCaregiversProvided": "No caregivers provided",
   "welcome": "Welcome",
   "haveANiceDay": "Have a nice day",
   "reminders": "Reminders",

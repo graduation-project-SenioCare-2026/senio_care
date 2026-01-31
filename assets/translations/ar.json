@@ -134,6 +134,7 @@
   "heightNotValid": "الطول غير صالح",
   "invalidId": "id يجب ان يكون 24 رمز",
   "itemAlreadyExists":"العنصر موجود بالفعل",
+  "noCaregiversProvided_ar": "لم يتم توفير مقدمي الرعاية",
   "welcome": "مرحباً",
   "haveANiceDay": "نتمنى لك يوماً سعيداً",
   "reminders": "التذكيرات",

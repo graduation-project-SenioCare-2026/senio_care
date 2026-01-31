@@ -31,4 +31,5 @@ abstract final class AppIcons {
   static const String sos = "$baseAppIconPath/sos.png";
   static const String virus = "$baseAppIconPath/virus.png";
   static const String weight = "$baseAppIconPath/weight.png";
+  static const String editInfo="$baseAppIconPath/edit_info.png";
 }
