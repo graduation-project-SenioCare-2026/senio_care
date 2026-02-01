@@ -73,6 +73,21 @@ class InfoCard extends StatelessWidget {
               const Divider(),
 
               InfoRow(
+                label: "bloodType".tr(),
+                icon: Icons.bloodtype,
+                value: elder?.bloodType,
+              ),
+              const Divider(),
+
+              InfoRow(
+                label: "mobilityStatus".tr(),
+                icon: Icons.wheelchair_pickup_outlined,
+                values: elder?.allergies,
+              ),
+              const Divider(),
+
+
+              InfoRow(
                 label: "caregivers".tr(),
                 icon: Icons.volunteer_activism,
                 values: elder?.caregiverIds,
