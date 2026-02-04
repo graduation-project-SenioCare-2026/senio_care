@@ -17,4 +17,10 @@ abstract class ServiceProviderApiServices {
   Future<ServiceProviderResponse> serviceProviderOnboarding(
     @Body() ServiceProviderOnboardingRequest request,
   );
+
+  @PUT(EndPointsConstants.serviceProviderById)
+  Future<ServiceProviderResponse> serviceProviderEditProfile(
+      @Path('id') String serviceProviderId,
+      @Body() ServiceProviderOnboardingRequest request,
+      );
 }

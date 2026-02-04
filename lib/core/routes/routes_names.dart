@@ -8,5 +8,6 @@ abstract class RoutesNames {
   static const String elderHome= "elderHome";
   static const String caregiverHome="caregiverHome";
   static const String serviceProviderHome="ServiceProviderHome";
+  static const String serviceProviderEditProfile="ServiceProviderEditProfile";
 
 }

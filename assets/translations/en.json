@@ -108,6 +108,7 @@
   "phoneNumbersOnly": "Phone number must contain digits only",
   "phoneLength": "Phone number must be 11 digits",
   "invalidEgyptianPhone": "Invalid phone number",
+  "notProvided":"Not Provided",
 
   "medicalHistory": "Medical History",
   "pleaseProvideYourMedicalInformation": "Please provide your medical information",

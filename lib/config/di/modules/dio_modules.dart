@@ -11,7 +11,19 @@ import 'package:senio_care/core/network/interceptors/token_interceptor.dart';
 abstract class DioModule {
   @lazySingleton
   Dio provieDio() {
-    final dio = Dio();
+    final dio = Dio(
+      BaseOptions(
+        followRedirects: true,
+        maxRedirects: 5,
+        validateStatus: (status) {
+          return status != null && status < 500;
+        },
+      ),
+    );
+
+    dio.options.headers = {
+      Constants.contentType: Constants.appJson,
+    };
     dio.interceptors.add(getIt.get<PrettyDioLogger>());
     dio.interceptors.add(getIt.get<TokenInterceptor>());
     dio.options.headers = {Constants.contentType: Constants.appJson};
