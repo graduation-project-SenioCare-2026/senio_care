@@ -36,7 +36,7 @@ class ServiceProviderEditProfileBloc
     Emitter<ServiceProviderEditProfileState> emit,
   ) async {
     emit(
-      state.copyWith(serviceProviderEditProfileState: StateStatus.loading()),
+      state.copyWith(getServiceProviderStatus: StateStatus.loading()),
     );
     final result = await _providerByIdUseCase(event.id);
     if (result is Success<ServiceProviderEntity>) {
@@ -50,13 +50,13 @@ class ServiceProviderEditProfileBloc
       );
       emit(
         state.copyWith(
-          serviceProviderEditProfileState: StateStatus.success(result.data),
+          getServiceProviderStatus: StateStatus.success(result.data),
         ),
       );
     } else if (result is Failure<ServiceProviderEntity>) {
       emit(
         state.copyWith(
-          serviceProviderEditProfileState: StateStatus.failure(
+          getServiceProviderStatus: StateStatus.failure(
             result.responseException,
           ),
         ),
