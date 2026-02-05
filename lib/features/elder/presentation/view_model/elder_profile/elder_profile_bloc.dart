@@ -10,6 +10,7 @@ import 'package:senio_care/features/auth/domain/entity/caregiver_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
 import 'package:senio_care/features/auth/domain/use_case/get_caregiver_by_id_use_case.dart';
 import 'package:senio_care/features/auth/domain/use_case/get_elder_by_id_use_case.dart';
+import 'package:senio_care/features/elder/api/models/request/onboarding/elder_onboarding_request.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/allergy_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/disease_entity.dart';
 import 'package:senio_care/features/elder/domain/use_case/edit_elder_profile_use_case.dart';
@@ -44,8 +45,11 @@ class ElderProfileBloc extends Bloc<ElderProfileEvent, ElderProfileState> {
     on<SetBloodTypeEvent>(_setBloodTypeEvent);
     on<SetMobilityEvent>(_setMobilityEvent);
     on<GetElderEvent>(_getElderById);
-    on<EditElderProfileEvent>(_editElderProfile);
     on<GetMultipleCaregiversEvent>(_getMultipleCaregivers);
+    // on<AddCaregiverEvent>(_addCaregiver);
+    on<RemoveCaregiverEvent>(_removeCaregiver);
+    on<EditElderProfileEvent>(_editElderProfile);
+
   }
 
   void _onInitProfile(
@@ -195,39 +199,144 @@ class ElderProfileBloc extends Bloc<ElderProfileEvent, ElderProfileState> {
       GetMultipleCaregiversEvent event,
       Emitter<ElderProfileState> emit,
       ) async {
-    emit(state.copyWith(
-      getCaregiversStatus: const StateStatus.loading(),
-    ));
+    emit(
+      state.copyWith(
+        getCaregiversStatus: const StateStatus.loading(),
+      ),
+    );
 
     final List<CaregiverEntity> caregivers = [];
     final List<String> failedIds = [];
 
-    for (final id in event.caregiverIds) {
-      final result = await _getCaregiverByIdUseCase.call(id);
+    final results = await Future.wait(
+      event.caregiverIds.map(_getCaregiverByIdUseCase.call),
+    );
 
-      switch (result) {
-        case Success<CaregiverEntity>():
-          caregivers.add(result.data);
-          break;
+    for (int i = 0; i < results.length; i++) {
+      final result = results[i];
 
-        case Failure<CaregiverEntity>():
-          failedIds.add(id);
-          break;
+      if (result is Success<CaregiverEntity>) {
+        caregivers.add(result.data);
+      } else if (result is Failure<CaregiverEntity>) {
+        failedIds.add(event.caregiverIds[i]);
       }
     }
 
     if (caregivers.isNotEmpty) {
-      emit(state.copyWith(
-        getCaregiversStatus: StateStatus.success(caregivers),
-      ));
-    } else {
-      emit(state.copyWith(
-        getCaregiversStatus: StateStatus.failure(
-          ResponseException(message: 'Failed to load caregivers'),
+      emit(
+        state.copyWith(
+          getCaregiversStatus: StateStatus.success(caregivers),
         ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          getCaregiversStatus: StateStatus.failure(
+            ResponseException(
+              message: 'Failed to load caregivers',
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+
+  // void _addCaregiver(
+  //     AddCaregiverEvent event,
+  //     Emitter<ElderProfileState> emit,
+  //     ) async {
+  //   List<CaregiverEntity> currentCaregivers = [];
+  //   final currentState = state.getCaregiversStatus;
+  //   if (currentState is StateStatus<List<CaregiverEntity>> && currentState.data != null) {
+  //     currentCaregivers = List.from(currentState.data!);
+  //   }
+  //
+  //   emit(state.copyWith(getCaregiversStatus: const StateStatus.loading()));
+  //
+  //   // جلب بيانات الـ caregiver الجديد
+  //   final result = await _getCaregiverByIdUseCase.call(event.id);
+  //
+  //   if (result is Success<CaregiverEntity>) {
+  //     // تحقق من عدم التكرار
+  //     if (!currentCaregivers.any((c) => c.id == result.data.id)) {
+  //       currentCaregivers.add(result.data);
+  //
+  //       // ✅ تحديث الـ elder profile على الـ Backend
+  //       final elder = ProfileManager().elder;
+  //       if (elder != null) {
+  //         final updatedCaregiverIds = [
+  //           ...(elder.caregiverIds ?? []),
+  //           event.id,
+  //         ];
+  //
+  //         // استخدم EditElderProfileEvent لحفظ التغييرات
+  //         final editRequest = ElderOnboardingRequest(
+  //           caregiverIds: updatedCaregiverIds,
+  //           // أضف باقي البيانات الضرورية
+  //         );
+  //
+  //         final editResult = await _editElderProfileUseCase.call(
+  //           elder.id!,
+  //           editRequest,
+  //         );
+  //
+  //         if (editResult is Success<ElderEntity>) {
+  //           ProfileManager().elder = editResult.data;
+  //         }
+  //       }
+  //     }
+  //
+  //     emit(state.copyWith(
+  //       getCaregiversStatus: StateStatus.success(currentCaregivers),
+  //     ));
+  //   } else if (result is Failure<CaregiverEntity>) {
+  //     emit(state.copyWith(
+  //       getCaregiversStatus: StateStatus.failure(
+  //         result.responseException ,
+  //       ),
+  //     ));
+  //   }
+  // }
+
+  void _removeCaregiver(
+      RemoveCaregiverEvent event,
+      Emitter<ElderProfileState> emit,
+      ) async {
+    final currentState = state.getCaregiversStatus;
+    if (currentState is StateStatus<List<CaregiverEntity>> && currentState.data != null) {
+      final updatedCaregivers = currentState.data!
+          .where((c) => c.id != event.id)
+          .toList();
+
+      // ✅ تحديث الـ elder profile على الـ Backend
+      final elder = ProfileManager().elder;
+      if (elder != null) {
+        final updatedCaregiverIds = (elder.caregiverIds ?? [])
+            .where((id) => id != event.id)
+            .toList();
+
+        final editRequest = ElderOnboardingRequest(
+          caregiverIds: updatedCaregiverIds,
+          // أضف باقي البيانات الضرورية
+        );
+
+        final editResult = await _editElderProfileUseCase.call(
+          elder.id!,
+          editRequest,
+        );
+
+        if (editResult is Success<ElderEntity>) {
+          ProfileManager().elder = editResult.data;
+        }
+      }
+
+      emit(state.copyWith(
+        getCaregiversStatus: StateStatus.success(updatedCaregivers),
       ));
     }
   }
+
 
 
   @override
