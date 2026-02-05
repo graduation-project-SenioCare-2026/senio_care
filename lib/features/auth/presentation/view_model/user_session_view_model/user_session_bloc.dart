@@ -24,11 +24,11 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   final SecureStorageService _secureStorage;
 
   SessionBloc(
-    this._getElderByIdUseCase,
-    this._getCaregiverByIdUseCase,
-    this._getServiceProviderUseCase,
-    this._secureStorage,
-  ) : super(SessionState()) {
+      this._getElderByIdUseCase,
+      this._getCaregiverByIdUseCase,
+      this._getServiceProviderUseCase,
+      this._secureStorage,
+      ) : super(SessionState()) {
     on<InitSessionEvent>(_initSession);
     // on<SignOutEvent>(_signOut);
   }
@@ -151,10 +151,10 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     }
   }
 
-  // Future<void> _signOut(SignOutEvent event, Emitter<SessionState> emit) async {
-  //   await _secureStorage.clearSession();
-  //   ProfileManager().clear();
-  //   UserManager().clear();
-  //   emit(SessionState());
-  // }
+// Future<void> _signOut(SignOutEvent event, Emitter<SessionState> emit) async {
+//   await _secureStorage.clearSession();
+//   ProfileManager().clear();
+//   UserManager().clear();
+//   emit(SessionState());
+// }
 }

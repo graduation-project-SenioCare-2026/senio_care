@@ -19,14 +19,10 @@ class EditPersonalInfoScreen extends StatelessWidget {
         SafeArea(
           child: MultiBlocProvider(
             providers: [
-              // ✅ Onboarding bloc للحصول على القوائم المتاحة فقط
+              BlocProvider(create: (context) => getIt<ElderOnboardingBloc>()),
               BlocProvider(
-                create: (context) => getIt<ElderOnboardingBloc>(),
-              ),
-              // ✅ Profile bloc لإدارة البيانات المختارة والحفظ
-              BlocProvider(
-                create: (context) => getIt<ElderProfileBloc>()
-                  ..add(InitElderProfileEvent()),
+                create: (context) =>
+                    getIt<ElderProfileBloc>()..add(InitElderProfileEvent()),
               ),
             ],
             child: EditPersonalInfoViewBody(),

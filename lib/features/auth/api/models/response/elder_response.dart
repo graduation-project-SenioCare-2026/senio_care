@@ -19,14 +19,17 @@ class ElderResponse {
   final List<String>? chronicDiseases;
   @JsonKey(name: "allergies")
   final List<String>? allergies;
+
+  // Handle both string IDs and full caregiver objects
   @JsonKey(name: "caregiver_ids")
   final List<String>? caregiverIds;
+
   @JsonKey(name: "bloodType")
   final String? bloodType;
   @JsonKey(name: "mobilityStatus")
   final String? mobilityStatus;
 
-  ElderResponse ({
+  ElderResponse({
     this.id,
     this.age,
     this.weight,
@@ -39,6 +42,7 @@ class ElderResponse {
     this.mobilityStatus,
   });
 
+
   factory ElderResponse.fromJson(Map<String, dynamic> json) {
     return _$ElderResponseFromJson(json);
   }
@@ -47,7 +51,7 @@ class ElderResponse {
     return _$ElderResponseToJson(this);
   }
 
-  ElderEntity toEntity(){
+  ElderEntity toEntity() {
     return ElderEntity(
       id: id,
       age: age,
@@ -58,9 +62,7 @@ class ElderResponse {
       allergies: allergies,
       bloodType: bloodType,
       mobilityStatus: mobilityStatus,
-      caregiverIds: caregiverIds
+      caregiverIds: caregiverIds,
     );
   }
 }
-
-

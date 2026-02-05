@@ -25,6 +25,8 @@ class _EditInfoCardState extends State<EditInfoCard> {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<ElderProfileBloc>();
+    final elder = context.read<ElderProfileBloc>().state.getElderStatus?.data ??
+        context.read<ElderProfileBloc>().state.editElderProfileStatus.data;
 
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: context.setWidth(25)),
@@ -65,12 +67,14 @@ class _EditInfoCardState extends State<EditInfoCard> {
                   const AllergiesEditSection(),
                   const BloodTypeEdit(),
                   const MobilityStatusEdit(),
-                  const CaregiversEditSection(),
+                   CaregiversEditSection(
+                    elder: elder,
+                  ),
                 ],
               ),
             ),
           ),
-          SizedBox(height: context.setHeight(20)),
+          SizedBox(height: context.setHeight(5)),
         ]),
       ),
     );

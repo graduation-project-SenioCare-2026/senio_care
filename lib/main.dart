@@ -22,7 +22,7 @@ void main() async {
   await configureDependencies();
 // In your app, add a button or run this once
 //   await getIt<SecureStorageService>(). clearSession();
-
+  //
   runApp(
     EasyLocalization(
       path: 'assets/translations',

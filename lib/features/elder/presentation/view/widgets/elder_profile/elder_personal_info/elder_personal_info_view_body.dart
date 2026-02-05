@@ -12,67 +12,77 @@ import 'package:senio_care/features/elder/presentation/view/widgets/elder_profil
 import 'package:senio_care/features/elder/presentation/view/widgets/elder_profile/elder_personal_info/info_card.dart';
 import 'package:senio_care/features/elder/presentation/view_model/elder_profile/elder_profile_bloc.dart';
 import 'package:senio_care/features/elder/presentation/view_model/elder_profile/elder_profile_event.dart';
+import 'package:senio_care/features/elder/presentation/view_model/elder_profile/elder_profile_state.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ElderPersonalInfoViewBody extends StatelessWidget {
   const ElderPersonalInfoViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.transparent,
-            centerTitle: true,
-            elevation: 0,
-            title: Text(
-              "personalInformation".tr(),
-              style: getBoldStyle(
-                color: AppColors.black,
-                fontSize: context.setSp(FontSize.s24),
-              ),
-            ),
-            leading: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: AppColors.black,
-                size: context.setWidth(25),
-              ),
-            ),
-            actions: [
-              GestureDetector(
-                onTap: () async {
-                  final wasUpdated = await Navigator.pushNamed(
-                    context,
-                    RoutesNames.elderEditProfile,
-                  );
+    return BlocBuilder<ElderProfileBloc, ElderProfileState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: Skeletonizer(
+            enabled: state.getElderStatus?.isLoading??false,
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  backgroundColor: Colors.transparent,
+                  centerTitle: true,
+                  elevation: 0,
+                  title: Text(
+                    "personalInformation".tr(),
+                    style: getBoldStyle(
+                      color: AppColors.black,
+                      fontSize: context.setSp(FontSize.s24),
+                    ),
+                  ),
+                  leading: IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: AppColors.black,
+                      size: context.setWidth(25),
+                    ),
+                  ),
+                  actions: [
+                    GestureDetector(
+                      onTap: () async {
+                        final wasUpdated = await Navigator.pushNamed(
+                          context,
+                          RoutesNames.elderEditProfile,
+                        );
 
 
-                  if (wasUpdated == true && context.mounted) {
-                    final elderId = ProfileManager().elder?.id;
-                    if (elderId != null) {
-                      context.read<ElderProfileBloc>().add(GetElderEvent(elderId));
-                    }
-                  }
-                },
-                child: Padding(
-                  padding: EdgeInsetsDirectional.only(
-                    end: context.setWidth(10),
-                  ),
-                  child: Image.asset(
-                    AppIcons.editInfo,
-                    width: context.setWidth(30),
-                    height: context.setHeight(30),
-                  ),
+                        if (wasUpdated == true && context.mounted) {
+                          final elderId = ProfileManager().elder?.id;
+                          if (elderId != null) {
+                            context.read<ElderProfileBloc>().add(
+                                GetElderEvent(elderId));
+                          }
+                        }
+                      },
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.only(
+                          end: context.setWidth(10),
+                        ),
+                        child: Image.asset(
+                          AppIcons.editInfo,
+                          width: context.setWidth(30),
+                          height: context.setHeight(30),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
+                AvatarNameContainer(),
+                InfoCard(),
+              ],
+            ),
           ),
-          AvatarNameContainer(),
-          InfoCard(),
-        ],
-      ),
+        );
+      },
     );
   }
 }

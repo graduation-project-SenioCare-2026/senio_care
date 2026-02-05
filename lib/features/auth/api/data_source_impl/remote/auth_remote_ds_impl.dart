@@ -5,7 +5,6 @@ import 'package:senio_care/core/safe_call/safe_call.dart';
 import 'package:senio_care/features/auth/api/client/auth_api_services.dart';
 import 'package:senio_care/features/auth/api/models/request/google_sign_in_request.dart';
 import 'package:senio_care/features/auth/api/models/response/elder_response.dart';
-import 'package:senio_care/features/auth/api/models/response/get_caregiver_response.dart';
 import 'package:senio_care/features/auth/api/models/response/service_provider_response.dart';
 import 'package:senio_care/features/auth/data/data_source/remote/auth_remote_ds.dart';
 import 'package:senio_care/features/auth/domain/entity/caregiver_entity.dart';
@@ -59,7 +58,7 @@ class AuthRemoteDsImpl implements AuthRemoteDs {
   @override
   Future<Result<CaregiverEntity>> getCaregiverById(String id) {
     return safeCall(() async{
-      GetCaregiverResponse response= await _authApiServices.getCaregiverById(id);
+      final response= await _authApiServices.getCaregiverById(id);
       return response.toEntity();
     },);
   }

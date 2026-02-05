@@ -33,7 +33,8 @@ class ElderProfileState extends Equatable {
     BloodTypeEntity? selectedBloodType,
     MobilityStatusEntity? selectedMobilityStatus,
     StateStatus<ElderEntity>?  getElderStatus,
-    StateStatus<List<CaregiverEntity>>? getCaregiversStatus
+    StateStatus<List<CaregiverEntity>>? getCaregiversStatus,
+
 
   }) {
     return ElderProfileState(

@@ -58,6 +58,16 @@ class GetMultipleCaregiversEvent extends ElderProfileEvent {
   GetMultipleCaregiversEvent(this.caregiverIds);
 }
 
+class AddCaregiverEvent extends ElderProfileEvent {
+  final String id;
+  AddCaregiverEvent(this.id);
+}
+
+class RemoveCaregiverEvent extends ElderProfileEvent {
+  final String id;
+  RemoveCaregiverEvent(this.id);
+}
+
 class EditElderProfileEvent extends ElderProfileEvent {
   final String id;
   final ElderOnboardingRequest request;

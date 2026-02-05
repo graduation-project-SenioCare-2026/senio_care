@@ -19,4 +19,12 @@ abstract class ElderApiServices {
       @Body() ElderOnboardingRequest request
       );
 
+  @PUT(EndPointsConstants.elderById)
+  Future<ElderResponse> editElder(
+      @Path('id') String id,
+      @Body() ElderOnboardingRequest request
+
+      );
+
+
 }
