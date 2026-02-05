@@ -28,9 +28,10 @@ class _ElderHomeState extends State<ElderHome> {
       children: [
         BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
         Scaffold(
+          extendBody: true,
           body: taps[currentIndex],
           bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(25),
                 child: BottomNavigationBar(
