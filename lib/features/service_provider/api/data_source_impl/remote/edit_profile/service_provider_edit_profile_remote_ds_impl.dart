@@ -6,26 +6,18 @@ import 'package:senio_care/features/service_provider/api/client/service_provider
 import 'package:senio_care/features/service_provider/api/models/request/onboarding/service_provider_onboarding_request.dart';
 import 'package:senio_care/features/service_provider/data/data_source/remote/edit_profile/service_provider_edit_profile_remote_ds.dart';
 
-import '../../../../../../core/cache/secure_storage_service.dart';
-
 @Injectable(as: ServiceProviderEditProfileRemoteDS)
 class ServiceProviderEditProfileRemoteDSImpl
     implements ServiceProviderEditProfileRemoteDS {
-
   final ServiceProviderApiServices _serviceProviderApiServices;
-  final SecureStorageService _secureStorage;
 
-  ServiceProviderEditProfileRemoteDSImpl(
-    this._serviceProviderApiServices,
-    this._secureStorage,
-  );
+  ServiceProviderEditProfileRemoteDSImpl(this._serviceProviderApiServices);
   @override
   Future<Result<ServiceProviderEntity>> serviceProviderEditProfileRemoteDS(
     String id,
     ServiceProviderOnboardingRequest request,
   ) async {
     return safeCall<ServiceProviderEntity>(() async {
-      // final getId = await _secureStorage.getServiceProviderId();
       final response = await _serviceProviderApiServices
           .serviceProviderEditProfile(id, request);
       return response.toEntity();

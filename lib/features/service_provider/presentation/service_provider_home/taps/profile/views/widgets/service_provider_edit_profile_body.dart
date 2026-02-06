@@ -7,6 +7,7 @@ import 'package:senio_care/features/service_provider/presentation/service_provid
 
 import '../../../../../../../../core/common_widgets/app_form_field.dart';
 import '../../../../../../../../core/common_widgets/blur_container.dart';
+import '../../../../../../../../core/common_widgets/custom_card.dart';
 import '../../../../../../../../core/common_widgets/custom_elevated_button.dart';
 import '../../../../../../../../core/user/profile_manager.dart';
 import '../../../../../../../../core/user/user_manager.dart';
@@ -19,16 +20,15 @@ class ServiceProviderEditProfileBody extends StatelessWidget {
 
   final user = UserManager().user;
 
-  final serviceProvider = ProfileManager().serviceProvider;
-
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<ServiceProviderEditProfileBloc>();
+
     return BlocConsumer<
       ServiceProviderEditProfileBloc,
       ServiceProviderEditProfileState
     >(
-      listener: (BuildContext context, ServiceProviderEditProfileState state) {
+      listener: (context, state) {
         if (state.serviceProviderEditProfileState.isSuccess &&
             state.entity != null) {
           Navigator.pop(context, true);
@@ -37,54 +37,67 @@ class ServiceProviderEditProfileBody extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.serviceProviderEditProfileState !=
           current.serviceProviderEditProfileState,
-      builder: (BuildContext context, ServiceProviderEditProfileState state) {
-        return Form(
-          key: bloc.formKey,
-          child: Column(
-            children: [
-              SizedBox(height: context.setHeight(60)),
-              BlurContainer(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    AppFormField(
-                      label: 'phoneNumber'.tr(),
-                      hint: "",
-                      keyboardType: TextInputType.phone,
-                      validator: (_) => Validator.validatePhoneNumber(
-                        bloc.phoneNumberController.text,
-                      ),
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
-                      controller: bloc.phoneNumberController,
+      builder: (context, state) {
+        return CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.only(
+                top: context.setHeight(100),
+                right: context.setWidth(25),
+                left: context.setWidth(25),
+              ),
+              sliver: SliverToBoxAdapter(
+                child: CustomCard(
+                  child: Form(
+                    key: bloc.formKey,
+                    child: Column(
+                      children: [
+                        AppFormField(
+                          label: 'phoneNumber'.tr(),
+                          keyboardType: TextInputType.phone,
+                          controller: bloc.phoneNumberController,
+                          validator: (_) => Validator.validatePhoneNumber(
+                            bloc.phoneNumberController.text,
+                          ),
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
+                          hint: '',
+                        ),
+
+                        AppFormField(
+                          label: 'specialization'.tr(),
+                          controller: bloc.specializationController,
+                          validator: (_) => Validator.validateRequired(
+                            bloc.specializationController.text,
+                          ),
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
+                          hint: '',
+                        ),
+
+                        SizedBox(height: context.setHeight(20)),
+                        CustomElevatedButton(
+                          width: context.setWidth(300),
+                          onPressed: () {
+                            if (bloc.formKey.currentState!.validate()) {
+                              final request = ServiceProviderOnboardingRequest(
+                                phoneNumber: bloc.phoneNumberController.text,
+                                specialization:
+                                    bloc.specializationController.text,
+                              );
+
+                              bloc.add(
+                                ServiceProviderEditEvent(request, user!.id!),
+                              );
+                            }
+                          },
+                          buttonLabel: 'save'.tr(),
+                        ),
+                      ],
                     ),
-                    AppFormField(
-                      label: 'specialization'.tr(),
-                      hint: "",
-                      validator: (_) => Validator.validateRequired(
-                        bloc.specializationController.text,
-                      ),
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
-                      controller: bloc.specializationController,
-                    ),
-                    SizedBox(height: context.setHeight(20)),
-                  ],
+                  ),
                 ),
               ),
-              CustomElevatedButton(
-                width: context.setWidth(300),
-                onPressed: () {
-                  if (bloc.formKey.currentState!.validate()) {
-                    final request = ServiceProviderOnboardingRequest(
-                      phoneNumber: bloc.phoneNumberController.text,
-                      specialization: bloc.specializationController.text,
-                    );
-                    bloc.add(ServiceProviderEditEvent(request, user!.id!));
-                  }
-                },
-                buttonLabel: 'save'.tr(),
-              ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );

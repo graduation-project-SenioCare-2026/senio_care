@@ -16,8 +16,4 @@ class GetServiceProviderByIdEvent extends ServiceProviderEditProfileEvent{
   final String id;
   GetServiceProviderByIdEvent(this.id);
 }
-//
-// class ServiceProviderLoadData extends ServiceProviderEditProfileEvent {
-//   final ServiceProviderEntity entity;
-//   ServiceProviderLoadData(this.entity);
-// }
+

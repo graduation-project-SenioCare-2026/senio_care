@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/config/di/di.dart';
+import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/profile/view_model/service_provider_edit_profile_bloc.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/profile/view_model/service_provider_edit_profile_event.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/profile/views/widgets/service_provider_edit_profile_body.dart';
@@ -32,9 +33,13 @@ class ServiceProviderEditProfile extends StatelessWidget {
             centerTitle: true,
             leading: IconButton(
               onPressed: () {
-                Navigator.pop(context,true);
+                Navigator.pop(context, true);
               },
-              icon: Icon(Icons.arrow_back),
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.black,
+                size: context.setWidth(25),
+              ),
             ),
           ),
           body: BlocProvider(

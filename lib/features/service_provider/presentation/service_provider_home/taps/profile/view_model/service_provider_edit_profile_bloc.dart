@@ -26,7 +26,6 @@ class ServiceProviderEditProfileBloc
   ServiceProviderEditProfileBloc(this._case, this._providerByIdUseCase)
     : super(ServiceProviderEditProfileState()) {
     on<ServiceProviderEditEvent>(_serviceProviderEditProfile);
-    // on<ServiceProviderLoadData>(_serviceProviderLoadData);
     on<ServiceProviderInitProfile>(_initProfile);
     on<GetServiceProviderByIdEvent>(_getServiceProviderById);
   }
@@ -72,15 +71,6 @@ class ServiceProviderEditProfileBloc
     phoneNumberController.text = service?.phoneNumber.toString() ?? "";
     specializationController.text = service?.specialization.toString() ?? "";
   }
-  //
-  // void _serviceProviderLoadData(
-  //   ServiceProviderLoadData event,
-  //   Emitter<ServiceProviderEditProfileState> emit,
-  // ) async {
-  //   phoneNumberController.text = event.entity.phoneNumber ?? "notProvided".tr();
-  //   specializationController.text =
-  //       event.entity.specialization ?? "notProvided".tr();
-  // }
 
   Future<void> _serviceProviderEditProfile(
     ServiceProviderEditEvent event,
