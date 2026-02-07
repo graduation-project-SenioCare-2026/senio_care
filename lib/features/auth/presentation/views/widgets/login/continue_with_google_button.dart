@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:senio_care/core/cache/secure_storage_service.dart';
 import 'package:senio_care/core/common_widgets/custom_elevated_button.dart';
 import 'package:senio_care/core/constants/app_icons.dart';
 import 'package:senio_care/core/loaders/loaders.dart';
@@ -26,20 +27,39 @@ class ContinueWithGoogleButton extends StatelessWidget {
             message: "loginSuccess".tr(),
             context: context,
           );
-          if(state.loginStatus.data?.role==UserRole.elder) {
-            Navigator.pushNamedAndRemoveUntil(
-              context, RoutesNames.elderOnboarding, (route) => false,);
-          }
-        else if(state.loginStatus.data?.role==UserRole.caregiver){
-            Navigator.pushNamedAndRemoveUntil(
-              context, RoutesNames.caregiverOnboardingScreen, (route) => false,);
-          }
-        else if(state.loginStatus.data?.role==UserRole.serviceProvider)
-          {
-            Navigator.pushNamedAndRemoveUntil(
-              context, RoutesNames.serviceProviderOnboardingScreen, (route) => false,);
-          }
+
+          final storage = SecureStorageService();
+          storage.isOnboardingCompleted().then((onboardingDone) {
+            if (!context.mounted) return;
+
+            if (state.loginStatus.data?.role == UserRole.elder) {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                onboardingDone
+                    ? RoutesNames.elderHome
+                    : RoutesNames.elderOnboarding,
+                    (route) => false,
+              );
+            } else if (state.loginStatus.data?.role == UserRole.caregiver) {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                onboardingDone
+                    ? RoutesNames.caregiverHome
+                    : RoutesNames.caregiverOnboardingScreen,
+                    (route) => false,
+              );
+            } else if (state.loginStatus.data?.role == UserRole.serviceProvider) {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                onboardingDone
+                    ? RoutesNames.serviceProviderHome
+                    : RoutesNames.serviceProviderOnboardingScreen,
+                    (route) => false,
+              );
+            }
+          });
         }
+
         if (state.loginStatus.isFailure) {
           Loaders.showErrorMessage(
             message: state.loginStatus.error!.message,

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:senio_care/core/cache/secure_storage_service.dart';
 import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/routes/routes_names.dart';
@@ -27,8 +28,12 @@ class ElderOnboardingBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ElderOnboardingBloc, ElderOnboardingState>(
-      listener: (context, state) {
+      listener: (context, state) async{
         if (state.elderOnboardingStatus.isSuccess) {
+          final storage = SecureStorageService();
+          await storage.setOnboardingCompleted();
+
+          if (!context.mounted) return;
           Loaders.showSuccessMessage(
             message: "welcomeToSenioCare".tr(),
             context: context,

@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:senio_care/core/cache/secure_storage_service.dart';
 import 'package:senio_care/core/common_widgets/app_form_field.dart';
 import 'package:senio_care/core/common_widgets/blur_container.dart';
 import 'package:senio_care/core/common_widgets/custom_elevated_button.dart';
@@ -29,8 +30,12 @@ class ServiceProviderOnboardingBody extends StatelessWidget {
       ServiceProviderOnboardingBloc,
       ServiceProviderOnboardingState
     >(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state.serviceProviderOnboardingState.isFailure) {
+          final storage = SecureStorageService();
+          await storage.setOnboardingCompleted();
+
+          if (!context.mounted) return;
           Loaders.showErrorMessage(
             message: state.serviceProviderOnboardingState.error!.message,
             context: context,
