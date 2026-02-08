@@ -184,7 +184,10 @@
   "serviceDescription": "وصف الخدمة",
   "editPost": "تعديل المنشور",
   "saveChanges": "حفظ التغييرات",
-
+  "logout": "تسجيل الخروج",
+  "language": "اللغة",
+  "arabic": "العربية",
+  "english": "الإنجليزية",
   "emailRequired": "البريد الإلكتروني مطلوب",
   "emailNotValid": "يرجى إدخال بريد إلكتروني صالح",
   "passwordRequired": "كلمة المرور مطلوبة",
