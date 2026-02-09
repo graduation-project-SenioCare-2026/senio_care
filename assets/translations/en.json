@@ -112,6 +112,7 @@
   "language": "Language",
   "arabic": "Arabic",
   "english": "English",
+  "contactProvider": "Contact Provider",
   "medicalHistory": "Medical History",
   "pleaseProvideYourMedicalInformation": "Please provide your medical information",
   "age": "Age",

@@ -188,6 +188,7 @@
   "language": "اللغة",
   "arabic": "العربية",
   "english": "الإنجليزية",
+  "contactProvider": "التواصل مع مقدم الخدمة ",
   "emailRequired": "البريد الإلكتروني مطلوب",
   "emailNotValid": "يرجى إدخال بريد إلكتروني صالح",
   "passwordRequired": "كلمة المرور مطلوبة",
