@@ -21,18 +21,17 @@ class AvatarContainer extends StatelessWidget {
 
           GradientIconContainer(
             width: context.setWidth(90),
-            height: context.setHeight(100),
+            height: context.setHeight(90),
             radius: context.setSp(80),
             childPadding: context.setWidth(5),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(90),
-              child:
-              (user?.avatar != null && user!.avatar!.isNotEmpty)
+              child: (user?.avatar != null && user!.avatar!.isNotEmpty)
                   ? Image.network(user.avatar!, fit: BoxFit.cover)
                   : Container(
-                color: Colors.grey[300],
-                child: const Icon(Icons.person, size: 50),
-              ),
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.person, size: 50),
+                    ),
             ),
           ),
 
@@ -46,7 +45,7 @@ class AvatarContainer extends StatelessWidget {
             ),
           ),
           Text(
-            "serviceProvider".tr(),
+            user?.email ?? "notProvided",
             style: getBoldStyle(
               color: AppColors.gray,
               fontSize: context.setSp(FontSize.s14),

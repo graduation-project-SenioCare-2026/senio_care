@@ -111,12 +111,6 @@ class ServiceProviderProfileTab extends StatelessWidget {
                                     label: "Specialization",
                                     value: serviceProvider?.specialization,
                                   ),
-                                  const Divider(),
-                                  InfoRow(
-                                    icon: Icons.email,
-                                    label: "Email",
-                                    value: user?.email,
-                                  ),
                                 ],
                               ),
                             ),
