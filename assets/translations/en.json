@@ -232,5 +232,29 @@
   "dateRequired": "Date is required",
   "chronicDiseaseMinLength": "Please provide more details (at least 3 characters)",
   "allergyMinLength": "Please provide more details (at least 3 characters)",
-  "genderRequired": "Please select a gender"
+  "genderRequired": "Please select a gender",
+
+  "graph": "Graph",
+  "vitalsMonitoring": "Vitals Monitoring",
+  "pickAMetricToExploreElderData": "Pick a metric to explore elder's data",
+  "bloodSugar": "Blood Sugar",
+  "heartRate": "Heart Rate",
+  "oxygenLevel": "Oxygen Level",
+  "bloodPressure": "Blood Pressure",
+  "viewGraph": "View Graph",
+  "currentValue": "Current Value",
+  "averageRate": "Average Rate",
+  "systolic": "Systolic",
+  "diastolic": "Diastolic",
+  "normalRange": "Normal Range",
+  "normal": "Normal",
+  "high": "High",
+  "low": "Low",
+  "mgDl": "mg/dL",
+  "bpm": "bpm",
+  "%": "%",
+  "mmHg": "mm Hg",
+  "noDataAvailable": "No data available",
+  "avg": "Avg"
+
 }

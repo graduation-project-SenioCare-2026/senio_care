@@ -7,26 +7,33 @@ import 'package:senio_care/features/auth/presentation/view_model/login_view_mode
 import 'package:senio_care/features/auth/presentation/views/screens/login_screen.dart';
 import 'package:senio_care/features/auth/presentation/views/screens/roles_screen.dart';
 import 'package:senio_care/features/auth/presentation/views/screens/splash_screen.dart';
-import 'package:senio_care/features/caregiver/presentation/onboarding/views/screens/caregiver_home/caregiver_home.dart';
-import 'package:senio_care/features/elder/presentation/onboarding/view/screens/elder_home/elder_main_layout.dart';
+import 'package:senio_care/features/caregiver/presentation/caregiver_home/caregiver_main_layout.dart';
+import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/blood_pressure_screen.dart';
+import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/blood_sugar_screen.dart';
 import 'package:senio_care/features/elder/presentation/onboarding/view/screens/elder_onboarding_screen.dart';
 import 'package:senio_care/features/service_provider/presentation/onboarding/views/screens/service_provider_home/service_provider_home.dart';
 import 'package:senio_care/features/service_provider/presentation/onboarding/views/screens/service_provider_onboarding_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/onboarding/views/screens/caregiver_onboarding_screen.dart';
 
+import '../../features/caregiver/presentation/caregiver_home/taps/graph/view_model/caregiver_graph_bloc.dart';
+import '../../features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/heart_rate_screen.dart';
+import '../../features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/oxygen_screen.dart';
+import '../../features/elder/presentation/onboarding/view/screens/elder_home/elder_main_layout.dart';
+
 abstract class Routes {
   static final GlobalKey<NavigatorState> navigatorKey =
-  GlobalKey<NavigatorState>();
+      GlobalKey<NavigatorState>();
 
   static Route onGenerate(RouteSettings setting) {
     final url = Uri.parse(setting.name ?? "");
     switch (url.path) {
       case RoutesNames.splashScreen:
-        return MaterialPageRoute(builder: (_) =>
-            BlocProvider(
-              create: (context) => getIt<AuthBloc>(),
-              child: SplashScreen(),
-            ));
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<AuthBloc>(),
+            child: SplashScreen(),
+          ),
+        );
 
       case RoutesNames.rolesScreen:
         return MaterialPageRoute(builder: (_) => RolesScreen());
@@ -50,10 +57,36 @@ abstract class Routes {
         return MaterialPageRoute(builder: (context) => ElderHome());
 
       case RoutesNames.caregiverHome:
-        return MaterialPageRoute(builder: (_) => CaregiverHome());
+        return MaterialPageRoute(builder: (_) => CaregiverMainLayout());
 
       case RoutesNames.serviceProviderHome:
         return MaterialPageRoute(builder: (_) => ServiceProviderHome());
+
+      case RoutesNames.bloodSugarGraph:
+        final bloc = setting.arguments as CaregiverGraphBloc;
+        return MaterialPageRoute(
+          builder: (context) =>
+              BlocProvider.value(value: bloc, child: const BloodSugarScreen()),
+        );
+      case RoutesNames.heartRateGraph:
+        final bloc = setting.arguments as CaregiverGraphBloc;
+        return MaterialPageRoute(
+          builder: (context) =>
+              BlocProvider.value(value: bloc, child: const HeartRateScreen()),
+        );
+
+      case RoutesNames.oxygenGraph:
+        final bloc = setting.arguments as CaregiverGraphBloc;
+        return MaterialPageRoute(
+          builder: (context) =>
+              BlocProvider.value(value: bloc, child: const OxygenScreen()),
+        );
+      case RoutesNames.bloodPressureGraph:
+        final bloc = setting.arguments as CaregiverGraphBloc;
+        return MaterialPageRoute(
+          builder: (context) =>
+              BlocProvider.value(value: bloc, child: const BloodPressureScreen()),
+        );
 
       default:
         return MaterialPageRoute(

@@ -1,0 +1,11 @@
+{
+  "blood_pressure": [
+    {"day": "Sat", "systolic": 118, "diastolic": 76},
+    {"day": "Sun", "systolic": 122, "diastolic": 80},
+    {"day": "Mon", "systolic": 135, "diastolic": 88},
+    {"day": "Tue", "systolic": 128, "diastolic": 82},
+    {"day": "Wed", "systolic": 120, "diastolic": 78},
+    {"day": "Thu", "systolic": 116, "diastolic": 74},
+    {"day": "Fri", "systolic": 124, "diastolic": 81}
+  ]
+}

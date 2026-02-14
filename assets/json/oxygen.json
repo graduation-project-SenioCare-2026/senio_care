@@ -1,0 +1,11 @@
+{
+  "oxygen": [
+    {"day": "Sat", "value": 98},
+    {"day": "Sun", "value": 97},
+    {"day": "Mon", "value": 96},
+    {"day": "Tue", "value": 98},
+    {"day": "Wed", "value": 99},
+    {"day": "Thu", "value": 97},
+    {"day": "Fri", "value": 98}
+  ]
+}
