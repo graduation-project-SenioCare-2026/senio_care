@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/home/views/screen/caregiver_home_tab.dart';
-import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/views/screen/caregiver_profile_tab.dart';
+import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/screens/caregiver_graph_tab.dart';
+import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/home/views/screens/caregiver_home_tab.dart';
+import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/views/screens/caregiver_profile_tab.dart';
 
 import '../../../../core/common_widgets/bg_gradient.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -15,7 +17,11 @@ class CaregiverMainLayout extends StatefulWidget {
 
 class _CaregiverMainLayoutState extends State<CaregiverMainLayout> {
   int currentIndex = 0;
-  List<Widget> taps = [CaregiverHomeTab(), CaregiverProfileTab()];
+  List<Widget> taps = [
+    CaregiverHomeTab(),
+    CaregiverGraphTab(),
+    CaregiverProfileTab(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +31,7 @@ class _CaregiverMainLayoutState extends State<CaregiverMainLayout> {
         Scaffold(
           body: taps[currentIndex],
           bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(15),
+            padding:  EdgeInsets.all(context.setHeight(15)),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(25),
               child: BottomNavigationBar(
@@ -37,8 +43,8 @@ class _CaregiverMainLayoutState extends State<CaregiverMainLayout> {
                 unselectedItemColor: AppColors.black.withAlpha(150),
                 selectedIconTheme: IconThemeData(size: 30),
                 unselectedIconTheme: IconThemeData(size: 25),
-                showUnselectedLabels: false,
-                showSelectedLabels: false,
+                showUnselectedLabels: true,
+                showSelectedLabels: true,
                 onTap: (index) {
                   setState(() {
                     currentIndex = index;
@@ -48,6 +54,10 @@ class _CaregiverMainLayoutState extends State<CaregiverMainLayout> {
                   BottomNavigationBarItem(
                     icon: Icon(Icons.home),
                     label: "home".tr(),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.bar_chart),
+                    label: "graph".tr(),
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.person),

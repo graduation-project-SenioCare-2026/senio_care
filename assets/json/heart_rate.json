@@ -1,0 +1,11 @@
+{
+  "heart_rate": [
+    {"day": "Sat", "value": 72},
+    {"day": "Sun", "value": 68},
+    {"day": "Mon", "value": 85},
+    {"day": "Tue", "value": 78},
+    {"day": "Wed", "value": 70},
+    {"day": "Thu", "value": 66},
+    {"day": "Fri", "value": 74}
+  ]
+}

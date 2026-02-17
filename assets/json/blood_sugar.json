@@ -1,0 +1,11 @@
+{
+  "blood_sugar": [
+    {"day": "Sat", "value": 95, "unit": "mg/dL"},
+    {"day": "Sun", "value": 110, "unit": "mg/dL"},
+    {"day": "Mon", "value": 160, "unit": "mg/dL"},
+    {"day": "Tue", "value": 140, "unit": "mg/dL"},
+    {"day": "Wed", "value": 105, "unit": "mg/dL"},
+    {"day": "Thu", "value": 98, "unit": "mg/dL"},
+    {"day": "Fri", "value": 115, "unit": "mg/dL"}
+  ]
+}

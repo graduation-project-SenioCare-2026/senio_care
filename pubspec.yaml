@@ -52,6 +52,8 @@ dependencies:
   percent_indicator: ^4.2.5
   dropdown_search: ^6.0.2
   skeletonizer: ^2.1.2
+  fl_chart: ^1.1.1
+
 
 dev_dependencies:
   flutter_test:
