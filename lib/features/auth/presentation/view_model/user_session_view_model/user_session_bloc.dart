@@ -72,7 +72,13 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
           case Success<ElderEntity>():
             ProfileManager().elder = result.data;
 
-            final currentUser = UserManager().user!;
+            // final currentUser = UserManager().user!;
+            final currentUser = UserManager().user;
+
+            if (currentUser == null) {
+              emit(state.copyWith(sessionChecked: true));
+              return;
+            }
             UserManager().setUser(
               currentUser.copyWith(
                 id: result.data.id,

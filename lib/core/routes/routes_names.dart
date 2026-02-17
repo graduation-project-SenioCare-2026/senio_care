@@ -10,5 +10,6 @@ abstract class RoutesNames {
   static const String serviceProviderHome="ServiceProviderHome";
   static const String elderPersonalInfoScreen="elderPersonalInfo";
   static const String elderEditProfile="elderEditProfile";
+  static const String serviceProviderEditProfile="ServiceProviderEditProfile";
 
 }

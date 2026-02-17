@@ -184,6 +184,7 @@
   "serviceDescription": "وصف الخدمة",
   "editPost": "تعديل المنشور",
   "saveChanges": "حفظ التغييرات",
+  "notProvided": "غير مزود",
 
   "emailRequired": "البريد الإلكتروني مطلوب",
   "emailNotValid": "يرجى إدخال بريد إلكتروني صالح",

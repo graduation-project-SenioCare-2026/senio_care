@@ -8,14 +8,15 @@ import 'package:senio_care/features/auth/presentation/views/screens/login_screen
 import 'package:senio_care/features/auth/presentation/views/screens/roles_screen.dart';
 import 'package:senio_care/features/auth/presentation/views/screens/splash_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/onboarding/views/screens/caregiver_home/caregiver_home.dart';
+import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_main_layout.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_profile/edit_personal_info_screen.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_profile/elder_personal_info_screen.dart';
-import 'package:senio_care/features/service_provider/presentation/onboarding/views/screens/service_provider_home/service_provider_home.dart';
+import 'package:senio_care/features/elder/presentation/view/screens/elder_onboarding/elder_onboarding_screen.dart';
 import 'package:senio_care/features/service_provider/presentation/onboarding/views/screens/service_provider_onboarding_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/onboarding/views/screens/caregiver_onboarding_screen.dart';
+import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/profile/views/screens/service_provider_edit_profile.dart';
 
-import '../../features/elder/presentation/view/screens/elder_home/elder_main_layout.dart';
-import '../../features/elder/presentation/view/screens/elder_onboarding/elder_onboarding_screen.dart';
+import '../../features/service_provider/presentation/service_provider_home/service_provider_main_layout.dart';
 
 abstract class Routes {
   static final GlobalKey<NavigatorState> navigatorKey =
@@ -56,7 +57,11 @@ abstract class Routes {
         return MaterialPageRoute(builder: (_) => CaregiverHome());
 
       case RoutesNames.serviceProviderHome:
-        return MaterialPageRoute(builder: (_) => ServiceProviderHome());
+        return MaterialPageRoute(builder: (_) => ServiceProviderMainLayout());
+
+
+      case RoutesNames.serviceProviderEditProfile:
+        return MaterialPageRoute(builder: (_) => ServiceProviderEditProfile());
 
       case RoutesNames.elderPersonalInfoScreen:
         return MaterialPageRoute(builder: (_) => ElderPersonalInfoScreen(),);

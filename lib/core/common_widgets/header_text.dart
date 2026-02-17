@@ -9,12 +9,14 @@ class HeaderText extends StatelessWidget {
   final String subTitle;
   final double subTitleSize;
   final int? titlePadding;
+  final Color? color;
   const HeaderText({
     required this.title,
     required this.titleSize,
     required this.subTitle,
     required this.subTitleSize,
     this.titlePadding,
+    this.color,
     super.key,
   });
 
@@ -27,7 +29,7 @@ class HeaderText extends StatelessWidget {
           Text(
             title,
             style: getBoldStyle(
-              color: AppColors.white,
+              color: color??AppColors.white,
               fontSize: context.setSp(titleSize),
             ),
           ),
