@@ -15,18 +15,6 @@ class ElderProfileTap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        title: Text(
-          "myProfile".tr(),
-          style: getBoldStyle(
-            color: AppColors.black,
-            fontSize: context.setSp(FontSize.s24),
-          ),
-        ),
-      ),
-
       body: Padding(
         padding: EdgeInsets.symmetric(
           vertical: context.setHeight(30),
