@@ -95,9 +95,7 @@ class CaregiverHome extends StatelessWidget {
                           _infoRow(
                             icon: Icons.elderly,
                             label: "Elder ID",
-                            value: caregiver?.elderIds?.first ??
-                                caregiver?.elders?.first.id ??
-                                "Not linked",
+                            value: "caregiver!.elders!.length"
                           ),
                           const Divider(),
                           _infoRow(

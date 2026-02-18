@@ -7,7 +7,6 @@ class CaregiverEntity extends Equatable {
   final String? gender;
   final String? relationship;
   final List<ElderEntity>? elders;
-  final List<String>? elderIds;
 
   const CaregiverEntity({
     this.id,
@@ -15,10 +14,8 @@ class CaregiverEntity extends Equatable {
     this.gender,
     this.relationship,
     this.elders,
-    this.elderIds,
   });
 
   @override
-  List<Object?> get props =>
-      [id, phoneNumber, gender, relationship, elders, elderIds];
+  List<Object?> get props => [id, phoneNumber, gender, relationship, elders];
 }

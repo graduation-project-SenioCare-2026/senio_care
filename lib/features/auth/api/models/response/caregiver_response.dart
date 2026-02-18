@@ -1,27 +1,25 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:senio_care/features/auth/api/models/response/elder_response.dart';
 import 'package:senio_care/features/auth/domain/entity/caregiver_entity.dart';
 
 part 'caregiver_response.g.dart';
 
 @JsonSerializable()
 class CaregiverResponse {
-  @JsonKey(name: "_id")
-  final String? id;
   @JsonKey(name: "phone_number")
   final String? phoneNumber;
-  @JsonKey(name: "gender")
-  final String? gender;
   @JsonKey(name: "relationship")
   final String? relationship;
   @JsonKey(name: "elder_ids")
-  final List<String>? elderIds;
+  final List<ElderResponse>? elderIds;
+  @JsonKey(name: "id")
+  final String? id;
 
   CaregiverResponse ({
-    this.id,
     this.phoneNumber,
-    this.gender,
     this.relationship,
     this.elderIds,
+    this.id,
   });
 
   factory CaregiverResponse.fromJson(Map<String, dynamic> json) {
@@ -36,12 +34,11 @@ class CaregiverResponse {
     return CaregiverEntity(
       id: id,
       phoneNumber: phoneNumber,
-      gender: gender,
+      // gender: gender
       relationship: relationship,
-      elderIds: elderIds
+      elders: elderIds?.map((e) => e.toEntity(),).toList()
     );
   }
-
 }
 
 

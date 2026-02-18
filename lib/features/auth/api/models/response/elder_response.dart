@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:senio_care/features/auth/api/models/response/caregiver_response.dart';
 import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
 
 part 'elder_response.g.dart';
@@ -10,9 +11,9 @@ class ElderResponse {
   @JsonKey(name: "age")
   final int? age;
   @JsonKey(name: "weight")
-  final int? weight;
+  final double? weight;
   @JsonKey(name: "height")
-  final int? height;
+  final double? height;
   @JsonKey(name: "gender")
   final String? gender;
   @JsonKey(name: "chronicDiseases")
@@ -20,7 +21,7 @@ class ElderResponse {
   @JsonKey(name: "allergies")
   final List<String>? allergies;
   @JsonKey(name: "caregiver_ids")
-  final List<String>? caregiverIds;
+  final List<CaregiverResponse>? caregiverIds;
   @JsonKey(name: "bloodType")
   final String? bloodType;
   @JsonKey(name: "mobilityStatus")
@@ -58,7 +59,7 @@ class ElderResponse {
       allergies: allergies,
       bloodType: bloodType,
       mobilityStatus: mobilityStatus,
-      caregiverIds: caregiverIds
+      caregiverIds: caregiverIds?.map((e) => e.toEntity(),).toList()
     );
   }
 }

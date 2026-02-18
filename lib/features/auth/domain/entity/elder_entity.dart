@@ -1,14 +1,15 @@
 import 'package:equatable/equatable.dart';
+import 'package:senio_care/features/auth/domain/entity/caregiver_entity.dart';
 
 class ElderEntity extends Equatable {
   final String? id;
   final int? age;
-  final int? weight;
-  final int? height;
+  final double? weight;
+  final double? height;
   final String? gender;
   final List<String>? chronicDiseases;
   final List<String>? allergies;
-  final List<String>? caregiverIds;
+  final List<CaregiverEntity>? caregiverIds;
   final String? bloodType;
   final String? mobilityStatus;
 
