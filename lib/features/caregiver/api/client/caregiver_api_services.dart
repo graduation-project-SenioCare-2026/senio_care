@@ -16,4 +16,10 @@ abstract class CaregiverApiService {
   Future<CaregiverResponse> caregiverOnboarding(
     @Body() CaregiverOnboardingRequest request,
   );
+
+  @PUT(EndPointsConstants.caregiverById)
+  Future<CaregiverResponse> caregiverEditProfile(
+      @Path('id') String caregiverId,
+      @Body() CaregiverOnboardingRequest request,
+      );
 }

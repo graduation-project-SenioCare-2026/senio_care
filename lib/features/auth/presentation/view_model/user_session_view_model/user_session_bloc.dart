@@ -24,13 +24,13 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   final SecureStorageService _secureStorage;
 
   SessionBloc(
-    this._getElderByIdUseCase,
-    this._getCaregiverByIdUseCase,
-    this._getServiceProviderUseCase,
-    this._secureStorage,
-  ) : super(SessionState()) {
+      this._getElderByIdUseCase,
+      this._getCaregiverByIdUseCase,
+      this._getServiceProviderUseCase,
+      this._secureStorage,
+      ) : super(SessionState()) {
     on<InitSessionEvent>(_initSession);
-    // on<SignOutEvent>(_signOut);
+    on<SignOutEvent>(_signOut);
   }
   Future<void> _initSession(
       InitSessionEvent event,
@@ -72,7 +72,13 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
           case Success<ElderEntity>():
             ProfileManager().elder = result.data;
 
-            final currentUser = UserManager().user!;
+            // final currentUser = UserManager().user!;
+            final currentUser = UserManager().user;
+
+            if (currentUser == null) {
+              emit(state.copyWith(sessionChecked: true));
+              return;
+            }
             UserManager().setUser(
               currentUser.copyWith(
                 id: result.data.id,
@@ -151,10 +157,10 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     }
   }
 
-  // Future<void> _signOut(SignOutEvent event, Emitter<SessionState> emit) async {
-  //   await _secureStorage.clearSession();
-  //   ProfileManager().clear();
-  //   UserManager().clear();
-  //   emit(SessionState());
-  // }
+Future<void> _signOut(SignOutEvent event, Emitter<SessionState> emit) async {
+  await _secureStorage.clearSession();
+  ProfileManager().clear();
+  UserManager().clear();
+  emit(state.copyWith(sessionChecked: true));
+}
 }
