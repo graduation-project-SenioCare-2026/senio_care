@@ -8,26 +8,38 @@ part 'elder_response.g.dart';
 class ElderResponse {
   @JsonKey(name: "_id")
   final String? id;
+
   @JsonKey(name: "age")
   final int? age;
+
   @JsonKey(name: "weight")
   final double? weight;
+
   @JsonKey(name: "height")
   final double? height;
+
   @JsonKey(name: "gender")
   final String? gender;
+
   @JsonKey(name: "chronicDiseases")
   final List<String>? chronicDiseases;
+
   @JsonKey(name: "allergies")
   final List<String>? allergies;
-  @JsonKey(name: "caregiver_ids")
+
+  @JsonKey(
+    name: "caregiver_ids",
+    fromJson: _caregiverFromJson,
+  )
   final List<CaregiverResponse>? caregiverIds;
+
   @JsonKey(name: "bloodType")
   final String? bloodType;
+
   @JsonKey(name: "mobilityStatus")
   final String? mobilityStatus;
 
-  ElderResponse ({
+  ElderResponse({
     this.id,
     this.age,
     this.weight,
@@ -40,15 +52,12 @@ class ElderResponse {
     this.mobilityStatus,
   });
 
-  factory ElderResponse.fromJson(Map<String, dynamic> json) {
-    return _$ElderResponseFromJson(json);
-  }
+  factory ElderResponse.fromJson(Map<String, dynamic> json) =>
+      _$ElderResponseFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    return _$ElderResponseToJson(this);
-  }
+  Map<String, dynamic> toJson() => _$ElderResponseToJson(this);
 
-  ElderEntity toEntity(){
+  ElderEntity toEntity() {
     return ElderEntity(
       id: id,
       age: age,
@@ -59,9 +68,19 @@ class ElderResponse {
       allergies: allergies,
       bloodType: bloodType,
       mobilityStatus: mobilityStatus,
-      caregiverIds: caregiverIds?.map((e) => e.toEntity(),).toList()
+      caregiverIds: caregiverIds?.map((e) => e.toEntity()).toList(),
     );
   }
+
+  static List<CaregiverResponse>? _caregiverFromJson(dynamic json) {
+    if (json == null) return null;
+
+    return (json as List).map((e) {
+      if (e is String) {
+        return CaregiverResponse(id: e);
+      } else {
+        return CaregiverResponse.fromJson(e as Map<String, dynamic>);
+      }
+    }).toList();
+  }
 }
-
-

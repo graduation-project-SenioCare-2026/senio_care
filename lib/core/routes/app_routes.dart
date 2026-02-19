@@ -7,7 +7,7 @@ import 'package:senio_care/features/auth/presentation/view_model/login_view_mode
 import 'package:senio_care/features/auth/presentation/views/screens/login_screen.dart';
 import 'package:senio_care/features/auth/presentation/views/screens/roles_screen.dart';
 import 'package:senio_care/features/auth/presentation/views/screens/splash_screen.dart';
-import 'package:senio_care/features/caregiver/presentation/onboarding/views/screens/caregiver_home/caregiver_home.dart';
+import 'package:senio_care/features/caregiver/presentation/caregiver_home/caregiver_main_layout.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_main_layout.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_onboarding/elder_onboarding_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/blood_pressure_screen.dart';
@@ -61,7 +61,7 @@ abstract class Routes {
         return MaterialPageRoute(builder: (context) => ElderHome());
 
       case RoutesNames.caregiverHome:
-        return MaterialPageRoute(builder: (_) => CaregiverHome());
+        return MaterialPageRoute(builder: (_) => CaregiverMainLayout());
 
       case RoutesNames.serviceProviderHome:
         return MaterialPageRoute(builder: (_) => ServiceProviderMainLayout());

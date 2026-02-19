@@ -10,8 +10,24 @@ class CaregiverResponse {
   final String? phoneNumber;
   @JsonKey(name: "relationship")
   final String? relationship;
-  @JsonKey(name: "elder_ids")
+  @JsonKey(
+    name: "elder_ids",
+    fromJson: _elderFromJson,
+  )
   final List<ElderResponse>? elderIds;
+
+  static List<ElderResponse>? _elderFromJson(dynamic json) {
+    if (json == null) return null;
+
+    return (json as List).map((e) {
+      if (e is String) {
+        return ElderResponse(id: e);
+      } else {
+        return ElderResponse.fromJson(e as Map<String, dynamic>);
+      }
+    }).toList();
+  }
+
   @JsonKey(name: "id")
   final String? id;
 

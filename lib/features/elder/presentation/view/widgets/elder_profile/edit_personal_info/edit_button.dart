@@ -49,12 +49,12 @@ class EditButton extends StatelessWidget {
                       mobilityStatus:
                           state.selectedMobilityStatus?.en ??
                           elder?.mobilityStatus?.trim(),
-                      caregiverIds:
-                          state.getCaregiversStatus?.data
-                              ?.map((c) => c.id!)
-                              .toList() ??
-                          elder?.caregiverIds ??
-                          [],
+                      // caregiverIds:
+                      //     state.getCaregiversStatus?.data
+                      //         ?.map((c) => c.id!)
+                      //         .toList() ??
+                      //     elder?.caregiverIds ??
+                      //     [],
                     );
 
                     bloc.add(EditElderProfileEvent(elder!.id!, request));

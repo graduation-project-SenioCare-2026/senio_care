@@ -47,7 +47,7 @@ class CaregiverEditProfileBloc
 
     emit(
       state.copyWith(
-        elderId: caregiver?.elderIds ?? [],
+        // elderId: caregiver?.elderIds ?? [],
       ),
     );
   }
@@ -71,17 +71,17 @@ class CaregiverEditProfileBloc
         currentUser.copyWith(id: result.data.id, role: UserRole.caregiver),
       );
 
-      // ✅ Extract IDs from elders list if elderIds is null, filtering out nulls
-      final elderIdsToSet = result.data.elderIds ??
-          result.data.elders?.map((e) => e.id).whereType<String>().toList() ??
-          [];
+      // // ✅ Extract IDs from elders list if elderIds is null, filtering out nulls
+      // final elderIdsToSet = result.data.elderIds ??
+      //     result.data.elders?.map((e) => e.id).whereType<String>().toList() ??
+      //     [];
 
 
 
       emit(
         state.copyWith(
           getCaregiverProfileState: StateStatus.success(result.data),
-          elderId: elderIdsToSet,
+          // elderId: elderIdsToSet,
         ),
       );
 
@@ -108,14 +108,14 @@ class CaregiverEditProfileBloc
       ProfileManager().caregiver = result.data;
 
       // ✅ Extract IDs, filtering out nulls
-      final elderIdsToSet = result.data.elderIds ??
-          result.data.elders?.map((e) => e.id).whereType<String>().toList() ??
-          [];
+      // final elderIdsToSet = result.data.elderIds ??
+      //     result.data.elders?.map((e) => e.id).whereType<String>().toList() ??
+      //     [];
 
       emit(
         state.copyWith(
           caregiverEditProfileState: StateStatus.success(result.data),
-          elderId: elderIdsToSet,
+          // elderId: elderIdsToSet,
         ),
       );
     } else if (result is Failure<CaregiverEntity>) {
@@ -145,18 +145,18 @@ class CaregiverEditProfileBloc
     }
 
     // ✅ Get current IDs from elderIds OR extract from elders, filtering out nulls
-    final currentElderIds = caregiver.elderIds ??
-        caregiver.elders?.map((e) => e.id).whereType<String>().toList() ??
-        [];
+    // final currentElderIds = caregiver.elderIds ??
+    //     caregiver.elders?.map((e) => e.id).whereType<String>().toList() ??
+    //     [];
 
-    if (currentElderIds.contains(event.elderId)) return;
+    // if (currentElderIds.contains(event.elderId)) return;
 
     emit(state.copyWith(getElderState: const StateStatus.loading()));
 
-    final updatedElderIds = [...currentElderIds, event.elderId];
+    // final updatedElderIds = [...currentElderIds, event.elderId];
 
     final request = CaregiverOnboardingRequest(
-      elderIds: updatedElderIds,
+      // elderIds: updatedElderIds,
       phoneNumber: caregiver.phoneNumber,
       relationship: caregiver.relationship,
       gender: caregiver.gender,
@@ -168,13 +168,13 @@ class CaregiverEditProfileBloc
       ProfileManager().caregiver = result.data;
 
       // ✅ Extract IDs, filtering out nulls
-      final elderIdsToSet = result.data.elderIds ??
-          result.data.elders?.map((e) => e.id).whereType<String>().toList() ??
-          [];
+      // final elderIdsToSet = result.data.elderIds ??
+      //     result.data.elders?.map((e) => e.id).whereType<String>().toList() ??
+      //     [];
 
       emit(
         state.copyWith(
-          elderId: elderIdsToSet,
+          // elderId: elderIdsToSet,
           getElderState: StateStatus.success(result.data),
         ),
       );
@@ -195,16 +195,16 @@ class CaregiverEditProfileBloc
     if (caregiver == null) return;
 
     // ✅ Get current IDs, filtering out nulls
-    final currentElderIds = caregiver.elderIds ??
-        caregiver.elders?.map((e) => e.id).whereType<String>().toList() ??
-        [];
+    // final currentElderIds = caregiver.elderIds ??
+    //     caregiver.elders?.map((e) => e.id).whereType<String>().toList() ??
+    //     [];
 
-    final updatedElderIds = currentElderIds.where((id) => id != event.elderId).toList();
+    // final updatedElderIds = currentElderIds.where((id) => id != event.elderId).toList();
 
     emit(state.copyWith(getElderState: const StateStatus.loading()));
 
     final request = CaregiverOnboardingRequest(
-      elderIds: updatedElderIds,
+      // elderIds: updatedElderIds,
       phoneNumber: caregiver.phoneNumber,
       relationship: caregiver.relationship,
       gender: caregiver.gender,
@@ -216,13 +216,13 @@ class CaregiverEditProfileBloc
       ProfileManager().caregiver = result.data;
 
       // ✅ Extract IDs, filtering out nulls
-      final elderIdsToSet = result.data.elderIds ??
-          result.data.elders?.map((e) => e.id).whereType<String>().toList() ??
-          [];
+      // final elderIdsToSet = result.data.elderIds ??
+      //     result.data.elders?.map((e) => e.id).whereType<String>().toList() ??
+      //     [];
 
       emit(
         state.copyWith(
-          elderId: elderIdsToSet,
+          // elderId: elderIdsToSet,
           getElderState: StateStatus.success(result.data),
         ),
       );

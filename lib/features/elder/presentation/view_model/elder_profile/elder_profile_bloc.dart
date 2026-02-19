@@ -47,7 +47,7 @@ class ElderProfileBloc extends Bloc<ElderProfileEvent, ElderProfileState> {
     on<GetElderEvent>(_getElderById);
     on<GetMultipleCaregiversEvent>(_getMultipleCaregivers);
     // on<AddCaregiverEvent>(_addCaregiver);
-    on<RemoveCaregiverEvent>(_removeCaregiver);
+    // on<RemoveCaregiverEvent>(_removeCaregiver);
     on<EditElderProfileEvent>(_editElderProfile);
 
   }
@@ -299,43 +299,43 @@ class ElderProfileBloc extends Bloc<ElderProfileEvent, ElderProfileState> {
   //   }
   // }
 
-  void _removeCaregiver(
-      RemoveCaregiverEvent event,
-      Emitter<ElderProfileState> emit,
-      ) async {
-    final currentState = state.getCaregiversStatus;
-    if (currentState is StateStatus<List<CaregiverEntity>> && currentState.data != null) {
-      final updatedCaregivers = currentState.data!
-          .where((c) => c.id != event.id)
-          .toList();
-
-      // ✅ تحديث الـ elder profile على الـ Backend
-      final elder = ProfileManager().elder;
-      if (elder != null) {
-        final updatedCaregiverIds = (elder.caregiverIds ?? [])
-            .where((id) => id != event.id)
-            .toList();
-
-        final editRequest = ElderOnboardingRequest(
-          caregiverIds: updatedCaregiverIds,
-          // أضف باقي البيانات الضرورية
-        );
-
-        final editResult = await _editElderProfileUseCase.call(
-          elder.id!,
-          editRequest,
-        );
-
-        if (editResult is Success<ElderEntity>) {
-          ProfileManager().elder = editResult.data;
-        }
-      }
-
-      emit(state.copyWith(
-        getCaregiversStatus: StateStatus.success(updatedCaregivers),
-      ));
-    }
-  }
+  // void _removeCaregiver(
+  //     RemoveCaregiverEvent event,
+  //     Emitter<ElderProfileState> emit,
+  //     ) async {
+  //   final currentState = state.getCaregiversStatus;
+  //   if (currentState is StateStatus<List<CaregiverEntity>> && currentState.data != null) {
+  //     final updatedCaregivers = currentState.data!
+  //         .where((c) => c.id != event.id)
+  //         .toList();
+  //
+  //     // ✅ تحديث الـ elder profile على الـ Backend
+  //     final elder = ProfileManager().elder;
+  //     if (elder != null) {
+  //       final updatedCaregiverIds = (elder.caregiverIds ?? [])
+  //           .where((id) => id != event.id)
+  //           .toList();
+  //
+  //       final editRequest = ElderOnboardingRequest(
+  //         caregiverIds: updatedCaregiverIds,
+  //         // أضف باقي البيانات الضرورية
+  //       );
+  //
+  //       final editResult = await _editElderProfileUseCase.call(
+  //         elder.id!,
+  //         editRequest,
+  //       );
+  //
+  //       if (editResult is Success<ElderEntity>) {
+  //         ProfileManager().elder = editResult.data;
+  //       }
+  //     }
+  //
+  //     emit(state.copyWith(
+  //       getCaregiversStatus: StateStatus.success(updatedCaregivers),
+  //     ));
+  //   }
+  // }
 
 
 
