@@ -21,7 +21,7 @@ class AvatarContainer extends StatelessWidget {
 
           GradientIconContainer(
             width: context.setWidth(90),
-            height: context.setHeight(100),
+            height: context.setHeight(90),
             radius: context.setSp(80),
             childPadding: context.setWidth(5),
             child: ClipRRect(

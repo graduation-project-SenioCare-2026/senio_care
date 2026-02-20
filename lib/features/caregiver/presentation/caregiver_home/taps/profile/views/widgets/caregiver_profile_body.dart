@@ -27,7 +27,7 @@ class CaregiverProfileBody extends StatelessWidget {
       builder: (BuildContext context, state) {
         final user = UserManager().user;
         final caregiver = state.getCaregiverProfileState.data;
-        final elderIds=state.elderId;
+        final elders=state.getElderState.data??[];
         final isLoading = state.getElderState.isLoading;
         return Scaffold(
           body: Skeletonizer(
@@ -67,7 +67,7 @@ class CaregiverProfileBody extends StatelessWidget {
                           end: context.setWidth(10),
                         ),
                         child: Image.asset(
-                          AppIcons.editService,
+                          AppIcons.editInfo,
                           color: AppColors.black,
                           width: context.setWidth(30),
                           height: context.setHeight(30),
@@ -117,7 +117,7 @@ class CaregiverProfileBody extends StatelessWidget {
                               value: caregiver?.relationship,
                             ),
                             const Divider(),
-                            ElderIdsSection(elder: elderIds,isLoading: isLoading,),
+                            ElderIdsSection(elder: elders,isLoading: isLoading,),
                           ],
                         ),
                       ),

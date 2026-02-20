@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
 import 'package:senio_care/features/auth/domain/entity/caregiver_entity.dart';
+import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
 
 class CaregiverEditProfileState extends Equatable {
   final StateStatus<CaregiverEntity> caregiverEditProfileState;
   final StateStatus<CaregiverEntity> getCaregiverProfileState;
-  final StateStatus<CaregiverEntity> getElderState;
+  final StateStatus<List<ElderEntity>> getElderState;
   final List<String> elderId;
 
   const CaregiverEditProfileState({
@@ -18,7 +19,7 @@ class CaregiverEditProfileState extends Equatable {
   CaregiverEditProfileState copyWith({
     StateStatus<CaregiverEntity>? caregiverEditProfileState,
     StateStatus<CaregiverEntity>? getCaregiverProfileState,
-    StateStatus<CaregiverEntity>? getElderState,
+    StateStatus<List<ElderEntity>>? getElderState,
     List<String>? elderId,
   }) {
     return CaregiverEditProfileState(

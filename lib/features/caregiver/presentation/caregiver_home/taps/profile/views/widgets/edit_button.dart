@@ -8,7 +8,6 @@ import 'package:senio_care/features/caregiver/api/models/request/onboarding/care
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/view_model/caregiver_edit_profile_bloc.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/view_model/caregiver_edit_profile_event.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/view_model/caregiver_edit_profile_state.dart';
-
 class EditCaregiverButton extends StatelessWidget {
   const EditCaregiverButton({super.key});
 
@@ -25,19 +24,27 @@ class EditCaregiverButton extends StatelessWidget {
           }
         },
         builder: (context, state) {
+          // ✅ Read elder IDs from getEldersStatus instead of elderId
+          final elderIds = state.getElderState.data
+              ?.map((e) => e.id)
+              .whereType<String>()
+              .toList() ??
+              [];
+
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: context.setWidth(20)),
             child: Column(
               children: [
                 CustomElevatedButton(
                   onPressed: () {
-                    final request=CaregiverOnboardingRequest(
+                    final request = CaregiverOnboardingRequest(
                       phoneNumber: bloc.phoneNumberController.text,
                       gender: bloc.genderController.text,
                       relationship: bloc.relationShipController.text,
-                      elderIds: state.elderId,
+                      elderIds: elderIds, // ✅ fixed
                     );
-                    bloc.add(CaregiverEditProfileEvent(caregiver!.id!, request));
+                    bloc.add(
+                        CaregiverEditProfileEvent(caregiver!.id!, request));
                   },
                   buttonLabel: 'save'.tr(),
                 ),

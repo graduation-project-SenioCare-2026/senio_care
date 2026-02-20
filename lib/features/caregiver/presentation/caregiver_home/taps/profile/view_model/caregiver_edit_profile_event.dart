@@ -15,12 +15,17 @@ class RemoveElderId extends CaregiverProfileEvent {
 }
 
 class CaregiverEditProfileEvent extends CaregiverProfileEvent {
-  String id;
-  CaregiverOnboardingRequest request;
+  final String id;
+  final CaregiverOnboardingRequest request;
   CaregiverEditProfileEvent(this.id, this.request);
 }
 
 class GetCaregiverByIdEvent extends CaregiverProfileEvent {
-  String id;
+  final String id;
   GetCaregiverByIdEvent(this.id);
+}
+
+class GetMultipleEldersEvent extends CaregiverProfileEvent {
+  final List<String> elderIds;
+  GetMultipleEldersEvent(this.elderIds);
 }

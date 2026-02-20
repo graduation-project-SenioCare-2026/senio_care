@@ -47,60 +47,117 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
     );
   }
 
+  void _showDeleteConfirmation(String elderId) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Row(
+          children: [
+            Icon(Icons.warning_amber_rounded, color: AppColors.red, size: 28),
+            const SizedBox(width: 12),
+            Text(
+              "confirmDelete".tr(),
+              style: getBoldStyle(
+                color: AppColors.black,
+                fontSize: FontSize.s18,
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          "areYouSureDeleteElder".tr(),
+          style: getRegularStyle(
+            color: AppColors.gray[700] ?? AppColors.gray,
+            fontSize: FontSize.s14,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            ),
+            child: Text(
+              "cancel".tr(),
+              style: getRegularStyle(
+                color: AppColors.gray[600] ?? AppColors.gray,
+                fontSize: FontSize.s14,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              setState(() => _isRemovingElder = true);
+              context.read<CaregiverEditProfileBloc>().add(
+                RemoveElderId(elderId),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.red,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: Text(
+              "delete".tr(),
+              style: getRegularStyle(
+                color: Colors.white,
+                fontSize: FontSize.s14,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CaregiverEditProfileBloc, CaregiverEditProfileState>(
-      listenWhen: (prev, curr) {
-        // Listen to changes when adding or removing
-        if (_isAddingElder || _isRemovingElder) {
-          return prev.caregiverEditProfileState != curr.caregiverEditProfileState;
-        }
-        return false;
-      },
+      listenWhen: (prev, curr) =>
+      prev.getElderState != curr.getElderState,
       listener: (context, state) {
         if (_isAddingElder) {
-          if (state.caregiverEditProfileState.isSuccess) {
+          if (state.getElderState.isSuccess) {
             _showSuccessMessage("elderAddedSuccessfully".tr());
-            setState(() {
-              _isAddingElder = false;
-            });
-          } else if (state.caregiverEditProfileState.isFailure) {
-            final error = state.caregiverEditProfileState.error?.message ??
+            setState(() => _isAddingElder = false);
+          } else if (state.getElderState.isFailure) {
+            final error = state.getElderState.error?.message ??
                 "failedToAddElder".tr();
             _showErrorMessage(error);
-            setState(() {
-              _isAddingElder = false;
-            });
+            setState(() => _isAddingElder = false);
           }
         }
 
         if (_isRemovingElder) {
-          if (state.caregiverEditProfileState.isSuccess) {
+          if (state.getElderState.isSuccess) {
             _showSuccessMessage("elderRemovedSuccessfully".tr());
-            setState(() {
-              _isRemovingElder = false;
-            });
-          } else if (state.caregiverEditProfileState.isFailure) {
-            final error = state.caregiverEditProfileState.error?.message ??
+            setState(() => _isRemovingElder = false);
+          } else if (state.getElderState.isFailure) {
+            final error = state.getElderState.error?.message ??
                 "failedToRemoveElder".tr();
             _showErrorMessage(error);
-            setState(() {
-              _isRemovingElder = false;
-            });
+            setState(() => _isRemovingElder = false);
           }
         }
       },
       buildWhen: (prev, curr) =>
-      prev.elderId != curr.elderId ||
-          prev.caregiverEditProfileState != curr.caregiverEditProfileState,
+      prev.getElderState != curr.getElderState,
       builder: (context, state) {
-        final elderIds = state.elderId;
-        final isLoading = state.caregiverEditProfileState.isLoading;
-        final hasError = state.caregiverEditProfileState.isFailure;
+        // ✅ Read from getElderState — List<ElderEntity>
+        final elders = state.getElderState.data ?? [];
+        final isLoading = state.getElderState.isLoading;
+        final hasError = state.getElderState.isFailure;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // ── Header ──────────────────────────────────────────────
             Row(
               children: [
                 Icon(
@@ -120,34 +177,37 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
             ),
             SizedBox(height: context.setHeight(12)),
 
-            /// Loading state
+            // ── Loading ──────────────────────────────────────────────
             if (isLoading)
               Center(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: context.setHeight(16)),
+                  padding: EdgeInsets.symmetric(
+                      vertical: context.setHeight(16)),
                   child: const CircularProgressIndicator(),
                 ),
               ),
 
-            /// Error state (for initial load only)
+            // ── Error (initial load only) ────────────────────────────
             if (hasError && !_isAddingElder && !_isRemovingElder)
               Padding(
-                padding: EdgeInsets.symmetric(vertical: context.setHeight(8)),
+                padding:
+                EdgeInsets.symmetric(vertical: context.setHeight(8)),
                 child: Text(
                   "errorLoadingElders".tr(),
                   style: TextStyle(color: AppColors.red),
                 ),
               ),
 
-            /// Display elder IDs
-            if (!isLoading && elderIds.isNotEmpty)
+            // ── Elder list ───────────────────────────────────────────
+            if (!isLoading && elders.isNotEmpty)
               Column(
-                children: elderIds.asMap().entries.map<Widget>((entry) {
-                  final elderId = entry.value;
+                children: elders.asMap().entries.map<Widget>((entry) {
+                  final elder = entry.value;
                   final index = entry.key;
 
                   return Padding(
-                    padding: EdgeInsets.only(bottom: context.setHeight(8)),
+                    padding:
+                    EdgeInsets.only(bottom: context.setHeight(8)),
                     child: Container(
                       padding: EdgeInsets.all(context.setMinSize(12)),
                       decoration: BoxDecoration(
@@ -161,7 +221,8 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
                       child: Row(
                         children: [
                           CircleAvatar(
-                            backgroundColor: AppColors.blue.withOpacity(0.2),
+                            backgroundColor:
+                            AppColors.blue.withOpacity(0.2),
                             radius: context.setMinSize(20),
                             child: Text(
                               "${index + 1}",
@@ -177,16 +238,7 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Elder ID",
-                                  style: getRegularStyle(
-                                    color: AppColors.gray[500] ??
-                                        AppColors.gray,
-                                    fontSize: FontSize.s12,
-                                  ),
-                                ),
-                                SizedBox(height: context.setHeight(2)),
-                                Text(
-                                  elderId,
+                                  elder.id ?? '',
                                   style: getRegularStyle(
                                     color: AppColors.black,
                                     fontSize: FontSize.s14,
@@ -197,7 +249,7 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
                           ),
                           IconButton(
                             onPressed: () {
-                              _showDeleteConfirmation(elderId);
+                              _showDeleteConfirmation(elder.id ?? '');
                             },
                             icon: Icon(
                               Icons.delete_outline,
@@ -212,8 +264,8 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
                 }).toList(),
               ),
 
-            /// Message when no elders
-            if (!isLoading && elderIds.isEmpty)
+            // ── Empty state ──────────────────────────────────────────
+            if (!isLoading && elders.isEmpty && !hasError)
               Container(
                 padding: EdgeInsets.all(context.setMinSize(16)),
                 decoration: BoxDecoration(
@@ -246,7 +298,7 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
 
             SizedBox(height: context.setHeight(16)),
 
-            /// Add new elder input
+            // ── Add elder input ──────────────────────────────────────
             Container(
               padding: EdgeInsets.all(context.setMinSize(12)),
               decoration: BoxDecoration(
@@ -280,13 +332,15 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide(
-                                color: AppColors.gray[300] ?? Colors.grey,
+                                color:
+                                AppColors.gray[300] ?? Colors.grey,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide(
-                                color: AppColors.gray[300] ?? Colors.grey,
+                                color:
+                                AppColors.gray[300] ?? Colors.grey,
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
@@ -312,26 +366,26 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
                         onPressed: isLoading
                             ? null
                             : () {
-                          final id = _elderIdController.text.trim();
+                          final id =
+                          _elderIdController.text.trim();
                           if (id.isEmpty) {
-                            _showErrorMessage("pleaseEnterElderId".tr());
+                            _showErrorMessage(
+                                "pleaseEnterElderId".tr());
                             return;
                           }
 
-                          // Check if elder ID already exists
-                          if (elderIds.contains(id)) {
-                            _showErrorMessage("elderIdAlreadyExists".tr());
+                          // ✅ Check against ElderEntity list
+                          if (elders.any((e) => e.id == id)) {
+                            _showErrorMessage(
+                                "elderIdAlreadyExists".tr());
                             return;
                           }
 
-                          // Set flag for adding
-                          setState(() {
-                            _isAddingElder = true;
-                          });
+                          setState(() => _isAddingElder = true);
 
-                          context.read<CaregiverEditProfileBloc>().add(
-                            AddElderId(id),
-                          );
+                          context
+                              .read<CaregiverEditProfileBloc>()
+                              .add(AddElderId(id));
                           _elderIdController.clear();
                         },
                         style: ElevatedButton.styleFrom(
@@ -360,83 +414,6 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
           ],
         );
       },
-    );
-  }
-
-  void _showDeleteConfirmation(String elderId) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        title: Row(
-          children: [
-            Icon(
-              Icons.warning_amber_rounded,
-              color: AppColors.red,
-              size: 28,
-            ),
-            SizedBox(width: 12),
-            Text(
-              "confirmDelete".tr(),
-              style: getBoldStyle(
-                color: AppColors.black,
-                fontSize: FontSize.s18,
-              ),
-            ),
-          ],
-        ),
-        content: Text(
-          "areYouSureDeleteElder".tr(),
-          style: getRegularStyle(
-            color: AppColors.gray[700] ?? AppColors.gray,
-            fontSize: FontSize.s14,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            ),
-            child: Text(
-              "cancel".tr(),
-              style: getRegularStyle(
-                color: AppColors.gray[600] ?? AppColors.gray,
-                fontSize: FontSize.s14,
-              ),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-
-              setState(() {
-                _isRemovingElder = true;
-              });
-
-              context.read<CaregiverEditProfileBloc>().add(
-                RemoveElderId(elderId),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.red,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: Text(
-              "delete".tr(),
-              style: getRegularStyle(
-                color: Colors.white,
-                fontSize: FontSize.s14,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
