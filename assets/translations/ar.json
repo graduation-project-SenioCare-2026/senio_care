@@ -276,5 +276,8 @@
   "%": "٪",
   "mmHg": "ملم زئبق",
   "noDataAvailable": "لا توجد بيانات متاحة",
-  "avg": "متوسط"
+  "avg": "متوسط",
+  "elderId": "ID المسن",
+  "mobilityStatus": "حالة التنقل",
+  "relationship": "العلاقة بالمسن"
 }

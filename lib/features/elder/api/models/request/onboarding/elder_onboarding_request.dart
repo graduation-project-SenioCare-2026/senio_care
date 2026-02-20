@@ -7,9 +7,9 @@ class ElderOnboardingRequest{
   @JsonKey(name: "age")
   final int? age;
   @JsonKey(name: "weight")
-  final int? weight;
+  final double? weight;
   @JsonKey(name: "height")
-  final int? height;
+  final double? height;
   @JsonKey(name: "gender")
   final String? gender;
   @JsonKey(name: "chronicDiseases")

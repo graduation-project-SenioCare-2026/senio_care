@@ -65,8 +65,8 @@ class ElderOnboardingActions extends StatelessWidget {
                 } else {
                   final request = ElderOnboardingRequest(
                     age: int.parse(bloc.ageController.text),
-                    weight: int.parse(bloc.weightController.text),
-                    height: int.parse(bloc.heightController.text),
+                    weight: double.parse(bloc.weightController.text),
+                    height: double.parse(bloc.heightController.text),
                     gender: state.selectedGender,
                     allergies: state.selectedAllergies
                         .map((e) => e.en)

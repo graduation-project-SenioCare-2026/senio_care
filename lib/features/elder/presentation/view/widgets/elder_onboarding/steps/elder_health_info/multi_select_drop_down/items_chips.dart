@@ -38,7 +38,7 @@ class _ItemsChipsState<T> extends State<ItemsChips<T>> {
             widget.itemAsString(item),
             style: getRegularStyle(
               color: AppColors.black,
-              fontSize: context.setSp(FontSize.s12),
+              fontSize: context.setSp(FontSize.s14),
             ),
           ),
           deleteIcon: Icon(

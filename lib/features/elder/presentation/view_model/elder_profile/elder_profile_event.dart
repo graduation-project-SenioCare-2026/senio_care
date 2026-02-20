@@ -53,11 +53,6 @@ class GetElderEvent extends ElderProfileEvent {
   GetElderEvent(this.id);
 }
 
-class GetMultipleCaregiversEvent extends ElderProfileEvent {
-  final List<String> caregiverIds;
-  GetMultipleCaregiversEvent(this.caregiverIds);
-}
-
 class AddCaregiverEvent extends ElderProfileEvent {
   final String id;
   AddCaregiverEvent(this.id);

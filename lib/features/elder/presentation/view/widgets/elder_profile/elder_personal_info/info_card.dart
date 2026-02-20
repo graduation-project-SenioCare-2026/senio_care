@@ -23,24 +23,14 @@ class InfoCard extends StatelessWidget {
 
         },
         listener: (context, state) {
-          // final elder = state.getElderStatus?.data ?? state.editElderProfileStatus.data;
-          //
-          // if (elder != null && elder.caregiverIds != null && elder.caregiverIds!.isNotEmpty) {
-          //   context.read<ElderProfileBloc>().add(
-          //     GetMultipleCaregiversEvent(elder.caregiverIds!),
-          //   );
-          // }
         },
         child: BlocBuilder<ElderProfileBloc, ElderProfileState>(
           buildWhen: (previous, current) =>
           previous.getElderStatus != current.getElderStatus ||
-              previous.editElderProfileStatus != current.editElderProfileStatus ||
-              previous.getCaregiversStatus != current.getCaregiversStatus,
+              previous.editElderProfileStatus != current.editElderProfileStatus,
           builder: (context, state) {
             final elder = state.getElderStatus?.data ?? state.editElderProfileStatus.data;
             final caregivers = state.getElderStatus?.data?.caregiverIds;
-            final isLoading = state.getCaregiversStatus?.isLoading ?? false;
-            final hasError = state.getCaregiversStatus?.isFailure ?? false;
 
             return SliverToBoxAdapter(
               child: CustomCard(
@@ -66,7 +56,7 @@ class InfoCard extends StatelessWidget {
                     InfoRow(
                       label: "gender".tr(),
                       icon: elder?.gender == 'male' ? Icons.male : Icons.female,
-                      value: elder?.gender,
+                      value:elder?.gender == 'male' ? "male".tr() : "female".tr(),
                     ),
                     const Divider(),
 
@@ -114,8 +104,6 @@ class InfoCard extends StatelessWidget {
                     ProfileCaregiversSection(
                       elder: elder,
                       caregivers: caregivers,
-                      isLoading: isLoading,
-                      hasError: hasError,
                     ),
                   ],
                 ),

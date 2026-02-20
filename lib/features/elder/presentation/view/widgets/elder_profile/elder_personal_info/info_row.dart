@@ -39,7 +39,7 @@ class InfoRow extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: getRegularStyle(
+                style: getBoldStyle(
                   color: AppColors.black,
                   fontSize: context.setSp(FontSize.s16),
                 ),
@@ -51,8 +51,8 @@ class InfoRow extends StatelessWidget {
                   child: Text(
                     value!,
                     style: getRegularStyle(
-                      color: AppColors.gray[600] ?? AppColors.gray,
-                      fontSize: FontSize.s14,
+                      color: AppColors.gray[700] ?? AppColors.gray,
+                      fontSize: FontSize.s16,
                     ),
                   ),
                 ),
@@ -66,10 +66,10 @@ class InfoRow extends StatelessWidget {
                     children: values!
                         .map(
                           (e) => Text(
-                            e,
+                            "${e} -",
                             style: getRegularStyle(
-                              fontSize: FontSize.s12,
-                              color: AppColors.gray[600] ?? AppColors.gray,
+                              fontSize: FontSize.s16,
+                              color: AppColors.gray[700] ?? AppColors.gray,
                             ),
                           ),
                         )

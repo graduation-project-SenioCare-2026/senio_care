@@ -49,6 +49,7 @@ class AppFormField extends StatelessWidget {
           hintText: hint?.tr()??"",
           hintStyle: getRegularStyle(
             color: AppColors.gray[800] ?? AppColors.gray,
+            fontSize: context.setSp(FontSize.s12)
           ),
           autovalidateMode: autoValidateMode,
           suffixIcon: suffix == null

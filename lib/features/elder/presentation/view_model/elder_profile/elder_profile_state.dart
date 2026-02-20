@@ -13,8 +13,8 @@ class ElderProfileState extends Equatable {
   final List<AllergyEntity> selectedAllergies;
   final BloodTypeEntity? selectedBloodType;
   final MobilityStatusEntity? selectedMobilityStatus;
-  final StateStatus<ElderEntity>?  getElderStatus;
-  final StateStatus<List<CaregiverEntity>>? getCaregiversStatus;
+  final StateStatus<ElderEntity>? getElderStatus;
+  final List<CaregiverEntity> caregivers;
 
   const ElderProfileState({
     this.editElderProfileStatus = const StateStatus.initial(),
@@ -22,8 +22,8 @@ class ElderProfileState extends Equatable {
     this.selectedAllergies = const [],
     this.selectedBloodType,
     this.selectedMobilityStatus,
-    this.getElderStatus= const StateStatus.initial(),
-    this.getCaregiversStatus=const StateStatus.initial(),
+    this.getElderStatus = const StateStatus.initial(),
+    this.caregivers = const [],
   });
 
   ElderProfileState copyWith({
@@ -32,21 +32,17 @@ class ElderProfileState extends Equatable {
     List<AllergyEntity>? selectedAllergies,
     BloodTypeEntity? selectedBloodType,
     MobilityStatusEntity? selectedMobilityStatus,
-    StateStatus<ElderEntity>?  getElderStatus,
-    StateStatus<List<CaregiverEntity>>? getCaregiversStatus,
-
-
+    StateStatus<ElderEntity>? getElderStatus,
+    List<CaregiverEntity>? caregivers,
   }) {
     return ElderProfileState(
-      editElderProfileStatus:
-          editElderProfileStatus ?? this.editElderProfileStatus,
+      editElderProfileStatus: editElderProfileStatus ?? this.editElderProfileStatus,
       selectedDiseases: selectedDiseases ?? this.selectedDiseases,
       selectedAllergies: selectedAllergies ?? this.selectedAllergies,
       selectedBloodType: selectedBloodType ?? this.selectedBloodType,
-      selectedMobilityStatus:
-          selectedMobilityStatus ?? this.selectedMobilityStatus,
-      getElderStatus: getElderStatus??this.getElderStatus,
-        getCaregiversStatus: getCaregiversStatus ?? this.getCaregiversStatus
+      selectedMobilityStatus: selectedMobilityStatus ?? this.selectedMobilityStatus,
+      getElderStatus: getElderStatus ?? this.getElderStatus,
+      caregivers: caregivers ?? this.caregivers,
     );
   }
 
@@ -58,6 +54,6 @@ class ElderProfileState extends Equatable {
     selectedBloodType,
     selectedMobilityStatus,
     getElderStatus,
-    getCaregiversStatus
+    caregivers,
   ];
 }

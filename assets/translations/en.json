@@ -108,7 +108,6 @@
   "phoneNumbersOnly": "Phone number must contain digits only",
   "phoneLength": "Phone number must be 11 digits",
   "invalidEgyptianPhone": "Invalid phone number",
-  "notProvided":"Not Provided",
 
 "logout": "Logout",
   "language": "Language",
@@ -271,6 +270,6 @@
   "%": "%",
   "mmHg": "mm Hg",
   "noDataAvailable": "No data available",
-  "avg": "Avg"
-
+  "avg": "Avg",
+  "mobilityStatus": "Mobility Status"
 }
