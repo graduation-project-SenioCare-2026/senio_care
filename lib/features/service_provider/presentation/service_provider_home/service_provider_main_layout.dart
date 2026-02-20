@@ -40,8 +40,8 @@ class _ServiceProviderMainLayoutState extends State<ServiceProviderMainLayout> {
                   unselectedItemColor: AppColors.black.withAlpha(150),
                   selectedIconTheme: IconThemeData(size: 30),
                   unselectedIconTheme: IconThemeData(size: 25),
-                   showUnselectedLabels: false,
-                  showSelectedLabels: false,
+                   showUnselectedLabels: true,
+                  showSelectedLabels: true,
                   onTap: (index) {
                     setState(() {
                       currentIndex = index;

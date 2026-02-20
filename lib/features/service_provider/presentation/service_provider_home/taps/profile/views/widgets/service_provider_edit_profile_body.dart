@@ -86,7 +86,6 @@ class ServiceProviderEditProfileBody extends StatelessWidget {
                       ),
                     ),
 
-                    // Removed SliverToBoxAdapter wrapper here
                     CustomElevatedButton(
                       width: context.setWidth(300),
                       onPressed: () {

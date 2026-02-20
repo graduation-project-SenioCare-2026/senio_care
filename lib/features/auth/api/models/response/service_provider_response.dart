@@ -11,11 +11,14 @@ class ServiceProviderResponse {
   final String? phoneNumber;
   @JsonKey(name: "specialization")
   final String? specialization;
+  @JsonKey(name: "gender")
+  final String? gender;
 
   ServiceProviderResponse ({
     this.id,
     this.phoneNumber,
     this.specialization,
+    this.gender
   });
 
   factory ServiceProviderResponse.fromJson(Map<String, dynamic> json) {
@@ -30,7 +33,8 @@ class ServiceProviderResponse {
     return ServiceProviderEntity(
       id: id,
       phoneNumber: phoneNumber,
-      specialization: specialization
+      specialization: specialization,
+      gender: gender
     );
   }
 }

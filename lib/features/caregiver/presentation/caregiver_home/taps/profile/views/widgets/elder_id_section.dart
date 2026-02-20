@@ -49,7 +49,6 @@ class ElderIdsSection extends StatelessWidget {
         padding: EdgeInsets.all(context.setWidth(16)),
         child: Column(
           children: [
-            const CircularProgressIndicator(),
             SizedBox(height: context.setHeight(8)),
             Text(
               "loadingElders".tr(),
