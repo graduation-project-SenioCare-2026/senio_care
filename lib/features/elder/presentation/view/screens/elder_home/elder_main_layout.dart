@@ -31,7 +31,7 @@ class _ElderHomeState extends State<ElderHome> {
 
   List<String> appBarTitles = [
     "myProfile".tr(),
-    "myProfile".tr(),
+    "emergencySos".tr(),
     "medicalServices".tr(),
     "myProfile".tr(),
   ];
