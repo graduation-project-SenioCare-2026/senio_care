@@ -75,6 +75,7 @@ class CaregiverOnboardingBody extends StatelessWidget {
                     AppFormField(
                       controller: bloc.relationController,
                       label: 'relationship',
+                      autoValidateMode: AutovalidateMode.onUserInteraction,
                       hint: "",
                       autoValidateMode: AutovalidateMode.onUserInteraction,
                       validator: (_) => Validator.validateRequired(
@@ -85,6 +86,7 @@ class CaregiverOnboardingBody extends StatelessWidget {
                     AppFormField(
                       controller: bloc.elderIdController,
                       label: 'elderId',
+                      autoValidateMode: AutovalidateMode.onUserInteraction,
                       hint: "",
                       autoValidateMode: AutovalidateMode.onUserInteraction,
                       validator: (_) =>

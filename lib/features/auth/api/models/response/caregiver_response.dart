@@ -10,6 +10,8 @@ class CaregiverResponse {
   final String? phoneNumber;
   @JsonKey(name: "relationship")
   final String? relationship;
+  @JsonKey(name: "gender")
+  final String? gender;
   @JsonKey(
     name: "elder_ids",
     fromJson: _elderFromJson,
@@ -36,6 +38,7 @@ class CaregiverResponse {
     this.relationship,
     this.elderIds,
     this.id,
+    this.gender
   });
 
   factory CaregiverResponse.fromJson(Map<String, dynamic> json) {
@@ -50,7 +53,7 @@ class CaregiverResponse {
     return CaregiverEntity(
       id: id,
       phoneNumber: phoneNumber,
-      // gender: gender
+       gender: gender,
       relationship: relationship,
       elders: elderIds?.map((e) => e.toEntity(),).toList()
     );

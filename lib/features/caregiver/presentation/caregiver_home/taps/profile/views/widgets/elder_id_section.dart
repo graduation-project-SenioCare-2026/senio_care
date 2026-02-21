@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
 
 import '../../../../../../../../core/theme/app_colors.dart';
 import '../../../../../../../../core/theme/font_manager.dart';
@@ -8,7 +9,7 @@ import '../../../../../../../../core/theme/font_style.dart';
 import 'info_raw.dart';
 
 class ElderIdsSection extends StatelessWidget {
-  final dynamic elder;
+  final List<ElderEntity> elder;
   final bool isLoading;
   final bool hasError;
 
@@ -21,28 +22,6 @@ class ElderIdsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('👥 ElderIdsSection build');
-    print('👥 Received elder: $elder');
-    print('👥 Elder type: ${elder.runtimeType}');
-
-    final elderIds = elder is List ? elder : (elder ?? []);
-
-    print('👥 Parsed elderIds: $elderIds');
-    print('👥 elderIds length: ${elderIds.length}');
-
-    // Empty state
-    if (elderIds.isEmpty) {
-      return Column(
-        children: [
-          InfoRow(
-            label: "elders".tr(),
-            icon: Icons.person_outline,
-            value: "noElders".tr(),
-          ),
-        ],
-      );
-    }
-
     // Loading state
     if (isLoading) {
       return Padding(
@@ -62,7 +41,20 @@ class ElderIdsSection extends StatelessWidget {
       );
     }
 
-    // Display elder IDs
+    // Empty state
+    if (elder.isEmpty) {
+      return Column(
+        children: [
+          InfoRow(
+            label: "elders".tr(),
+            icon: Icons.person_outline,
+            value: "noElders".tr(),
+          ),
+        ],
+      );
+    }
+
+    // Display elders
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -88,9 +80,8 @@ class ElderIdsSection extends StatelessWidget {
         Padding(
           padding: EdgeInsetsDirectional.only(start: context.setWidth(25)),
           child: Column(
-            // ✅ Fix: Explicitly type the map result as List<Widget>
-            children: elderIds.asMap().entries.map<Widget>((entry) {
-              final id = entry.value;
+            children: elder.asMap().entries.map<Widget>((entry) {
+              final elderEntity = entry.value;
               final index = entry.key;
 
               return Padding(
@@ -111,7 +102,7 @@ class ElderIdsSection extends StatelessWidget {
                     SizedBox(width: context.setWidth(10)),
                     Expanded(
                       child: Text(
-                        id.toString(),
+                        elderEntity.id ?? '',  // ✅ use ElderEntity.id
                         style: getRegularStyle(
                           color: AppColors.gray[600] ?? AppColors.gray,
                           fontSize: FontSize.s14,
@@ -121,7 +112,7 @@ class ElderIdsSection extends StatelessWidget {
                   ],
                 ),
               );
-            }).toList(), // ✅ This now returns List<Widget>
+            }).toList(),
           ),
         ),
       ],

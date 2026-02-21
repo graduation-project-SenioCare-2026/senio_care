@@ -57,15 +57,12 @@ class InfoRow extends StatelessWidget {
                     ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Text(
-                  value ?? "notProvided".tr(),
-                  overflow: TextOverflow.ellipsis,
-                  style: getRegularStyle(
-                    color: AppColors.gray[600] ?? AppColors.gray,
-                    fontSize: FontSize.s14,
-                  ),
+              Text(
+                value ?? "notProvided".tr(),
+                overflow: TextOverflow.ellipsis,
+                style: getRegularStyle(
+                  color: AppColors.gray[600] ?? AppColors.gray,
+                  fontSize: FontSize.s14,
                 ),
               ),
 

@@ -109,6 +109,7 @@
   "phoneLength": "Phone number must be 11 digits",
   "invalidEgyptianPhone": "Invalid phone number",
 
+
 "logout": "Logout",
   "language": "Language",
   "arabic": "Arabic",
@@ -201,8 +202,7 @@
   "relationShip": "Relationship",
   "addNewElder": "Add New Elder",
   "enterElderId": "Enter Elder ID",
-  "noElders": "No Elders",
-
+  "noEldersYet": "No Elders Yet",
   "emailRequired": "Email is required",
   "emailNotValid": "Please enter a valid email",
   "passwordRequired": "Password is required",
