@@ -6,6 +6,7 @@ import 'package:senio_care/core/common_widgets/app_form_field.dart';
 import 'package:senio_care/core/common_widgets/blur_container.dart';
 import 'package:senio_care/core/common_widgets/custom_elevated_button.dart';
 import 'package:senio_care/core/common_widgets/header_text.dart';
+import 'package:senio_care/core/common_widgets/loading_btn.dart';
 import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/routes/routes_names.dart';
@@ -89,11 +90,7 @@ class ServiceProviderOnboardingBody extends StatelessWidget {
                 ),
               ),
               if (state.serviceProviderOnboardingState.isLoading)
-                LoadingAnimationWidget.flickr(
-                  leftDotColor: AppColors.gradientEnd,
-                  rightDotColor: AppColors.gradientMiddle,
-                  size: context.setWidth(30),
-                )
+                LoadingBtn()
               else
                 CustomElevatedButton(
                   width: context.setWidth(300),
