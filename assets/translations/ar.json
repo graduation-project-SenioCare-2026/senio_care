@@ -193,7 +193,7 @@
   "elderRemovedSuccessfully": "تم حذف المسن بنجاح",
   "addNewElder": "إضافة مسن جديد",
   "enterElderId": "أدخل رقم المسن",
-  "noElders": "لا يوجد مسنين",
+  "noEldersYet": "لا يوجد مسنين",
   "errorLoadingElders": "خطأ في تحميل المسنين",
   "failedToAddElder": "فشل في إضافة المسن",
   "failedToRemoveElder": "فشل في حذف المسن",
@@ -202,7 +202,7 @@
   "confirmDelete": "تأكيد الحذف",
   "areYouSureDeleteElder": "هل أنت متأكد من حذف هذا المسن؟",
   "delete": "حذف",
-  "noEldersYet": "لم يتم إضافة مسنين بعد",
+
 
 
   "logout": "تسجيل الخروج",

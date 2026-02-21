@@ -202,8 +202,8 @@
   "relationShip": "Relationship",
   "addNewElder": "Add New Elder",
   "enterElderId": "Enter Elder ID",
-  "noElders": "No Elders",
-  "noElderIdYet": "No Elder ID Yet",
+  "noEldersYet": "No Elders Yet",
+
 
   "emailRequired": "Email is required",
   "emailNotValid": "Please enter a valid email",

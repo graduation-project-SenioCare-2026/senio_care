@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 
@@ -47,7 +46,7 @@ class AvatarContainer extends StatelessWidget {
           Text(
             user?.email ?? "",
             style: getBoldStyle(
-              color: AppColors.gray,
+              color: AppColors.gray.shade700,
               fontSize: context.setSp(FontSize.s14),
             ),
           ),
