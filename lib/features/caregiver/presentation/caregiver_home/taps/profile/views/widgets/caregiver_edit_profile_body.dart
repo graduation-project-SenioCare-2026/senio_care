@@ -12,7 +12,6 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../../../../../core/theme/app_colors.dart';
 import '../../../../../../../../core/theme/font_manager.dart';
 import '../../../../../../../../core/theme/font_style.dart';
-import 'elder_id_edit_section.dart';
 
 class CaregiverEditProfileBody extends StatelessWidget {
   const CaregiverEditProfileBody({super.key});

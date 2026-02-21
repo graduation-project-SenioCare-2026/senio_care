@@ -66,7 +66,7 @@ class InfoRow extends StatelessWidget {
                     children: values!
                         .map(
                           (e) => Text(
-                            "${e} -",
+                            "$e -",
                             style: getRegularStyle(
                               fontSize: FontSize.s16,
                               color: AppColors.gray[700] ?? AppColors.gray,

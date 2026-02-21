@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
@@ -59,8 +60,6 @@ class _ServiceProviderEditProfileBodyState
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<ServiceProviderEditProfileBloc>();
-
     return BlocConsumer<
       ServiceProviderEditProfileBloc,
       ServiceProviderEditProfileState

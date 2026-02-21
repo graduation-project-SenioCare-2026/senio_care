@@ -1,7 +1,5 @@
 import 'package:senio_care/features/service_provider/api/models/request/onboarding/service_provider_onboarding_request.dart';
 
-import '../../../../../../auth/domain/entity/service_provider_entity.dart';
-
 abstract class ServiceProviderEditProfileEvent {}
 
 class ServiceProviderInitProfile extends ServiceProviderEditProfileEvent{}

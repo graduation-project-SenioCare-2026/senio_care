@@ -2,9 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
-import 'package:senio_care/core/user/user_manager.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-
 import '../../../../../../../../core/constants/app_icons.dart';
 import '../../../../../../../../core/routes/routes_names.dart';
 import '../../../../../../../../core/theme/app_colors.dart';
@@ -25,7 +23,6 @@ class CaregiverProfileBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CaregiverEditProfileBloc, CaregiverEditProfileState>(
       builder: (BuildContext context, state) {
-        final user = UserManager().user;
         final caregiver = state.getCaregiverProfileState.data;
         final elders=state.getElderState.data??[];
         final isLoading = state.getElderState.isLoading;

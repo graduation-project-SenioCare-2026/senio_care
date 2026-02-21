@@ -163,9 +163,6 @@ class CaregiverEditProfileBloc
 
     if (result is Success<CaregiverEntity>) {
       ProfileManager().caregiver = result.data;
-      print('🔍 result.data.elders after add: ${result.data.elders}');
-      print('🔍 result.data.elders length: ${result.data.elders?.length}');
-
       final updatedElders = result.data.elders ?? <ElderEntity>[];
       emit(state.copyWith(getElderState: StateStatus.success(updatedElders)));
     } else if (result is Failure<CaregiverEntity>) {

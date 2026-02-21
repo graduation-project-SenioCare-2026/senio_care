@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:senio_care/core/common_widgets/app_form_field.dart';
 import 'package:senio_care/core/common_widgets/blur_container.dart';
 import 'package:senio_care/core/common_widgets/custom_elevated_button.dart';
@@ -10,7 +9,6 @@ import 'package:senio_care/core/common_widgets/loading_btn.dart';
 import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/routes/routes_names.dart';
-import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/validator/validator.dart';
 import 'package:senio_care/features/caregiver/api/models/request/onboarding/caregiver_onboarding_request.dart';
 import 'package:senio_care/features/caregiver/presentation/onboarding/view_model/caregiver_onboarding_bloc.dart';
@@ -77,7 +75,6 @@ class CaregiverOnboardingBody extends StatelessWidget {
                       label: 'relationship',
                       autoValidateMode: AutovalidateMode.onUserInteraction,
                       hint: "",
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
                       validator: (_) => Validator.validateRequired(
                         bloc.relationController.text,
                       ),
@@ -88,7 +85,6 @@ class CaregiverOnboardingBody extends StatelessWidget {
                       label: 'elderId',
                       autoValidateMode: AutovalidateMode.onUserInteraction,
                       hint: "",
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
                       validator: (_) =>
                           Validator.validateId(bloc.elderIdController.text),
                       keyboardType: TextInputType.text,
