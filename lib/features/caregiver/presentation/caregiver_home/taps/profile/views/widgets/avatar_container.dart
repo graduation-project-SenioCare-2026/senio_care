@@ -47,7 +47,7 @@ class AvatarContainer extends StatelessWidget {
           Text(
             user?.email ?? "",
             style: getBoldStyle(
-              color: AppColors.gray,
+              color: AppColors.gray.shade700,
               fontSize: context.setSp(FontSize.s14),
             ),
           ),

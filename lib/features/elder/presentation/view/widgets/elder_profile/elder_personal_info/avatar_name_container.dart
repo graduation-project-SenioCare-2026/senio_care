@@ -44,6 +44,14 @@ class AvatarNameContainer extends StatelessWidget {
             ),
           ),
 
+          Text(
+            user?.email ?? "Unknown User",
+            style: getBoldStyle(
+              color: AppColors.gray.shade700,
+              fontSize: context.setSp(FontSize.s14),
+            ),
+          ),
+
           SizedBox(height: context.setHeight(24)),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/profile/view_model/service_provider_edit_profile_bloc.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/profile/view_model/service_provider_edit_profile_state.dart';
@@ -31,6 +32,16 @@ class ServiceProviderEditProfileBody extends StatelessWidget {
         if (state.serviceProviderEditProfileState.isSuccess &&
             state.entity != null) {
           Navigator.pop(context, true);
+          Loaders.showSuccessMessage(
+            message: "profileEditedSuccessfully".tr(),
+            context: context,
+          );
+        }
+        if (state.serviceProviderEditProfileState.isFailure) {
+          Loaders.showErrorMessage(
+            message: state.serviceProviderEditProfileState.error!.message,
+            context: context,
+          );
         }
       },
       buildWhen: (previous, current) =>

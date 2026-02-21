@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/core/common_widgets/custom_elevated_button.dart';
 import 'package:senio_care/core/common_widgets/loading_btn.dart';
+import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/features/elder/api/models/request/onboarding/elder_onboarding_request.dart';
@@ -14,30 +15,37 @@ class EditButton extends StatelessWidget {
   const EditButton({super.key});
 
   bool _hasChanges(ElderProfileState state, elder, ElderProfileBloc bloc) {
-    final ageChanged = bloc.ageController.text != (elder?.age?.toString() ?? '');
-    final weightChanged = bloc.weightController.text != (elder?.weight?.toString() ?? '');
-    final heightChanged = bloc.heightController.text != (elder?.height?.toString() ?? '');
+    if (elder == null) return false;
+    final elderIds = (elder.caregiverIds ?? [])
+        .map((e) => e.id.toString().trim())
+        .toList();
 
-    final bloodTypeChanged = state.selectedBloodType != null &&
-        state.selectedBloodType?.type != elder?.bloodType;
+    final stateIds = state.caregivers.map((c) => (c.id ?? '').trim()).toList();
+
+    final ageChanged = int.tryParse(bloc.ageController.text) != elder.age;
+    final weightChanged =
+        double.tryParse(bloc.weightController.text) != elder.weight;
+    final heightChanged =
+        double.tryParse(bloc.heightController.text) != elder.height;
+
+    final bloodTypeChanged =
+        (state.selectedBloodType?.type ?? elder.bloodType) != elder.bloodType;
+    final mobilityChanged =
+        (state.selectedMobilityStatus?.en.trim() ??
+            elder.mobilityStatus?.trim()) !=
+        (elder.mobilityStatus?.trim() ?? '');
 
     final diseasesChanged = !_listsEqual(
       state.selectedDiseases.map((e) => e.en).toList(),
-      elder?.chronicDiseases ?? [],
+      elder.chronicDiseases ?? [],
     );
 
     final allergiesChanged = !_listsEqual(
       state.selectedAllergies.map((e) => e.en).toList(),
-      elder?.allergies ?? [],
+      elder.allergies ?? [],
     );
 
-    final mobilityChanged = state.selectedMobilityStatus != null &&
-        state.selectedMobilityStatus?.en.trim() != elder?.mobilityStatus?.trim();
-
-    final caregiversChanged = !_listsEqual(
-      state.caregivers.map((c) => c.id ?? '').toList(),
-      (elder?.caregiverIds ?? []).map((e) => e.toString()).toList(),
-    );
+    final caregiversChanged = !_listsEqual(elderIds, stateIds);
 
     return ageChanged ||
         weightChanged ||
@@ -70,6 +78,16 @@ class EditButton extends StatelessWidget {
           if (state.editElderProfileStatus.isSuccess) {
             ProfileManager().elder = state.editElderProfileStatus.data;
             Navigator.pop(context, true);
+            Loaders.showSuccessMessage(
+              message: "profileEditedSuccessfully".tr(),
+              context: context,
+            );
+          }
+          if (state.editElderProfileStatus.isFailure) {
+            Loaders.showErrorMessage(
+              message: state.editElderProfileStatus.error!.message,
+              context: context,
+            );
           }
         },
         builder: (context, state) {
@@ -82,25 +100,43 @@ class EditButton extends StatelessWidget {
                 state.editElderProfileStatus.isLoading
                     ? const LoadingBtn()
                     : CustomElevatedButton(
-                  buttonLabel: "save".tr(),
-                  onPressed: hasChanges
-                      ? () {
-                    final request = ElderOnboardingRequest(
-                      gender: elder?.gender,
-                      age: double.parse(bloc.ageController.text).toInt(),
-                      weight: double.parse(bloc.weightController.text),
-                      height: double.parse(bloc.heightController.text),
-                      bloodType: state.selectedBloodType?.type ?? elder?.bloodType,
-                      allergies: state.selectedAllergies.map((e) => e.en).toList(),
-                      chronicDiseases: state.selectedDiseases.map((e) => e.en).toList(),
-                      mobilityStatus: state.selectedMobilityStatus?.en ??
-                          elder?.mobilityStatus?.trim(),
-                      caregiverIds: state.caregivers.map((c) => c.id!).toList(),
-                    );
-                    bloc.add(EditElderProfileEvent(elder!.id!, request));
-                  }
-                      : null,
-                ),
+                        buttonLabel: "save".tr(),
+                        isLoading: state.editElderProfileStatus.isLoading,
+                        onPressed: hasChanges
+                            ? () {
+                                final request = ElderOnboardingRequest(
+                                  gender: elder?.gender,
+                                  age: double.parse(
+                                    bloc.ageController.text,
+                                  ).toInt(),
+                                  weight: double.parse(
+                                    bloc.weightController.text,
+                                  ),
+                                  height: double.parse(
+                                    bloc.heightController.text,
+                                  ),
+                                  bloodType:
+                                      state.selectedBloodType?.type ??
+                                      elder?.bloodType,
+                                  allergies: state.selectedAllergies
+                                      .map((e) => e.en)
+                                      .toList(),
+                                  chronicDiseases: state.selectedDiseases
+                                      .map((e) => e.en)
+                                      .toList(),
+                                  mobilityStatus:
+                                      state.selectedMobilityStatus?.en ??
+                                      elder?.mobilityStatus?.trim(),
+                                  caregiverIds: state.caregivers
+                                      .map((c) => c.id!)
+                                      .toList(),
+                                );
+                                bloc.add(
+                                  EditElderProfileEvent(elder!.id!, request),
+                                );
+                              }
+                            : null,
+                      ),
                 SizedBox(height: context.setHeight(20)),
               ],
             ),

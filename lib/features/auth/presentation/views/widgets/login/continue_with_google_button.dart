@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:senio_care/core/common_widgets/custom_elevated_button.dart';
+import 'package:senio_care/core/common_widgets/loading_btn.dart';
 import 'package:senio_care/core/constants/app_icons.dart';
 import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
@@ -50,11 +51,7 @@ class ContinueWithGoogleButton extends StatelessWidget {
       },
       builder: (context, state) {
          if(state.loginStatus.isLoading) {
-           return LoadingAnimationWidget.flickr(
-             leftDotColor:AppColors.gradientEnd ,
-             rightDotColor: AppColors.gradientMiddle,
-             size: context.setWidth(30),
-           );
+           return LoadingBtn();
          }
           return CustomElevatedButton(
             onPressed: () {

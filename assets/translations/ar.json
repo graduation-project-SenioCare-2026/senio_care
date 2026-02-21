@@ -279,5 +279,6 @@
   "avg": "متوسط",
   "elderId": "ID المسن",
   "mobilityStatus": "حالة التنقل",
-  "relationship": "العلاقة بالمسن"
+  "relationship": "العلاقة بالمسن",
+  "profileEditedSuccessfully": "تم التعديل بنجاح!"
 }

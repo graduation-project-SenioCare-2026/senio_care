@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/core/common_widgets/custom_elevated_button.dart';
+import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/features/caregiver/api/models/request/onboarding/caregiver_onboarding_request.dart';
@@ -22,6 +23,16 @@ class EditCaregiverButton extends StatelessWidget {
           if (state.caregiverEditProfileState.isSuccess) {
             ProfileManager().caregiver = state.caregiverEditProfileState.data;
             Navigator.pop(context, true);
+            Loaders.showSuccessMessage(
+              message: "profileEditedSuccessfully".tr(),
+              context: context,
+            );
+          }
+          if (state.caregiverEditProfileState.isFailure) {
+            Loaders.showErrorMessage(
+              message: state.caregiverEditProfileState.error!.message,
+              context: context,
+            );
           }
         },
         builder: (context, state) {
@@ -31,13 +42,15 @@ class EditCaregiverButton extends StatelessWidget {
               children: [
                 CustomElevatedButton(
                   onPressed: () {
-                    final request=CaregiverOnboardingRequest(
+                    final request = CaregiverOnboardingRequest(
                       phoneNumber: bloc.phoneNumberController.text,
                       gender: bloc.genderController.text,
                       relationship: bloc.relationShipController.text,
                       elderIds: state.elderId,
                     );
-                    bloc.add(CaregiverEditProfileEvent(caregiver!.id!, request));
+                    bloc.add(
+                      CaregiverEditProfileEvent(caregiver!.id!, request),
+                    );
                   },
                   buttonLabel: 'save'.tr(),
                 ),

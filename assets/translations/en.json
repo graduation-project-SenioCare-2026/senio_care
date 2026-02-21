@@ -271,5 +271,6 @@
   "mmHg": "mm Hg",
   "noDataAvailable": "No data available",
   "avg": "Avg",
-  "mobilityStatus": "Mobility Status"
+  "mobilityStatus": "Mobility Status",
+  "profileEditedSuccessfully": "Profile edited successfully!"
 }
