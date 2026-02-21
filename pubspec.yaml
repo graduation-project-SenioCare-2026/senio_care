@@ -53,6 +53,8 @@ dependencies:
   dropdown_search: ^6.0.2
   skeletonizer: ^2.1.2
   fl_chart: ^1.1.1
+  flutter_phone_direct_caller: ^2.2.1
+  permission_handler: ^11.3.0
 
 
 dev_dependencies:
