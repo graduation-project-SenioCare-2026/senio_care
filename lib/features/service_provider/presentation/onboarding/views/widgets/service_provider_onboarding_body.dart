@@ -18,6 +18,8 @@ import 'package:senio_care/features/service_provider/presentation/onboarding/vie
 import 'package:senio_care/features/service_provider/presentation/onboarding/view_model/service_provider_event.dart';
 import 'package:senio_care/features/service_provider/presentation/onboarding/view_model/service_provider_state.dart';
 
+import '../../../../../../core/common_widgets/custom_radio_group_form_field.dart';
+
 
 class ServiceProviderOnboardingBody extends StatelessWidget {
   const ServiceProviderOnboardingBody({super.key});
@@ -85,6 +87,17 @@ class ServiceProviderOnboardingBody extends StatelessWidget {
                       autoValidateMode: AutovalidateMode.onUserInteraction,
                       controller:   bloc.specializationController,
                     ),
+                    CustomRadioGroupFormField<String>(
+                      titleKey: 'gender',
+                      value: state.selectedGender,
+                      validator: Validator.validateGender,
+                      options: {'male': 'male', 'female': 'female'},
+                      onChanged: (value) {
+                        if (value != null) {
+                          bloc.add(ServiceProviderSetGenderEvent(value));
+                        }
+                      },
+                    ),
                     SizedBox(height: context.setHeight(20)),
                   ],
                 ),
@@ -99,6 +112,7 @@ class ServiceProviderOnboardingBody extends StatelessWidget {
                       final request = ServiceProviderOnboardingRequest(
                         phoneNumber: bloc.phoneNumberController.text,
                         specialization: bloc.specializationController.text,
+                        gender: state.selectedGender
                       );
                       bloc.add(ServiceProviderSubmitDataEvent(request));
                     }

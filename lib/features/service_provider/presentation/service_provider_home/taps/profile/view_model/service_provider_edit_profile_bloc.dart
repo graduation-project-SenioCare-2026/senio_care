@@ -22,6 +22,7 @@ class ServiceProviderEditProfileBloc
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final phoneNumberController = TextEditingController();
   final specializationController = TextEditingController();
+  final genderController = TextEditingController();
   final GetServiceProviderByIdUseCase _providerByIdUseCase;
   ServiceProviderEditProfileBloc(this._case, this._providerByIdUseCase)
     : super(ServiceProviderEditProfileState()) {
@@ -34,9 +35,7 @@ class ServiceProviderEditProfileBloc
     GetServiceProviderByIdEvent event,
     Emitter<ServiceProviderEditProfileState> emit,
   ) async {
-    emit(
-      state.copyWith(getServiceProviderStatus: StateStatus.loading()),
-    );
+    emit(state.copyWith(getServiceProviderStatus: StateStatus.loading()));
     final result = await _providerByIdUseCase(event.id);
     if (result is Success<ServiceProviderEntity>) {
       ProfileManager().serviceProvider = result.data;
@@ -70,6 +69,7 @@ class ServiceProviderEditProfileBloc
     final service = ProfileManager().serviceProvider;
     phoneNumberController.text = service?.phoneNumber.toString() ?? "";
     specializationController.text = service?.specialization.toString() ?? "";
+    genderController.text = service?.gender.toString() ?? "";
   }
 
   Future<void> _serviceProviderEditProfile(

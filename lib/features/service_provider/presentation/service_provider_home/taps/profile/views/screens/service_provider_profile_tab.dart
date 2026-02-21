@@ -74,7 +74,7 @@ class ServiceProviderProfileTab extends StatelessWidget {
                                 end: context.setWidth(10),
                               ),
                               child: Image.asset(
-                                AppIcons.editService,
+                                AppIcons.editInfo,
                                 color: AppColors.black,
                                 width: context.setWidth(30),
                                 height: context.setHeight(30),
@@ -104,6 +104,14 @@ class ServiceProviderProfileTab extends StatelessWidget {
                                     icon: Icons.phone,
                                     label: "Phone",
                                     value: serviceProvider?.phoneNumber,
+                                  ),
+                                  const Divider(),
+                                  InfoRow(
+                                    label: "gender".tr(),
+                                    icon: serviceProvider?.gender == 'male'
+                                        ? Icons.male
+                                        : Icons.female,
+                                    value: serviceProvider?.gender,
                                   ),
                                   const Divider(),
                                   InfoRow(

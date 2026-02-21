@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:senio_care/core/loaders/loaders.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/theme/app_colors.dart';
+import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/profile/view_model/service_provider_edit_profile_bloc.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/profile/view_model/service_provider_edit_profile_state.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/profile/views/widgets/avatar_container.dart';
@@ -15,10 +17,45 @@ import '../../../../../../../../core/validator/validator.dart';
 import '../../../../../../api/models/request/onboarding/service_provider_onboarding_request.dart';
 import '../../view_model/service_provider_edit_profile_event.dart';
 
-class ServiceProviderEditProfileBody extends StatelessWidget {
-  ServiceProviderEditProfileBody({super.key});
+class ServiceProviderEditProfileBody extends StatefulWidget {
+  const ServiceProviderEditProfileBody({super.key});
 
+  @override
+  State<ServiceProviderEditProfileBody> createState() =>
+      _ServiceProviderEditProfileBodyState();
+}
+
+class _ServiceProviderEditProfileBodyState
+    extends State<ServiceProviderEditProfileBody> {
+  late ServiceProviderEditProfileBloc _bloc;
   final user = UserManager().user;
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = context.read<ServiceProviderEditProfileBloc>();
+    _bloc.phoneNumberController.addListener(_onChanged);
+    _bloc.specializationController.addListener(_onChanged);
+  }
+
+  void _onChanged() => setState(() {});
+
+  @override
+  void dispose() {
+    _bloc.phoneNumberController.removeListener(_onChanged);
+    _bloc.specializationController.removeListener(_onChanged);
+    super.dispose();
+  }
+
+  bool _hasChanges() {
+    final serviceProvider = ProfileManager().serviceProvider;
+    if (serviceProvider == null) return false;
+
+    return _bloc.phoneNumberController.text !=
+            (serviceProvider.phoneNumber ?? '') ||
+        _bloc.specializationController.text !=
+            (serviceProvider.specialization ?? '');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +85,8 @@ class ServiceProviderEditProfileBody extends StatelessWidget {
           previous.serviceProviderEditProfileState !=
           current.serviceProviderEditProfileState,
       builder: (context, state) {
+        final hasChanges = _hasChanges();
+
         return CustomScrollView(
           slivers: [
             SliverPadding(
@@ -56,7 +95,7 @@ class ServiceProviderEditProfileBody extends StatelessWidget {
                 right: context.setWidth(25),
                 left: context.setWidth(25),
               ),
-              sliver: AvatarContainer(), // Use it as a sliver directly
+              sliver: AvatarContainer(),
             ),
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: context.setWidth(25)),
@@ -65,29 +104,28 @@ class ServiceProviderEditProfileBody extends StatelessWidget {
                   children: [
                     CustomCard(
                       child: Form(
-                        key: bloc.formKey,
+                        key: _bloc.formKey,
                         child: Column(
                           children: [
                             AppFormField(
                               label: 'phoneNumber'.tr(),
                               keyboardType: TextInputType.phone,
-                              controller: bloc.phoneNumberController,
+                              controller: _bloc.phoneNumberController,
                               validator: (_) => Validator.validatePhoneNumber(
-                                bloc.phoneNumberController.text,
+                                _bloc.phoneNumberController.text,
                               ),
                               autoValidateMode:
                               AutovalidateMode.onUserInteraction,
                               hint: '',
                             ),
-
                             AppFormField(
                               label: 'specialization'.tr(),
-                              controller: bloc.specializationController,
+                              controller: _bloc.specializationController,
                               validator: (_) => Validator.validateRequired(
-                                bloc.specializationController.text,
+                                _bloc.specializationController.text,
                               ),
                               autoValidateMode:
-                              AutovalidateMode.onUserInteraction,
+                                  AutovalidateMode.onUserInteraction,
                               hint: '',
                             ),
 
@@ -96,25 +134,34 @@ class ServiceProviderEditProfileBody extends StatelessWidget {
                         ),
                       ),
                     ),
-
-                    // Removed SliverToBoxAdapter wrapper here
-                    CustomElevatedButton(
-                      width: context.setWidth(300),
-                      onPressed: () {
-                        if (bloc.formKey.currentState!.validate()) {
-                          final request = ServiceProviderOnboardingRequest(
-                            phoneNumber: bloc.phoneNumberController.text,
-                            specialization:
-                            bloc.specializationController.text,
-                          );
-
-                          bloc.add(
-                            ServiceProviderEditEvent(request, user!.id!),
-                          );
-                        }
-                      },
-                      buttonLabel: 'save'.tr(),
-                    ),
+                    if (state.serviceProviderEditProfileState.isLoading)
+                      LoadingAnimationWidget.flickr(
+                        leftDotColor: AppColors.gradientEnd,
+                        rightDotColor: AppColors.gradientMiddle,
+                        size: context.setWidth(30),
+                      )
+                    else
+                      CustomElevatedButton(
+                        width: context.setWidth(300),
+                        backgroundColor: hasChanges
+                            ? AppColors.blue
+                            : AppColors.gray,
+                        onPressed: () {
+                          if (hasChanges &&
+                              _bloc.formKey.currentState!.validate()) {
+                            final request = ServiceProviderOnboardingRequest(
+                              phoneNumber: _bloc.phoneNumberController.text,
+                              specialization:
+                                  _bloc.specializationController.text,
+                            );
+                            _bloc.add(
+                              ServiceProviderEditEvent(request, user!.id!),
+                            );
+                          }
+                        },
+                        buttonLabel: 'save'.tr(),
+                      ),
+                    SizedBox(height: context.setHeight(20)),
                   ],
                 ),
               ),

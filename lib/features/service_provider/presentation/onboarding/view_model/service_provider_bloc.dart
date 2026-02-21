@@ -27,6 +27,14 @@ class ServiceProviderOnboardingBloc
     this._secureStorage,
   ) : super(ServiceProviderOnboardingState()) {
     on<ServiceProviderSubmitDataEvent>(_serviceProviderOnboardingEvent);
+    on<ServiceProviderSetGenderEvent>(_setGender);
+  }
+
+  void _setGender(
+      ServiceProviderSetGenderEvent event,
+      Emitter<ServiceProviderOnboardingState> emit,
+      ) {
+    emit(state.copyWith(selectedGender: event.gender));
   }
 
   Future<void> _serviceProviderOnboardingEvent(

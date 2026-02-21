@@ -7,3 +7,8 @@ class ServiceProviderSubmitDataEvent extends ServiceProviderOnboardingEvent {
   final ServiceProviderOnboardingRequest request;
   ServiceProviderSubmitDataEvent(this.request);
 }
+
+class ServiceProviderSetGenderEvent extends ServiceProviderOnboardingEvent{
+  final String gender;
+  ServiceProviderSetGenderEvent(this.gender);
+}

@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 
@@ -18,7 +17,6 @@ class AvatarContainer extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(height: context.setHeight(12)),
-
           GradientIconContainer(
             width: context.setWidth(90),
             height: context.setHeight(90),
@@ -47,7 +45,7 @@ class AvatarContainer extends StatelessWidget {
           Text(
             user?.email ?? "notProvided",
             style: getBoldStyle(
-              color: AppColors.gray,
+              color: AppColors.gray.shade700,
               fontSize: context.setSp(FontSize.s14),
             ),
           ),
