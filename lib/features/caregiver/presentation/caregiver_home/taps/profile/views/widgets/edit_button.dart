@@ -1,11 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:senio_care/core/common_widgets/custom_elevated_button.dart';
+import 'package:senio_care/core/common_widgets/loading_btn.dart';
 import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
-import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/features/caregiver/api/models/request/onboarding/caregiver_onboarding_request.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/view_model/caregiver_edit_profile_bloc.dart';
@@ -103,11 +102,7 @@ class _EditCaregiverButtonState extends State<EditCaregiverButton> {
             child: Column(
               children: [
                 if (state.caregiverEditProfileState.isLoading)
-                  LoadingAnimationWidget.flickr(
-                    leftDotColor: AppColors.gradientEnd,
-                    rightDotColor: AppColors.gradientMiddle,
-                    size: context.setWidth(30),
-                  )
+                  LoadingBtn()
                 else
                   CustomElevatedButton(
                     onPressed: hasChanges

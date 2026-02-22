@@ -1,10 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:senio_care/core/common_widgets/loading_btn.dart';
 import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
-import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/profile/view_model/service_provider_edit_profile_bloc.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/profile/view_model/service_provider_edit_profile_state.dart';
@@ -134,30 +133,25 @@ class _ServiceProviderEditProfileBodyState
                       ),
                     ),
                     if (state.serviceProviderEditProfileState.isLoading)
-                      LoadingAnimationWidget.flickr(
-                        leftDotColor: AppColors.gradientEnd,
-                        rightDotColor: AppColors.gradientMiddle,
-                        size: context.setWidth(30),
-                      )
+                      LoadingBtn()
                     else
                       CustomElevatedButton(
                         width: context.setWidth(300),
-                        backgroundColor: hasChanges
-                            ? AppColors.blue
-                            : AppColors.gray,
-                        onPressed: () {
-                          if (hasChanges &&
+                        onPressed:hasChanges? () {
+                          if (
                               _bloc.formKey.currentState!.validate()) {
                             final request = ServiceProviderOnboardingRequest(
                               phoneNumber: _bloc.phoneNumberController.text,
                               specialization:
                                   _bloc.specializationController.text,
+                              gender: ProfileManager().serviceProvider?.gender,
                             );
                             _bloc.add(
                               ServiceProviderEditEvent(request, user!.id!),
+
                             );
                           }
-                        },
+                        }:null,
                         buttonLabel: 'save'.tr(),
                       ),
                     SizedBox(height: context.setHeight(20)),
