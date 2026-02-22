@@ -27,15 +27,7 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
     super.dispose();
   }
 
-  void _showSuccessMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.green,
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
+
 
   void _showErrorMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -54,7 +46,7 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
       listener: (context, state) {
         if (_isAddingElder) {
           if (state.getElderState.isSuccess) {
-            _showSuccessMessage("elderAddedSuccessfully".tr());
+            // _showSuccessMessage("elderAddedSuccessfully".tr());
             setState(() => _isAddingElder = false);
           } else if (state.getElderState.isFailure) {
             final error =
@@ -66,7 +58,7 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
 
         if (_isRemovingElder) {
           if (state.getElderState.isSuccess) {
-            _showSuccessMessage("elderRemovedSuccessfully".tr());
+            // _showSuccessMessage("elderRemovedSuccessfully".tr());
             setState(() => _isRemovingElder = false);
           } else if (state.getElderState.isFailure) {
             final error =
@@ -144,22 +136,31 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
                       onTap: isLoading
                           ? null
                           : () {
-                              final id = _elderIdController.text.trim();
-                              if (id.isEmpty) {
-                                _showErrorMessage("pleaseEnterElderId".tr());
-                                return;
-                              }
-                              if (elders.any((e) => e.id == id)) {
-                                _showErrorMessage("elderIdAlreadyExists".tr());
-                                return;
-                              }
-                              setState(() => _isAddingElder = true);
-                              context.read<CaregiverEditProfileBloc>().add(
-                                AddElderId(id),
-                              );
-                              _elderIdController.clear();
-                            },
-                      child: Icon(
+                        final id = _elderIdController.text.trim();
+                        if (id.isEmpty) {
+                          _showErrorMessage("pleaseEnterElderId".tr());
+                          return;
+                        }
+                        if (elders.any((e) => e.id == id)) {
+                          _showErrorMessage("elderIdAlreadyExists".tr());
+                          return;
+                        }
+                        setState(() => _isAddingElder = true);
+                        context.read<CaregiverEditProfileBloc>().add(
+                          AddElderId(id),
+                        );
+                        _elderIdController.clear();
+                      },
+                      child: isLoading
+                          ? SizedBox(
+                        width: context.setMinSize(24),
+                        height: context.setMinSize(24),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.blue,
+                        ),
+                      )
+                          : Icon(
                         Icons.add,
                         color: Colors.black,
                         size: context.setMinSize(24),
@@ -170,7 +171,7 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
               ],
             ),
             SizedBox(height: context.setHeight(16)),
-            if (!isLoading && elders.isNotEmpty)
+            if ( elders.isNotEmpty)
               Column(
                 children: elders.asMap().entries.map((entry) {
                   final elder = entry.value;
@@ -243,34 +244,12 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
                 }).toList(),
               ),
 
-            if (!isLoading && elders.isEmpty && !hasError)
-              Container(
-                padding: EdgeInsets.all(context.setMinSize(16)),
-                decoration: BoxDecoration(
-                  color: AppColors.gray[100],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: AppColors.gray[300] ?? Colors.grey[300]!,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.info_outline,
-                      color: AppColors.gray[600],
-                      size: context.setMinSize(20),
-                    ),
-                    SizedBox(width: context.setWidth(12)),
-                    Expanded(
-                      child: Text(
-                        "noEldersYet".tr(),
-                        style: getRegularStyle(
-                          color: AppColors.gray[600] ?? AppColors.gray,
-                          fontSize: FontSize.s14,
-                        ),
-                      ),
-                    ),
-                  ],
+            if (elders.isEmpty && !hasError && !isLoading)
+              Text(
+                "noEldersYet".tr(),
+                style: getRegularStyle(
+                  color: AppColors.gray[600] ?? AppColors.gray,
+                  fontSize: FontSize.s14,
                 ),
               ),
           ],

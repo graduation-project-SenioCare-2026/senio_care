@@ -25,6 +25,7 @@ class CaregiverEditProfileBloc
   final relationShipController = TextEditingController();
   final genderController = TextEditingController();
   final elderIdController = TextEditingController();
+  CaregiverEntity? originalCaregiver;
 
   CaregiverEditProfileBloc(
       this._caregiverByIdUseCase,
@@ -42,6 +43,7 @@ class CaregiverEditProfileBloc
       Emitter<CaregiverEditProfileState> emit,
       ) {
     final caregiver = ProfileManager().caregiver;
+    originalCaregiver = caregiver;
 
     phoneNumberController.text = caregiver?.phoneNumber ?? '';
     relationShipController.text = caregiver?.relationship ?? '';
@@ -141,7 +143,6 @@ class CaregiverEditProfileBloc
 
     // ✅ Read current elders from state
     final currentElders = state.getElderState.data ?? <ElderEntity>[];
-
     // Prevent duplicates
     if (currentElders.any((e) => e.id == event.elderId)) return;
 

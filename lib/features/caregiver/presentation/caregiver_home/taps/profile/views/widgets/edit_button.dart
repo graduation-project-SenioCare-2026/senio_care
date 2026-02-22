@@ -42,26 +42,26 @@ class _EditCaregiverButtonState extends State<EditCaregiverButton> {
   }
 
   bool _hasChanges(CaregiverEditProfileState state) {
-    final caregiver = ProfileManager().caregiver;
-    if (caregiver == null) return false;
+    final original = _bloc.originalCaregiver;
+    if (original == null) return false;
 
     final currentElderIds =
         state.getElderState.data
             ?.map((e) => e.id)
             .whereType<String>()
             .toList() ??
-        [];
+            [];
 
     final originalElderIds =
-        caregiver.elders?.map((e) => e.id).whereType<String>().toList() ?? [];
+        original.elders?.map((e) => e.id).whereType<String>().toList() ?? [];
 
     final elderIdsChanged =
         currentElderIds.length != originalElderIds.length ||
-        !currentElderIds.every((id) => originalElderIds.contains(id));
+            !currentElderIds.every((id) => originalElderIds.contains(id));
 
-    return _bloc.phoneNumberController.text != (caregiver.phoneNumber ?? '') ||
-        _bloc.genderController.text != (caregiver.gender ?? '') ||
-        _bloc.relationShipController.text != (caregiver.relationship ?? '') ||
+    return _bloc.phoneNumberController.text != (original.phoneNumber ?? '') ||
+        _bloc.genderController.text != (original.gender ?? '') ||
+        _bloc.relationShipController.text != (original.relationship ?? '') ||
         elderIdsChanged;
   }
 
@@ -75,10 +75,10 @@ class _EditCaregiverButtonState extends State<EditCaregiverButton> {
           if (state.caregiverEditProfileState.isSuccess) {
             ProfileManager().caregiver = state.caregiverEditProfileState.data;
             Navigator.pop(context, true);
-            Loaders.showSuccessMessage(
-              message: "profileEditedSuccessfully".tr(),
-              context: context,
-            );
+            // Loaders.showSuccessMessage(
+            //   message: "profileEditedSuccessfully".tr(),
+            //   context: context,
+            // );
           }
           if (state.caregiverEditProfileState.isFailure) {
             Loaders.showErrorMessage(
