@@ -248,6 +248,7 @@
   "chronicDiseaseMinLength": "Please provide more details (at least 3 characters)",
   "allergyMinLength": "Please provide more details (at least 3 characters)",
   "genderRequired": "Please select a gender",
+  "elderInformation": "Elder Information",
 
   "graph": "Graph",
   "vitalsMonitoring": "Vitals Monitoring",

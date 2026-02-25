@@ -10,10 +10,12 @@ class ProfileManager {
   ElderEntity? elder;
   CaregiverEntity? caregiver;
   ServiceProviderEntity? serviceProvider;
+  ElderEntity? selectedElder;
 
   void clear() {
     elder = null;
     caregiver = null;
     serviceProvider = null;
+    selectedElder = null;
   }
 }

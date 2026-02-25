@@ -12,6 +12,7 @@
   "connectionTimeout": "مهلة الاتصال انتهت.",
   "networkError": "خطأ في الاتصال بالشبكة.",
   "anUnknownErrorOccurred": "حدث خطأ غير معروف.",
+  "elderInformation": "بيانات المسن",
 
   "emailAlreadyInUse": "هذا البريد مستخدم بالفعل.",
   "invalidEmail": "صيغة البريد الإلكتروني غير صحيحة.",
