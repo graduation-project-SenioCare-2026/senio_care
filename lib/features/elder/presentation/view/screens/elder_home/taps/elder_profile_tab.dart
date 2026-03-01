@@ -52,28 +52,31 @@ class ElderProfileTap extends StatelessWidget {
               ),
             ),
 
-            CustomCard(
-              child: Row(
-                children: [
-                  GradientIconContainer(
-                    width: context.setWidth(45),
-                    height: context.setHeight(50),
-                    radius: context.setSp(25),
-                    child: Image.asset(
-                      AppIcons.medicalDoc,
-                      height: context.setHeight(30),
-                      width: context.setWidth(30),
+            GestureDetector(
+              onTap: () => Navigator.pushNamed(context, RoutesNames.elderMedicalDocumentsScreen),
+              child: CustomCard(
+                child: Row(
+                  children: [
+                    GradientIconContainer(
+                      width: context.setWidth(45),
+                      height: context.setHeight(50),
+                      radius: context.setSp(25),
+                      child: Image.asset(
+                        AppIcons.medicalDoc,
+                        height: context.setHeight(30),
+                        width: context.setWidth(30),
+                      ),
                     ),
-                  ),
-                  SizedBox(width: context.setWidth(15)),
-                  Text(
-                    "medicalDocuments".tr(),
-                    style: getRegularStyle(
-                      color: AppColors.black,
-                      fontSize: context.setSp(FontSize.s20),
+                    SizedBox(width: context.setWidth(15)),
+                    Text(
+                      "medicalDocuments".tr(),
+                      style: getRegularStyle(
+                        color: AppColors.black,
+                        fontSize: context.setSp(FontSize.s20),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

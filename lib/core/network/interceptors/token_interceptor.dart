@@ -9,14 +9,19 @@ class TokenInterceptor extends Interceptor {
   TokenInterceptor(this._secureStorage);
 
   @override
+  @override
   Future<void> onRequest(
       RequestOptions options,
       RequestInterceptorHandler handler,
       ) async {
-    final token = await _secureStorage.getToken();
+    // ✅ متضيفش token لو الـ request بيروح لـ Cloudinary
+    final isCloudinary = options.uri.host.contains('cloudinary.com');
 
-    if (token != null && token.isNotEmpty) {
-      options.headers['Authorization'] = 'Bearer $token';
+    if (!isCloudinary) {
+      final token = await _secureStorage.getToken();
+      if (token != null && token.isNotEmpty) {
+        options.headers['Authorization'] = 'Bearer $token';
+      }
     }
 
     handler.next(options);

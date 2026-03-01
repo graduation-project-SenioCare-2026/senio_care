@@ -7,5 +7,8 @@ abstract class EndPointsConstants {
   static const String elderById="/elders/{id}";
   static const String caregiverById="/caregivers/{id}";
   static const String serviceProviderById="/service-providers/{id}";
+  static const String medicalDocs="medical-documents/";
+  static const String medicalDocById="medical-documents/{id}";
+
 
 }

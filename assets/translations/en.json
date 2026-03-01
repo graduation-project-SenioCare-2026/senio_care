@@ -272,5 +272,15 @@
   "noDataAvailable": "No data available",
   "avg": "Avg",
   "mobilityStatus": "Mobility Status",
-  "profileEditedSuccessfully": "Profile edited successfully!"
+  "profileEditedSuccessfully": "Profile edited successfully!",
+  "pickFromGallery": "Pick from Gallery",
+  "captureFromCamera": "Capture from Camera",
+  "DocumentName": "Document Name",
+  "selectDate": "Select Date",
+  "pleaseSelectImage": "Add at least on image for this document",
+  "attachImages": "Attach Images",
+  "images": "Images",
+  "captureAnother": "Capture another?",
+  "AddDocument": "Add Document",
+  "documentAddedSuccessfully": "Document added successfully"
 }

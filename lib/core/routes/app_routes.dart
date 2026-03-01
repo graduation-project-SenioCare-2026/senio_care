@@ -10,6 +10,8 @@ import 'package:senio_care/features/auth/presentation/views/screens/splash_scree
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/caregiver_main_layout.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/views/screen/caregiver_edit_profile.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_main_layout.dart';
+import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_profile/create_document_screen.dart';
+import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_profile/medical_documents_screen.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_onboarding/elder_onboarding_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/blood_pressure_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/blood_sugar_screen.dart';
@@ -102,6 +104,12 @@ abstract class Routes {
           builder: (context) =>
               BlocProvider.value(value: bloc, child: const BloodPressureScreen()),
         );
+
+      case RoutesNames.elderMedicalDocumentsScreen:
+        return MaterialPageRoute(builder: (context) => MedicalDocumentsScreen(),);
+
+      case RoutesNames.createDocumentScreen:
+        return MaterialPageRoute(builder: (context) => CreateDocumentScreen(),);
 
       default:
         return MaterialPageRoute(

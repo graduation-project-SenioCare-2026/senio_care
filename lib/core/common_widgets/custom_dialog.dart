@@ -7,7 +7,7 @@ import 'package:senio_care/core/theme/font_style.dart';
 
 class CustomDialog extends StatelessWidget {
   final Widget title;
-  final String content;
+  final String? content;
   final Widget? afterContent;
   final String confirmText;
   final String cancelText;
@@ -17,7 +17,7 @@ class CustomDialog extends StatelessWidget {
   const CustomDialog({
     super.key,
     required this.title,
-    required this.content,
+     this.content,
     this.afterContent,
     this.confirmText = "OK",
     this.cancelText = "Cancel",
@@ -34,8 +34,9 @@ class CustomDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          if(content!=null)
           Text(
-            content,
+            content!,
             style: getBoldStyle(
               color: AppColors.black,
               fontSize: context.setSp(FontSize.s14),

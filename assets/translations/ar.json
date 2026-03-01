@@ -280,5 +280,15 @@
   "elderId": "ID المسن",
   "mobilityStatus": "حالة التنقل",
   "relationship": "العلاقة بالمسن",
-  "profileEditedSuccessfully": "تم التعديل بنجاح!"
+  "profileEditedSuccessfully": "تم التعديل بنجاح!",
+  "pickFromGallery": "اختر من المعرض",
+  "captureFromCamera": "التقط صورة بالكاميرا",
+  "DocumentName": "اسم المستند",
+  "selectDate": "اختر التاريخ",
+  "pleaseSelectImage": "الرجاء اختيار صورة",
+  "attachImages": "أرفق الصور",
+  "images": "الصور",
+  "captureAnother": "التقاط صورة أخرى؟",
+  "AddDocument": "إضافة مستند",
+  "documentAddedSuccessfully": "تم إضافة المستند بنجاح"
 }

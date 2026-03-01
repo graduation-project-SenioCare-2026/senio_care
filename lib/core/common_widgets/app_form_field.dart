@@ -15,6 +15,7 @@ class AppFormField extends StatelessWidget {
   final TextEditingController? controller;
   final AutovalidateMode? autoValidateMode;
   final String? initialFormFieldValue;
+  final void Function(String)? onChange;
 
   const AppFormField({
     super.key,
@@ -25,7 +26,8 @@ class AppFormField extends StatelessWidget {
     this.validator,
     this.controller,
     this.autoValidateMode,
-    this.initialFormFieldValue
+    this.initialFormFieldValue,
+    this.onChange
   });
 
   @override
@@ -42,6 +44,7 @@ class AppFormField extends StatelessWidget {
         ),
         SizedBox(height: context.setHeight(8)),
         CustomTextFormField(
+    onChanged: onChange,
           controller: controller,
           initialValue: initialFormFieldValue,
           validator: validator,

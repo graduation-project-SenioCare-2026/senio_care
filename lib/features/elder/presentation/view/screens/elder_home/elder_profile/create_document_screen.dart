@@ -1,0 +1,51 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:senio_care/config/di/di.dart';
+import 'package:senio_care/core/common_widgets/bg_gradient.dart';
+import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/theme/app_colors.dart';
+import 'package:senio_care/core/theme/font_manager.dart';
+import 'package:senio_care/core/theme/font_style.dart';
+import 'package:senio_care/features/elder/presentation/view/widgets/elder_profile/medical_documents/create_document/create_document_card.dart';
+import 'package:senio_care/features/elder/presentation/view_model/medical_documents/medical_documents_bloc.dart';
+
+class CreateDocumentScreen extends StatelessWidget {
+  const CreateDocumentScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
+        SafeArea(
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              title: Text(
+                "AddDocument".tr(),
+                style: getBoldStyle(
+                  color: AppColors.black,
+                  fontSize: context.setSp(FontSize.s24),
+                ),
+              ),
+              centerTitle: true,
+              leading: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: AppColors.black,
+                  size: context.setWidth(25),
+                ),
+              ),
+            ),
+            body: BlocProvider(
+              create: (context) => getIt<MedicalDocumentsBloc>(),
+              child: SingleChildScrollView(child: CreateDocumentCard()),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
