@@ -35,4 +35,9 @@ abstract class ElderApiServices {
   Future<List<MedicalDocumentResponse>> getMedicalDocumentById(
       @Path('elder_id') String id,
       );
+
+  @DELETE(EndPointsConstants.medicalDocsById)
+  Future<String> deleteDocument(
+      @Path('id') String id,
+      );
 }

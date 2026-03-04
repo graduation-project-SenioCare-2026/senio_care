@@ -56,7 +56,7 @@ class _FullScreenViewerState extends State<FullScreenViewer> {
             ),
             body: PageView.builder(
               controller: _controller,
-              itemCount: widget.images?.length,
+              itemCount: widget.images!=null?widget.images?.length:widget.imageUrls?.length,
               itemBuilder: (context, index) {
                 return InteractiveViewer(
                   panEnabled: true,

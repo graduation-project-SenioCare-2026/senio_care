@@ -8,6 +8,7 @@ import 'package:senio_care/features/elder/api/models/request/medical_document_re
 import 'package:senio_care/features/elder/domain/entity/medical_document_entity.dart';
 import 'package:senio_care/features/elder/domain/use_case/cloudinary/upload_images_to_cloudinary_use_case.dart';
 import 'package:senio_care/features/elder/domain/use_case/medical_documents/create_document_use_case.dart';
+import 'package:senio_care/features/elder/domain/use_case/medical_documents/delete_document_use_case.dart';
 import 'package:senio_care/features/elder/domain/use_case/medical_documents/get_elder_documents_use_case.dart';
 
 import 'medical_documents_event.dart';
@@ -19,14 +20,16 @@ class MedicalDocumentsBloc
   final UploadImagesToCloudinaryUseCase _uploadImagesUseCase;
   final CreateDocumentUseCase _createDocumentUseCase;
   final GetElderDocumentsUseCase _getElderDocumentsUseCase;
+  final DeleteDocumentUseCase _deleteDocumentUseCase;
 
   MedicalDocumentsBloc(
-      this._uploadImagesUseCase,
-      this._createDocumentUseCase,
-      this._getElderDocumentsUseCase,
-      ) : super(const MedicalDocumentsState()) {
+    this._uploadImagesUseCase,
+    this._createDocumentUseCase,
+    this._getElderDocumentsUseCase,
+    this._deleteDocumentUseCase,
+  ) : super(const MedicalDocumentsState()) {
     on<ChangeDocumentNameEvent>(
-          (e, emit) => emit(state.copyWith(documentName: e.name)),
+      (e, emit) => emit(state.copyWith(documentName: e.name)),
     );
 
     on<PickDateEvent>((e, emit) => emit(state.copyWith(selectedDate: e.date)));
@@ -43,12 +46,13 @@ class MedicalDocumentsBloc
 
     on<SaveDocumentEvent>(_saveDocument);
     on<GetElderDocuments>(_getDocuments);
+    on<DeleteDocumentEvent>(_deleteDocument);
   }
 
   Future<void> _saveDocument(
-      SaveDocumentEvent event,
-      Emitter<MedicalDocumentsState> emit,
-      ) async {
+    SaveDocumentEvent event,
+    Emitter<MedicalDocumentsState> emit,
+  ) async {
     // ── Validate state before doing anything ──────────────────────────────
     if (state.documentName.trim().isEmpty) {
       emit(state.copyWith(error: "documentNameRequired".tr()));
@@ -134,9 +138,9 @@ class MedicalDocumentsBloc
   }
 
   Future<void> _getDocuments(
-      GetElderDocuments event,
-      Emitter<MedicalDocumentsState> emit,
-      ) async {
+    GetElderDocuments event,
+    Emitter<MedicalDocumentsState> emit,
+  ) async {
     emit(state.copyWith(getDocumentStatus: StateStatus.loading()));
     final result = await _getElderDocumentsUseCase.call(event.id);
     switch (result) {
@@ -148,6 +152,33 @@ class MedicalDocumentsBloc
         emit(
           state.copyWith(
             getDocumentStatus: StateStatus.failure(result.responseException),
+          ),
+        );
+    }
+  }
+
+  Future<void> _deleteDocument(
+    DeleteDocumentEvent event,
+    Emitter<MedicalDocumentsState> emit,
+  ) async {
+    emit(state.copyWith(deleteDocumentStatus: StateStatus.loading()));
+    final result = await _deleteDocumentUseCase.call(event.id);
+    switch (result) {
+      case Success<String>():
+        final updatedList = List.of(state.getDocumentStatus.data!)
+          ..removeWhere((doc) => doc.id == event.id);
+
+        emit(
+
+          state.copyWith(
+            deleteDocumentStatus: StateStatus.success(result.data),
+            getDocumentStatus:StateStatus.success(updatedList),
+          ),
+        );
+      case Failure<String>():
+        emit(
+          state.copyWith(
+            deleteDocumentStatus: StateStatus.failure(result.responseException),
           ),
         );
     }

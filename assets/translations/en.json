@@ -285,5 +285,7 @@
   "documentAddedSuccessfully": "Document added successfully",
   "selectAtLeastOneImage": "Please select at least one image",
   "noMedicalDocumentsFound": "No medical documents found",
-  "performedOn": "Performed on"
+  "performedOn": "Performed on",
+  "AreYouSureToDeleteThisDocument": "Are you sure you want to delete this document?",
+  "delete": "Delete"
 }

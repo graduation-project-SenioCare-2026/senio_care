@@ -23,5 +23,8 @@ class MedicalDocumentsRepoImpl implements MedicalDocumentsRepo {
     return _medicalDocumentRemoteDs.getMedicalDocumentById(id);
   }
 
-
+  @override
+  Future<Result<String>> deleteDocument(String id) {
+    return _medicalDocumentRemoteDs.deleteDocument(id);
+  }
 }

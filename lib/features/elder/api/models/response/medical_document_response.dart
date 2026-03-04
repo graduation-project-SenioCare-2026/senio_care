@@ -34,6 +34,7 @@ class MedicalDocumentResponse {
 
   MedicalDocumentEntity toEntity() {
     return MedicalDocumentEntity(
+      id: id!,
       documentName: documentName!,
       date: date!,
       images: images!,

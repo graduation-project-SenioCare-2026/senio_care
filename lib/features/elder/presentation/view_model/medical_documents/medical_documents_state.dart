@@ -16,6 +16,7 @@ class MedicalDocumentsState extends Equatable {
   final String? error;
 
   final StateStatus<List<MedicalDocumentEntity>> getDocumentStatus;
+  final StateStatus<String> deleteDocumentStatus;
 
   const MedicalDocumentsState({
     this.documentName = '',
@@ -26,6 +27,7 @@ class MedicalDocumentsState extends Equatable {
     this.createDocumentStatus = const StateStatus.initial(),
     this.error,
     this.getDocumentStatus = const StateStatus.initial(),
+    this.deleteDocumentStatus=const StateStatus.initial()
   });
 
   MedicalDocumentsState copyWith({
@@ -36,8 +38,9 @@ class MedicalDocumentsState extends Equatable {
     bool? isUploading,
     StateStatus<MedicalDocumentEntity>? createDocumentStatus,
     String? error,
-    bool clearError = false, // ✅ explicit flag to clear error
+    bool clearError = false,
     StateStatus<List<MedicalDocumentEntity>>? getDocumentStatus,
+    final StateStatus<String>? deleteDocumentStatus
   }) {
     return MedicalDocumentsState(
       documentName: documentName ?? this.documentName,
@@ -50,6 +53,7 @@ class MedicalDocumentsState extends Equatable {
           ? null
           : (error ?? this.error), // ✅ preserves old error unless cleared
       getDocumentStatus: getDocumentStatus ?? this.getDocumentStatus,
+      deleteDocumentStatus: deleteDocumentStatus??this.deleteDocumentStatus
     );
   }
 
@@ -63,5 +67,6 @@ class MedicalDocumentsState extends Equatable {
     createDocumentStatus,
     error,
     getDocumentStatus,
+    deleteDocumentStatus
   ];
 }

@@ -7,4 +7,5 @@ abstract interface class MedicalDocumentsRepo {
     MedicalDocumentRequest request,
   );
   Future<Result<List<MedicalDocumentEntity>>> getMedicalDocumentById(String id);
+  Future<Result<String>> deleteDocument(String id);
 }

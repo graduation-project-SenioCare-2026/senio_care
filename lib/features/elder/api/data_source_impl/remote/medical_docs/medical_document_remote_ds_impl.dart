@@ -30,4 +30,12 @@ class MedicalDocumentRemoteDsImpl implements MedicalDocumentRemoteDs {
      return documents;
    },);
   }
+
+  @override
+  Future<Result<String>> deleteDocument(String id) {
+    return safeCall(()async {
+      final response=await _elderApiServices.deleteDocument(id);
+      return response;
+    },);
+  }
 }

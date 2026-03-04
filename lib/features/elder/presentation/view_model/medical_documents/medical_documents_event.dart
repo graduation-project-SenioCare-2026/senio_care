@@ -27,3 +27,8 @@ class GetElderDocuments extends MedicalDocumentsEvent {
   final String id;
   GetElderDocuments(this.id);
 }
+
+class DeleteDocumentEvent extends MedicalDocumentsEvent{
+  final String id;
+  DeleteDocumentEvent(this.id);
+}
