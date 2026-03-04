@@ -272,5 +272,17 @@
   "noDataAvailable": "No data available",
   "avg": "Avg",
   "mobilityStatus": "Mobility Status",
-  "profileEditedSuccessfully": "Profile edited successfully!"
+  "profileEditedSuccessfully": "Profile edited successfully!",
+  "addNewServices": "Add New Service",
+  "description": "Description",
+  "schedules&Days": "Schedule & Days",
+  "addDay": "Add Day",
+  "schedule": "Schedule",
+  "timeSlots": "Time Slots",
+  "addSlot": "Add Slot",
+  "to": "to",
+  "noServices": "No services available",
+  "noSlots": "No time slots",
+  "myServices": "My Services",
+  "serviceAdded": "Service added successfully"
 }

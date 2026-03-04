@@ -10,26 +10,27 @@ class ServiceProviderMainLayout extends StatefulWidget {
   const ServiceProviderMainLayout({super.key});
 
   @override
-  State<ServiceProviderMainLayout> createState() => _ServiceProviderMainLayoutState();
+  State<ServiceProviderMainLayout> createState() =>
+      _ServiceProviderMainLayoutState();
 }
 
 class _ServiceProviderMainLayoutState extends State<ServiceProviderMainLayout> {
   int currentIndex = 0;
-  List<Widget> taps = [
-    ServiceProviderHomeTap(),
-    ServiceProviderProfileTab(),
-  ];
+  List<Widget> taps = [ServiceProviderHomeTap(), ServiceProviderProfileTab()];
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
-        Scaffold(
-          body: taps[currentIndex],
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(15),
-            child: ClipRRect(
+        MediaQuery.removePadding(
+          context: context,
+          removeBottom: true,
+          child: Scaffold(
+            body: taps[currentIndex],
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.all(15),
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(25),
                 child: BottomNavigationBar(
                   currentIndex: currentIndex,
@@ -38,21 +39,27 @@ class _ServiceProviderMainLayoutState extends State<ServiceProviderMainLayout> {
                   backgroundColor: AppColors.white,
                   selectedItemColor: AppColors.gradientEnd,
                   unselectedItemColor: AppColors.black.withAlpha(150),
-                  selectedIconTheme: IconThemeData(size: 30),
-                  unselectedIconTheme: IconThemeData(size: 25),
-                   showUnselectedLabels: true,
-                   showSelectedLabels: true,
+                  selectedIconTheme: IconThemeData(size: 28),
+                  unselectedIconTheme: IconThemeData(size: 23),
+                  showUnselectedLabels: true,
+                  showSelectedLabels: true,
                   onTap: (index) {
                     setState(() {
                       currentIndex = index;
                     });
                   },
                   items: [
-                    BottomNavigationBarItem(icon: Icon(Icons.home), label: "home".tr()),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.person), label: "profile".tr()),
+                      icon: Icon(Icons.home),
+                      label: "home".tr(),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.person),
+                      label: "profile".tr(),
+                    ),
                   ],
-                )
+                ),
+              ),
             ),
           ),
         ),

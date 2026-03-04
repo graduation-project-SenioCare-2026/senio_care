@@ -280,5 +280,17 @@
   "elderId": "ID المسن",
   "mobilityStatus": "حالة التنقل",
   "relationship": "العلاقة بالمسن",
-  "profileEditedSuccessfully": "تم التعديل بنجاح!"
+  "profileEditedSuccessfully": "تم التعديل بنجاح!",
+  "addNewServices": "إضافة خدمة جديدة",
+  "description": "الوصف",
+  "schedules&Days": "الجدول والأيام",
+  "addDay": "إضافة يوم",
+  "schedule": "الجدول",
+  "timeSlots": "الأوقات",
+  "addSlot": "إضافة وقت",
+  "to": "إلى",
+  "noServices": "لا توجد خدمات",
+  "noSlots": "لا توجد أوقات",
+  "myServices": "خدماتي",
+  "serviceAdded": "تمت إضافة الخدمة بنجاح"
 }
