@@ -124,4 +124,10 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
       (key, value) => MapEntry(key, List<TimeSlot>.from(value)),
     );
   }
+  @override
+  Future<void> close() {
+    descriptionController.dispose();
+    locationController.dispose();
+    return super.close();
+  }
 }

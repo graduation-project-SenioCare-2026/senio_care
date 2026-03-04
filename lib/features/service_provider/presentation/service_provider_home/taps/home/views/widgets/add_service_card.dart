@@ -23,11 +23,11 @@ class AddServiceCard extends StatelessWidget {
     final bloc = context.read<ServicesBloc>();
 
     return BlocConsumer<ServicesBloc, ServicesState>(
+      listenWhen: (previous, current) =>
+      previous.addServiceStatus != current.addServiceStatus,
       listener: (context, state) {
         if (state.addServiceStatus.isSuccess) {
-          if (Navigator.canPop(context)) {
             Navigator.pop(context);
-          }
         }
       },
       builder: (context, state) {

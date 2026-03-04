@@ -85,8 +85,9 @@ class _AddDaySectionState extends State<AddDaySection> {
 
     showDialog(
       context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDialogState) => AlertDialog(
+      useRootNavigator: true,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (dialogContext, setDialogState) => AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -97,95 +98,81 @@ class _AddDaySectionState extends State<AddDaySection> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Start time picker
               GestureDetector(
                 onTap: () async {
                   final picked = await showTimePicker(
-                    context: ctx,
+                    context: context,
                     initialTime: TimeOfDay.now(),
+                    useRootNavigator: true,
                   );
-                  if (picked != null) setDialogState(() => startTime = picked);
+                  if (picked != null) {
+                    setDialogState(() => startTime = picked);
+                  }
                 },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        startTime == null ? '--:-- --' : startTime!.format(ctx),
-                        style: TextStyle(color: Colors.grey.shade600),
-                      ),
-                      Icon(Icons.access_time, color: Colors.grey.shade500),
-                    ],
-                  ),
-                ),
+                child: _timeBox(startTime, dialogContext),
               ),
               const SizedBox(height: 12),
               Text('to', style: getBoldStyle(color: AppColors.black)),
               const SizedBox(height: 12),
-              // End time picker
               GestureDetector(
                 onTap: () async {
                   final picked = await showTimePicker(
-                    context: ctx,
+                    context: context,
                     initialTime: TimeOfDay.now(),
+                    useRootNavigator: true,
                   );
-                  if (picked != null) setDialogState(() => endTime = picked);
+                  if (picked != null) {
+                    setDialogState(() => endTime = picked);
+                  }
                 },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        endTime == null ? '--:-- --' : endTime!.format(ctx),
-                        style: TextStyle(color: Colors.grey.shade600),
-                      ),
-                      Icon(Icons.access_time, color: Colors.grey.shade500),
-                    ],
-                  ),
-                ),
+                child: _timeBox(endTime, dialogContext),
               ),
             ],
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(ctx),
+              onPressed: () => Navigator.pop(dialogContext),
               child: const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: startTime != null && endTime != null
                   ? () {
-                      context.read<ServicesBloc>().add(
-                        AddTimeSlotEvent(
-                          day: day,
-                          slot: TimeSlot(
-                            startTime: startTime!.format(ctx),
-                            endTime: endTime!.format(ctx),
-                          ),
-                        ),
-                      );
-                      Navigator.pop(ctx);
-                    }
+                context.read<ServicesBloc>().add(
+                  AddTimeSlotEvent(
+                    day: day,
+                    slot: TimeSlot(
+                      startTime: startTime!.format(context),
+                      endTime: endTime!.format(context),
+                    ),
+                  ),
+                );
+                Navigator.pop(dialogContext);
+              }
                   : null,
               child: const Text('Add'),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _timeBox(TimeOfDay? time, BuildContext ctx) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            time == null ? '--:-- --' : time.format(ctx),
+            style: TextStyle(color: Colors.grey.shade600),
+          ),
+          Icon(Icons.access_time, color: Colors.grey.shade500),
+        ],
       ),
     );
   }
