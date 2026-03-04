@@ -18,4 +18,5 @@ abstract class RoutesNames {
   static const String bloodPressureGraph = "bloodPressureGraph";
   static const String elderMedicalDocumentsScreen="elderMedicalDocumentScreen";
   static const String createDocumentScreen="addDocumentScreen";
+  static const String documentDetailsScreen="documentDetailsScreen";
 }

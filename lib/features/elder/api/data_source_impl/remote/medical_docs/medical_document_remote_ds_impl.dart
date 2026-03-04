@@ -21,4 +21,13 @@ class MedicalDocumentRemoteDsImpl implements MedicalDocumentRemoteDs {
       return response.toEntity();
     });
   }
+
+  @override
+  Future<Result<List<MedicalDocumentEntity>>> getMedicalDocumentById(String id) {
+   return safeCall(()async {
+     final response=await _elderApiServices.getMedicalDocumentById(id);
+     final documents=response.map((e) => e.toEntity(),).toList();
+     return documents;
+   },);
+  }
 }

@@ -1,14 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:senio_care/config/di/di.dart';
 import 'package:senio_care/core/common_widgets/bg_gradient.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
 import 'package:senio_care/core/theme/font_style.dart';
 import 'package:senio_care/features/elder/presentation/view/widgets/elder_profile/medical_documents/create_document/create_document_card.dart';
-import 'package:senio_care/features/elder/presentation/view_model/medical_documents/medical_documents_bloc.dart';
 
 class CreateDocumentScreen extends StatelessWidget {
   const CreateDocumentScreen({super.key});
@@ -39,10 +36,7 @@ class CreateDocumentScreen extends StatelessWidget {
                 ),
               ),
             ),
-            body: BlocProvider(
-              create: (context) => getIt<MedicalDocumentsBloc>(),
-              child: SingleChildScrollView(child: CreateDocumentCard()),
-            ),
+            body: SingleChildScrollView(child: CreateDocumentCard()),
           ),
         ),
       ],

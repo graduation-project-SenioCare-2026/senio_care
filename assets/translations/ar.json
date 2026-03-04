@@ -290,5 +290,8 @@
   "images": "الصور",
   "captureAnother": "التقاط صورة أخرى؟",
   "AddDocument": "إضافة مستند",
-  "documentAddedSuccessfully": "تم إضافة المستند بنجاح"
+  "documentAddedSuccessfully": "تم إضافة المستند بنجاح",
+  "selectAtLeastOneImage": "يرجى اختيار صورة واحدة على الأقل",
+  "noMedicalDocumentsFound": "لا توجد مستندات طبية",
+  "performedOn": "تم الإجراء في"
 }

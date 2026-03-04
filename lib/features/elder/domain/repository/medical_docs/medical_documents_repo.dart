@@ -6,4 +6,5 @@ abstract interface class MedicalDocumentsRepo {
   Future<Result<MedicalDocumentEntity>> createDocument(
     MedicalDocumentRequest request,
   );
+  Future<Result<List<MedicalDocumentEntity>>> getMedicalDocumentById(String id);
 }

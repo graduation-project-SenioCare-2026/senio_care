@@ -4,6 +4,9 @@ part 'medical_document_request.g.dart';
 
 @JsonSerializable()
 class MedicalDocumentRequest {
+  @JsonKey(name: 'elder_id')
+  final String elderId;
+
   @JsonKey(name: 'document_name')
   final String documentName;
 
@@ -14,6 +17,7 @@ class MedicalDocumentRequest {
   final List<String> images;
 
   const MedicalDocumentRequest({
+    required this.elderId,
     required this.documentName,
     required this.date,
     required this.images,

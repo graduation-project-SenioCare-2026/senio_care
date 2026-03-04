@@ -282,5 +282,8 @@
   "images": "Images",
   "captureAnother": "Capture another?",
   "AddDocument": "Add Document",
-  "documentAddedSuccessfully": "Document added successfully"
+  "documentAddedSuccessfully": "Document added successfully",
+  "selectAtLeastOneImage": "Please select at least one image",
+  "noMedicalDocumentsFound": "No medical documents found",
+  "performedOn": "Performed on"
 }

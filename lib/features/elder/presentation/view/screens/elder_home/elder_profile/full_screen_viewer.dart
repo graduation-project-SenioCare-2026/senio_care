@@ -5,12 +5,14 @@ import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 
 class FullScreenViewer extends StatefulWidget {
-  final List<File> images;
+  final List<File>? images;
   final int initialIndex;
+  final List<String>? imageUrls;
 
   const FullScreenViewer({
     super.key,
-    required this.images,
+    this.images,
+    this.imageUrls,
     required this.initialIndex,
   });
 
@@ -54,7 +56,7 @@ class _FullScreenViewerState extends State<FullScreenViewer> {
             ),
             body: PageView.builder(
               controller: _controller,
-              itemCount: widget.images.length,
+              itemCount: widget.images?.length,
               itemBuilder: (context, index) {
                 return InteractiveViewer(
                   panEnabled: true,
@@ -67,7 +69,34 @@ class _FullScreenViewerState extends State<FullScreenViewer> {
                         right: context.setHeight(10),
                         left: context.setHeight(10),
                       ),
-                      child: Image.file(widget.images[index], fit: BoxFit.fill),
+                      child: widget.images != null
+                          ? Image.file(widget.images![index], fit: BoxFit.fill)
+                          : Image.network(
+                              widget.imageUrls![index],
+                              fit: BoxFit.fill,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value:
+                                            loadingProgress
+                                                    .expectedTotalBytes !=
+                                                null
+                                            ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                            : null,
+                                      ),
+                                    );
+                                  },
+                              errorBuilder: (context, error, stackTrace) {
+                                return Center(
+                                  child: Icon(Icons.broken_image, size: 50),
+                                );
+                              },
+                            ),
                     ),
                   ),
                 );

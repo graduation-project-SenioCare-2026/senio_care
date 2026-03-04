@@ -14,14 +14,16 @@ class PickDateEvent extends MedicalDocumentsEvent {
   const PickDateEvent(this.date);
 }
 
-/// Replaces the entire selected-images list (add, remove, replace).
 class SelectImagesEvent extends MedicalDocumentsEvent {
   final List<File> images;
   const SelectImagesEvent(this.images);
 }
 
-/// ✅ No longer carries a pre-built request.
-/// The BLoC builds the request from its own state.
 class SaveDocumentEvent extends MedicalDocumentsEvent {
   const SaveDocumentEvent();
+}
+
+class GetElderDocuments extends MedicalDocumentsEvent {
+  final String id;
+  GetElderDocuments(this.id);
 }

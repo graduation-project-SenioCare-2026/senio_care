@@ -17,4 +17,11 @@ class MedicalDocumentsRepoImpl implements MedicalDocumentsRepo {
   ) {
     return _medicalDocumentRemoteDs.createDocument(request);
   }
+
+  @override
+  Future<Result<List<MedicalDocumentEntity>>> getMedicalDocumentById(String id) {
+    return _medicalDocumentRemoteDs.getMedicalDocumentById(id);
+  }
+
+
 }

@@ -3,5 +3,8 @@ import 'package:senio_care/features/elder/api/models/request/medical_document_re
 import 'package:senio_care/features/elder/domain/entity/medical_document_entity.dart';
 
 abstract interface class MedicalDocumentRemoteDs {
-  Future<Result<MedicalDocumentEntity>> createDocument(MedicalDocumentRequest request);
+  Future<Result<MedicalDocumentEntity>> createDocument(
+    MedicalDocumentRequest request,
+  );
+  Future<Result<List<MedicalDocumentEntity>>> getMedicalDocumentById(String id);
 }

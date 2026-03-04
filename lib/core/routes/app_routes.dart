@@ -9,8 +9,10 @@ import 'package:senio_care/features/auth/presentation/views/screens/roles_screen
 import 'package:senio_care/features/auth/presentation/views/screens/splash_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/caregiver_main_layout.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/views/screen/caregiver_edit_profile.dart';
+import 'package:senio_care/features/elder/domain/entity/medical_document_entity.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_main_layout.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_profile/create_document_screen.dart';
+import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_profile/document_details_screen.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_profile/medical_documents_screen.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_onboarding/elder_onboarding_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/blood_pressure_screen.dart';
@@ -23,24 +25,24 @@ import '../../features/elder/presentation/view/screens/elder_home/elder_profile/
 import '../../features/service_provider/presentation/service_provider_home/service_provider_main_layout.dart';
 import '../../features/service_provider/presentation/service_provider_home/taps/profile/views/screens/service_provider_edit_profile.dart';
 
-
 import '../../features/caregiver/presentation/caregiver_home/taps/graph/view_model/caregiver_graph_bloc.dart';
 import '../../features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/heart_rate_screen.dart';
 import '../../features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/oxygen_screen.dart';
 
 abstract class Routes {
   static final GlobalKey<NavigatorState> navigatorKey =
-  GlobalKey<NavigatorState>();
+      GlobalKey<NavigatorState>();
 
   static Route onGenerate(RouteSettings setting) {
     final url = Uri.parse(setting.name ?? "");
     switch (url.path) {
       case RoutesNames.splashScreen:
-        return MaterialPageRoute(builder: (_) =>
-            BlocProvider(
-              create: (context) => getIt<AuthBloc>(),
-              child: SplashScreen(),
-            ));
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<AuthBloc>(),
+            child: SplashScreen(),
+          ),
+        );
 
       case RoutesNames.rolesScreen:
         return MaterialPageRoute(builder: (_) => RolesScreen());
@@ -75,10 +77,10 @@ abstract class Routes {
         return MaterialPageRoute(builder: (_) => ServiceProviderEditProfile());
 
       case RoutesNames.elderPersonalInfoScreen:
-        return MaterialPageRoute(builder: (_) => ElderPersonalInfoScreen(),);
+        return MaterialPageRoute(builder: (_) => ElderPersonalInfoScreen());
 
       case RoutesNames.elderEditProfile:
-        return MaterialPageRoute(builder: (_) => EditPersonalInfoScreen(),);
+        return MaterialPageRoute(builder: (_) => EditPersonalInfoScreen());
       case RoutesNames.bloodSugarGraph:
         final bloc = setting.arguments as CaregiverGraphBloc;
         return MaterialPageRoute(
@@ -101,15 +103,25 @@ abstract class Routes {
       case RoutesNames.bloodPressureGraph:
         final bloc = setting.arguments as CaregiverGraphBloc;
         return MaterialPageRoute(
-          builder: (context) =>
-              BlocProvider.value(value: bloc, child: const BloodPressureScreen()),
+          builder: (context) => BlocProvider.value(
+            value: bloc,
+            child: const BloodPressureScreen(),
+          ),
         );
 
       case RoutesNames.elderMedicalDocumentsScreen:
-        return MaterialPageRoute(builder: (context) => MedicalDocumentsScreen(),);
+        return MaterialPageRoute(
+          builder: (context) => MedicalDocumentsScreen(),
+        );
 
       case RoutesNames.createDocumentScreen:
-        return MaterialPageRoute(builder: (context) => CreateDocumentScreen(),);
+        return MaterialPageRoute(builder: (context) => CreateDocumentScreen());
+
+      case RoutesNames.documentDetailsScreen:
+        final document = setting.arguments as MedicalDocumentEntity;
+        return MaterialPageRoute(
+          builder: (context) => DocumentDetailsScreen(document: document),
+        );
 
       default:
         return MaterialPageRoute(

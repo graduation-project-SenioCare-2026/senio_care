@@ -27,15 +27,12 @@ abstract class ElderApiServices {
       );
 
   @POST(EndPointsConstants.medicalDocs)
-  Future<MedicalDocumentsResponse> createDocument(
+  Future<MedicalDocumentResponse> createDocument(
       @Body() MedicalDocumentRequest request,
       );
 
-  @GET(EndPointsConstants.medicalDocById)
-  Future<MedicalDocumentsResponse> getMedicalDocumentById(
-      @Path('id') String id,
+  @GET(EndPointsConstants.medicalDocByElder)
+  Future<List<MedicalDocumentResponse>> getMedicalDocumentById(
+      @Path('elder_id') String id,
       );
-
-  @GET(EndPointsConstants.medicalDocs)
-  Future<List<MedicalDocumentsResponse>> getAllDocuments();
 }
