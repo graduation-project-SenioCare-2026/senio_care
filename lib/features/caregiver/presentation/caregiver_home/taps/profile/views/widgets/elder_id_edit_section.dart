@@ -141,24 +141,22 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
                     ),
                     SizedBox(width: context.setWidth(8)),
                     GestureDetector(
-                      onTap: isLoading
-                          ? null
-                          : () {
-                              final id = _elderIdController.text.trim();
-                              if (id.isEmpty) {
-                                _showErrorMessage("pleaseEnterElderId".tr());
-                                return;
-                              }
-                              if (elders.any((e) => e.id == id)) {
-                                _showErrorMessage("elderIdAlreadyExists".tr());
-                                return;
-                              }
-                              setState(() => _isAddingElder = true);
-                              context.read<CaregiverEditProfileBloc>().add(
-                                AddElderId(id),
-                              );
-                              _elderIdController.clear();
-                            },
+                      onTap: () {
+                        final id = _elderIdController.text.trim();
+                        if (id.isEmpty) {
+                          _showErrorMessage("pleaseEnterElderId".tr());
+                          return;
+                        }
+                        if (elders.any((e) => e.id == id)) {
+                          _showErrorMessage("elderIdAlreadyExists".tr());
+                          return;
+                        }
+                        setState(() => _isAddingElder = true);
+                        context.read<CaregiverEditProfileBloc>().add(
+                          AddElderId(id),
+                        );
+                        _elderIdController.clear();
+                      },
                       child: Icon(
                         Icons.add,
                         color: Colors.black,
@@ -244,34 +242,19 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
               ),
 
             if (!isLoading && elders.isEmpty && !hasError)
-              Container(
-                padding: EdgeInsets.all(context.setMinSize(16)),
-                decoration: BoxDecoration(
-                  color: AppColors.gray[100],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: AppColors.gray[300] ?? Colors.grey[300]!,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.info_outline,
-                      color: AppColors.gray[600],
-                      size: context.setMinSize(20),
-                    ),
-                    SizedBox(width: context.setWidth(12)),
-                    Expanded(
-                      child: Text(
-                        "noEldersYet".tr(),
-                        style: getRegularStyle(
-                          color: AppColors.gray[600] ?? AppColors.gray,
-                          fontSize: FontSize.s14,
-                        ),
+              Row(
+                children: [
+                  SizedBox(width: context.setWidth(12)),
+                  Expanded(
+                    child: Text(
+                      "noEldersYet".tr(),
+                      style: getRegularStyle(
+                        color: AppColors.gray[600] ?? AppColors.gray,
+                        fontSize: FontSize.s14,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
           ],
         );

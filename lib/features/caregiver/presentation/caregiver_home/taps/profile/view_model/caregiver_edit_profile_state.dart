@@ -8,12 +8,14 @@ class CaregiverEditProfileState extends Equatable {
   final StateStatus<CaregiverEntity> getCaregiverProfileState;
   final StateStatus<List<ElderEntity>> getElderState;
   final List<String> elderId;
+  final List<String>? initialElderIds;
 
   const CaregiverEditProfileState({
     this.caregiverEditProfileState = const StateStatus.initial(),
     this.getCaregiverProfileState = const StateStatus.initial(),
     this.getElderState = const StateStatus.initial(),
     this.elderId = const [],
+    this.initialElderIds = const [],
   });
 
   CaregiverEditProfileState copyWith({
@@ -21,6 +23,7 @@ class CaregiverEditProfileState extends Equatable {
     StateStatus<CaregiverEntity>? getCaregiverProfileState,
     StateStatus<List<ElderEntity>>? getElderState,
     List<String>? elderId,
+    List<String>? initialElderIds,
   }) {
     return CaregiverEditProfileState(
       caregiverEditProfileState:
@@ -29,6 +32,7 @@ class CaregiverEditProfileState extends Equatable {
           getCaregiverProfileState ?? this.getCaregiverProfileState,
       getElderState: getElderState ?? this.getElderState,
       elderId: elderId ?? this.elderId,
+      initialElderIds: initialElderIds ?? this.initialElderIds,
     );
   }
 
@@ -38,5 +42,6 @@ class CaregiverEditProfileState extends Equatable {
     getCaregiverProfileState,
     getElderState,
     elderId,
+    initialElderIds,
   ];
 }
