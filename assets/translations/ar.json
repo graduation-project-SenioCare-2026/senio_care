@@ -292,5 +292,18 @@
   "noServices": "لا توجد خدمات",
   "noSlots": "لا توجد أوقات",
   "myServices": "خدماتي",
-  "serviceAdded": "تمت إضافة الخدمة بنجاح"
+  "serviceAdded": "تمت إضافة الخدمة بنجاح",
+  "editService": "تعديل الخدمة",
+  "noDaysAddedYet": "لم تتم إضافة أي أيام بعد",
+  "deleteService": "حذف الخدمة",
+  "allDaysHaveBeenAdded": "تمت إضافة جميع الأيام",
+  "selectADay": "اختر يوم",
+  "addTimeSlot": "اضافه مدة زمنيه",
+  "monday": "الاثنين",
+  "tuesday": "الثلاثاء",
+  "wednesday": "الاربعاء",
+  "thursday": "الخميس",
+  "friday": "الجمعه",
+  "saturday": "السبت",
+  "sunday": "الاحد"
 }

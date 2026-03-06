@@ -5,4 +5,6 @@ import 'package:senio_care/features/service_provider/domain/entity/service_entit
 abstract interface class ServicesRepo {
   Future<Result<ServicesEntity>> serviceRepo(ServiceRequest request);
   Future<Result<List<ServicesEntity>>> getServiceRepo(String id);
+  Future<Result<String>> deleteServiceRepo(String id);
+  Future<Result<ServicesEntity>> editServiceRepo(ServiceRequest request,String id);
 }

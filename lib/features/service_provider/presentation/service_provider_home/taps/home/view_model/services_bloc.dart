@@ -4,28 +4,110 @@ import 'package:injectable/injectable.dart';
 import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
 import 'package:senio_care/features/service_provider/domain/entity/service_entity.dart';
+import 'package:senio_care/features/service_provider/domain/use_case/home/delete_service_use_case.dart';
+import 'package:senio_care/features/service_provider/domain/use_case/home/edit_service_use_case.dart';
 import 'package:senio_care/features/service_provider/domain/use_case/home/get_service_use_case.dart';
 import 'package:senio_care/features/service_provider/domain/use_case/home/service_use_case.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/home/view_model/services_event.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/home/view_model/services_state.dart';
 
+import '../../../../../../../core/user/profile_manager.dart';
 import '../../../../../domain/entity/time_slot_entity.dart';
 
 @injectable
 class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
   final ServicesUseCase _servicesUseCase;
   final GetServiceUseCase _getServiceUseCase;
+  final DeleteServiceUseCase _deleteServiceUseCase;
+  final EditServiceUseCase _editServiceUseCase;
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final descriptionController = TextEditingController();
   final locationController = TextEditingController();
 
-  ServicesBloc(this._servicesUseCase, this._getServiceUseCase)
-    : super(ServicesState()) {
+  ServicesBloc(
+    this._servicesUseCase,
+    this._getServiceUseCase,
+    this._deleteServiceUseCase,
+    this._editServiceUseCase,
+  ) : super(ServicesState()) {
     on<AddServiceEvent>(_addService);
     on<AddTimeSlotEvent>(_addTimeSlot);
     on<RemoveTimeSlotEvent>(_removeTimeSlot);
     on<RemoveDayEvent>(_removeDay);
     on<GetServiceEvent>(_getServices);
+    on<DeleteServiceEvent>(_deleteService);
+    on<ClearFormEvent>(_onClearForm);
+    on<EditServiceEvent>(_editService);
+    on<SelectedService>(_selectedService);
+  }
+
+  void _selectedService(SelectedService event, Emitter<ServicesState> emit) {
+    final availabilityMap = <String, List<TimeSlot>>{};
+    for (final avail in event.servicesEntity.availability ?? []) {
+      availabilityMap[avail.day] = (avail.time as List<dynamic>)
+          .map((t) => TimeSlot(
+        startTime: t.startTime as String,
+        endTime: t.endTime as String,
+      ))
+          .toList();
+    }
+
+    descriptionController.text = event.servicesEntity.serviceDescription ?? '';
+    locationController.text = event.servicesEntity.location ?? '';
+
+    emit(
+      state.copyWith(
+        selectedService: event.servicesEntity,
+        availability: availabilityMap,
+        editServiceStatus: StateStatus.initial(),
+      ),
+    );
+  }
+
+  Future<void> _editService(
+      EditServiceEvent event,
+      Emitter<ServicesState> emit,
+      ) async {
+
+    emit(state.copyWith(editServiceStatus: StateStatus.loading()));
+    final result = await _editServiceUseCase.call(event.id, event.request);
+    switch (result) {
+      case Success<ServicesEntity>():
+        final updatedList = List<ServicesEntity>.from(
+          state.servicesList.map((s) => s.id == result.data.id ? result.data : s),
+        );
+        emit(state.copyWith(
+          editServiceStatus: StateStatus.success(result.data),
+          servicesList: updatedList,
+        ));
+
+      case Failure<ServicesEntity>():
+        emit(state.copyWith(
+          editServiceStatus: StateStatus.failure(result.responseException),
+        ));
+    }
+  }
+
+  Future<void> _deleteService(
+    DeleteServiceEvent event,
+    Emitter<ServicesState> emit,
+  ) async {
+    emit(state.copyWith(deleteServiceStatus: StateStatus.loading()));
+    final result = await _deleteServiceUseCase.call(event.id);
+    switch (result) {
+      case Success<String>():
+        emit(
+          state.copyWith(deleteServiceStatus: StateStatus.success(result.data)),
+        );
+        add(GetServiceEvent(ProfileManager().serviceProvider!.id!));
+      case Failure<String>():
+        emit(
+          state.copyWith(
+            deleteServiceStatus: StateStatus.failure(result.responseException),
+          ),
+        );
+    }
   }
 
   Future<void> _getServices(
@@ -39,7 +121,7 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
         emit(
           state.copyWith(
             getServicesStatus: StateStatus.success(result.data),
-            servicesList: result.data ?? [],
+            servicesList: result.data,
           ),
         );
 
@@ -58,14 +140,10 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
   }
 
   Future<void> _addService(
-      AddServiceEvent event,
-      Emitter<ServicesState> emit,
-      ) async {
-    emit(
-      state.copyWith(
-        addServiceStatus: StateStatus.loading(),
-      ),
-    );
+    AddServiceEvent event,
+    Emitter<ServicesState> emit,
+  ) async {
+    emit(state.copyWith(addServiceStatus: StateStatus.loading()));
 
     final result = await _servicesUseCase.call(event.request);
 
@@ -84,8 +162,7 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
       case Failure<ServicesEntity>():
         emit(
           state.copyWith(
-            addServiceStatus:
-            StateStatus.failure(result.responseException),
+            addServiceStatus: StateStatus.failure(result.responseException),
           ),
         );
     }
@@ -124,6 +201,20 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
       (key, value) => MapEntry(key, List<TimeSlot>.from(value)),
     );
   }
+
+  void _onClearForm(ClearFormEvent event, Emitter<ServicesState> emit) {
+    descriptionController.clear();
+    locationController.clear();
+    emit(
+      state.copyWith(
+        availability: {},
+        addServiceStatus: StateStatus.initial(),
+        editServiceStatus: StateStatus.initial(),
+        selectedService: null,
+      ),
+    );
+  }
+
   @override
   Future<void> close() {
     descriptionController.dispose();

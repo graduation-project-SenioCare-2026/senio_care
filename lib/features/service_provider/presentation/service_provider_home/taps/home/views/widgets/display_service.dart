@@ -14,16 +14,14 @@ class DisplayService extends StatelessWidget {
     return BlocBuilder<ServicesBloc, ServicesState>(
       buildWhen: (prev, curr) =>
       prev.servicesList.length != curr.servicesList.length ||
-          prev.getServicesStatus != curr.getServicesStatus,
+          prev.getServicesStatus != curr.getServicesStatus ||
+          prev.deleteServiceStatus != curr.deleteServiceStatus ||
+          prev.editServiceStatus != curr.editServiceStatus,
       builder: (context, state) {
-        if (state.getServicesStatus.isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
         if (state.servicesList.isEmpty) {
           return const SizedBox.shrink();
         }
         return ListView.builder(
-          shrinkWrap: true,
           itemCount: state.servicesList.length,
           itemBuilder: (context, index) =>
               ServiceProviderCard(service: state.servicesList[index]),

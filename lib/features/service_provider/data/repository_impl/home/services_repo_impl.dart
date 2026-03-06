@@ -20,4 +20,14 @@ class ServicesRepoImpl implements ServicesRepo {
   Future<Result<List<ServicesEntity>>> getServiceRepo(String id) {
     return _servicesRemoteDS.getServicesRemoteDS(id);
   }
+
+  @override
+  Future<Result<String>> deleteServiceRepo(String id) {
+    return _servicesRemoteDS.deleteServicesRemoteDS(id);
+  }
+
+  @override
+  Future<Result<ServicesEntity>> editServiceRepo(ServiceRequest request,String id) {
+    return _servicesRemoteDS.editServicesRemoteDS(request,id);
+  }
 }

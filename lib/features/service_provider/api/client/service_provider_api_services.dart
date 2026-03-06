@@ -7,8 +7,6 @@ import 'package:senio_care/features/service_provider/api/models/request/home/ser
 import 'package:senio_care/features/service_provider/api/models/request/onboarding/service_provider_onboarding_request.dart';
 import 'package:senio_care/features/service_provider/api/models/response/home/service_response.dart';
 
-import '../../domain/entity/service_entity.dart';
-
 part 'service_provider_api_services.g.dart';
 
 @RestApi(baseUrl: EndPointsConstants.baseUrl)
@@ -32,5 +30,16 @@ abstract class ServiceProviderApiServices {
   Future<ServiceResponse> addServices(@Body() ServiceRequest request);
 
   @GET(EndPointsConstants.getService)
-  Future<List<ServiceResponse>> getService(@Path('service_provider_id') String id);
+  Future<List<ServiceResponse>> getService(
+    @Path('service_provider_id') String id,
+  );
+
+  @DELETE(EndPointsConstants.deleteService)
+  Future<String> deleteService(@Path('id') String id);
+
+  @PUT(EndPointsConstants.editService)
+  Future<ServiceResponse> editService(
+    @Path('id') String id,
+    @Body() ServiceRequest request,
+  );
 }

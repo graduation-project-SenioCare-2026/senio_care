@@ -3,7 +3,7 @@ import 'package:senio_care/features/service_provider/api/models/request/home/ava
 
 part 'service_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ServiceRequest {
   @JsonKey(name: "serviceDescription")
   final String? serviceDescription;

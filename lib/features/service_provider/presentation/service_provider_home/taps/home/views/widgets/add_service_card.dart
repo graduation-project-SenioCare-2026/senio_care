@@ -24,17 +24,20 @@ class AddServiceCard extends StatelessWidget {
 
     return BlocConsumer<ServicesBloc, ServicesState>(
       listenWhen: (previous, current) =>
-      previous.addServiceStatus != current.addServiceStatus,
+          previous.addServiceStatus != current.addServiceStatus,
       listener: (context, state) {
         if (state.addServiceStatus.isSuccess) {
-            Navigator.pop(context);
+          bloc.descriptionController.clear();
+          bloc.locationController.clear();
+          bloc.add(ClearFormEvent());
+          Navigator.pop(context);
         }
       },
       builder: (context, state) {
         return SingleChildScrollView(
           padding: EdgeInsets.symmetric(
             vertical: context.setHeight(20),
-            horizontal: context.setWidth(10),
+            horizontal: context.setWidth(16),
           ),
           child: CustomCard(
             child: Form(

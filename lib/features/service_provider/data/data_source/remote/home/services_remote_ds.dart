@@ -5,4 +5,6 @@ import 'package:senio_care/features/service_provider/domain/entity/service_entit
 abstract class ServicesRemoteDS {
   Future<Result<ServicesEntity>> servicesRemoteDS(ServiceRequest request);
   Future<Result<List<ServicesEntity>>> getServicesRemoteDS(String id);
+  Future<Result<String>> deleteServicesRemoteDS(String id);
+  Future<Result<ServicesEntity>> editServicesRemoteDS(ServiceRequest request,String id);
 }

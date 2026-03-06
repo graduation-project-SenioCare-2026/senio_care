@@ -284,5 +284,18 @@
   "noServices": "No services available",
   "noSlots": "No time slots",
   "myServices": "My Services",
-  "serviceAdded": "Service added successfully"
+  "serviceAdded": "Service added successfully",
+  "editService": "Edit Service",
+  "noDaysAddedYet": "No Days Added Yet",
+  "deleteService": "Delete Service",
+  "allDaysHaveBeenAdded": "All Days Have Been Added",
+  "selectADay": "Select a Day",
+  "addTimeSlot": "Add Time Slot",
+  "monday": "Monday",
+  "tuesday": "Tuesday",
+  "wednesday": "Wednesday",
+  "thursday": "Thursday",
+  "friday": "Friday",
+  "saturday": "Saturday",
+  "sunday": "Sunday"
 }

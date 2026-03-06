@@ -22,7 +22,7 @@ void main() async {
   );
   await configureDependencies();
 // In your app, add a button or run this once
-//   await getIt<SecureStorageService>(). clearSession();
+// await getIt<SecureStorageService>(). clearSession();
 
   runApp(
     EasyLocalization(
@@ -53,8 +53,6 @@ class MyApp extends StatelessWidget {
       height: context.screenHeight,
       width: context.screenWidth,
       child: MaterialApp(
-        useInheritedMediaQuery: true,
-        builder: DevicePreview.appBuilder,
         debugShowCheckedModeBanner: false,
         locale: context.locale,
         supportedLocales: context.supportedLocales,

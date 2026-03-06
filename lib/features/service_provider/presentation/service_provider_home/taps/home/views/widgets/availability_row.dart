@@ -18,7 +18,6 @@ class AvailabilityRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Day chip
           Container(
             padding: EdgeInsets.symmetric(
               horizontal: context.setWidth(10),
@@ -35,7 +34,6 @@ class AvailabilityRow extends StatelessWidget {
           ),
           SizedBox(width: context.setWidth(10)),
 
-          // Time slots
           Expanded(
             child: availability.time.isEmpty
                 ? Text(

@@ -6,7 +6,9 @@ import 'package:senio_care/features/service_provider/domain/repository/home/serv
 @injectable
 class GetServiceUseCase {
   final ServicesRepo _servicesRepo;
+
   GetServiceUseCase(this._servicesRepo);
+
   Future<Result<List<ServicesEntity>>> call(String id) {
     return _servicesRepo.getServiceRepo(id);
   }

@@ -12,6 +12,9 @@ class ServiceResponse {
   @JsonKey(name: "service_provider_id")
   final String? id;
 
+  @JsonKey(name: "_id")
+  final String? serviceId;
+
   @JsonKey(name: "location")
   final String? location;
 
@@ -25,6 +28,7 @@ class ServiceResponse {
   final bool? isAvailable;
 
   ServiceResponse({
+    this.serviceId,
     this.id,
     this.phoneNumber,
     required this.availability,
@@ -43,6 +47,7 @@ class ServiceResponse {
 
   ServicesEntity toEntity() {
     return ServicesEntity(
+      id: serviceId,
       serviceDescription: serviceDescription,
       location: location,
       availability: availability

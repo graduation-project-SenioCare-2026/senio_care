@@ -27,4 +27,20 @@ class ServicesRemoteDsImpl implements ServicesRemoteDS {
       return response.map((e) => e.toEntity()).toList();
     });
   }
+
+  @override
+  Future<Result<String>> deleteServicesRemoteDS(String id) async {
+    return safeCall(() async {
+      final response = await _apiServices.deleteService(id);
+      return response.toString();
+    });
+  }
+
+  @override
+  Future<Result<ServicesEntity>> editServicesRemoteDS(ServiceRequest request,String id) async {
+    return safeCall(() async {
+      final response = await _apiServices.editService(id,request);
+      return response.toEntity();
+    });
+  }
 }

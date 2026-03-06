@@ -62,7 +62,7 @@ class DayScheduleCard extends StatelessWidget {
               SizedBox(width: context.setWidth(10)),
               GestureDetector(
                 onTap: onDelete,
-                child: const Icon(Icons.close),
+                child: Icon(Icons.close),
               ),
             ],
           ),

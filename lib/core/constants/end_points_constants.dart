@@ -9,5 +9,7 @@ abstract class EndPointsConstants {
   static const String serviceProviderById="/service-providers/{id}";
   static const String addService="/services/";
   static const String getService="/services/provider/{service_provider_id}";
+  static const String deleteService="/services/{id}";
+  static const String editService="/services/{id}";
 
 }

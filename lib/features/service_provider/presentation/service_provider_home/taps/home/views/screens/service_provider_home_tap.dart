@@ -31,7 +31,7 @@ class ServiceProviderHomeTap extends StatelessWidget {
               backgroundColor: Colors.transparent,
               elevation: 0,
             ),
-            body: const DisplayService(),
+            body: DisplayService(),
             floatingActionButton: GradientIconContainer(
               width: 60,
               height: 60,
@@ -43,7 +43,7 @@ class ServiceProviderHomeTap extends StatelessWidget {
                   arguments: context.read<ServicesBloc>(),
                 );
               },
-              child: const Icon(Icons.add, color: Colors.white),
+              child: Icon(Icons.add, color: Colors.white,size: 30,),
             ),
           );
         },
