@@ -10,6 +10,7 @@ abstract class EndPointsConstants {
   static const String medicalDocs="medical-documents/";
   static const String medicalDocsById="medical-documents/{id}";
   static const String medicalDocByElder="medical-documents/elder/{elder_id}";
+  static const String services="/services/";
 
 
 }

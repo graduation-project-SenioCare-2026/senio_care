@@ -294,5 +294,6 @@
   "selectAtLeastOneImage": "يرجى اختيار صورة واحدة على الأقل",
   "noMedicalDocumentsFound": "لا توجد مستندات طبية",
   "performedOn": "تم الإجراء في",
-  "AreYouSureToDeleteThisDocument": "هل أنت متأكد أنك تريد حذف هذا المستند؟"
+  "AreYouSureToDeleteThisDocument": "هل أنت متأكد أنك تريد حذف هذا المستند؟",
+  "availableDays": "الأيام المتاحة"
 }

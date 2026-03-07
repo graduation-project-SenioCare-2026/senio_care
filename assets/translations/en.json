@@ -287,5 +287,6 @@
   "noMedicalDocumentsFound": "No medical documents found",
   "performedOn": "Performed on",
   "AreYouSureToDeleteThisDocument": "Are you sure you want to delete this document?",
-  "delete": "Delete"
+  "delete": "Delete",
+  "availableDays": "Available Days"
 }

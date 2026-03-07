@@ -6,6 +6,7 @@ import 'package:senio_care/features/auth/api/models/response/elder_response.dart
 import 'package:senio_care/features/elder/api/models/request/medical_document_request.dart';
 import 'package:senio_care/features/elder/api/models/request/onboarding/elder_onboarding_request.dart';
 import 'package:senio_care/features/elder/api/models/response/medical_document_response.dart';
+import 'package:senio_care/features/service_provider/api/models/response/service_response.dart';
 
 part 'elder_api_services.g.dart';
 
@@ -40,4 +41,7 @@ abstract class ElderApiServices {
   Future<String> deleteDocument(
       @Path('id') String id,
       );
+
+  @GET(EndPointsConstants.services)
+ Future<List<ServiceResponse>> getAllServices();
 }

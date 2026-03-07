@@ -101,9 +101,9 @@ class _ElderHomeState extends State<ElderHome> {
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           floatingActionButton: GradientIconContainer(
-            width: 60,
-            height: 60,
-            radius: 30,
+            width: context.setWidth(60),
+            height: context.setHeight(60),
+            radius: context.setMinSize(30),
             child: Image.asset(
               AppIcons.chat,
               width: context.setWidth(50),
