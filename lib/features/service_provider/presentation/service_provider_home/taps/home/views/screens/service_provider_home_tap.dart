@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/config/di/di.dart';
@@ -25,12 +24,6 @@ class ServiceProviderHomeTap extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return Scaffold(
-            appBar: AppBar(
-              title: Text("myServices".tr()),
-              centerTitle: true,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-            ),
             body: DisplayService(),
             floatingActionButton: GradientIconContainer(
               width: 60,

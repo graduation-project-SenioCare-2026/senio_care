@@ -32,8 +32,44 @@ class _EditServiceCardState extends State<EditServiceCard> {
   @override
   void initState() {
     super.initState();
-    final bloc = context.read<ServicesBloc>();
-    _isAvailable = bloc.state.selectedService?.isAvailable ?? true;
+    _isAvailable = context.read<ServicesBloc>().state.selectedService?.isAvailable ?? true;
+  }
+
+  bool _hasChanges(ServicesState state, ServicesBloc bloc) {
+    final service = state.selectedService;
+    if (service == null) return false;
+
+    final descriptionChanged =
+        bloc.descriptionController.text != (service.serviceDescription ?? '');
+
+    final locationChanged =
+        bloc.locationController.text != (service.location ?? '');
+
+    final availabilityChanged = !_listsEqual(
+      state.availability.entries
+          .expand((e) => e.value.map((s) => '${e.key}:${s.startTime}-${s.endTime}'))
+          .toList(),
+      (service.availability ?? [])
+          .expand((a) => a.time.map((s) => '${a.day}:${s.startTime}-${s.endTime}'))
+          .toList(),
+    );
+
+    final isAvailableChanged = _isAvailable != (service.isAvailable ?? true);
+
+    return descriptionChanged ||
+        locationChanged ||
+        availabilityChanged ||
+        isAvailableChanged;
+  }
+
+  bool _listsEqual(List<String> a, List<String> b) {
+    if (a.length != b.length) return false;
+    final sortedA = [...a]..sort();
+    final sortedB = [...b]..sort();
+    for (int i = 0; i < sortedA.length; i++) {
+      if (sortedA[i] != sortedB[i]) return false;
+    }
+    return true;
   }
 
   @override
@@ -42,7 +78,7 @@ class _EditServiceCardState extends State<EditServiceCard> {
 
     return BlocConsumer<ServicesBloc, ServicesState>(
       listenWhen: (prev, curr) =>
-          prev.editServiceStatus != curr.editServiceStatus,
+      prev.editServiceStatus != curr.editServiceStatus,
       listener: (context, state) {
         if (state.editServiceStatus.isSuccess) {
           bloc.add(ClearFormEvent());
@@ -50,6 +86,8 @@ class _EditServiceCardState extends State<EditServiceCard> {
         }
       },
       builder: (context, state) {
+        final hasChanges = _hasChanges(state, bloc);
+
         return SingleChildScrollView(
           padding: EdgeInsets.symmetric(
             vertical: context.setHeight(20),
@@ -68,9 +106,12 @@ class _EditServiceCardState extends State<EditServiceCard> {
                   AppFormField(
                     label: "location".tr(),
                     controller: bloc.locationController,
+
                   ),
 
-                  AddDaySection(initialDays: state.availability.keys.toList()),
+                  AddDaySection(
+                    initialDays: state.availability.keys.toList(),
+                  ),
 
                   SizedBox(height: context.setHeight(16)),
 
@@ -87,7 +128,8 @@ class _EditServiceCardState extends State<EditServiceCard> {
                       Switch(
                         activeThumbColor: AppColors.blue,
                         value: _isAvailable,
-                        onChanged: (val) => setState(() => _isAvailable = val),
+                        onChanged: (val) =>
+                            setState(() => _isAvailable = val),
                       ),
                     ],
                   ),
@@ -97,40 +139,43 @@ class _EditServiceCardState extends State<EditServiceCard> {
                   state.editServiceStatus.isLoading
                       ? LoadingBtn()
                       : CustomElevatedButton(
-                          width: context.setWidth(300),
-                          onPressed: () {
-                            if (bloc.formKey.currentState!.validate()) {
-                              final request = ServiceRequest(
-                                availability: state.availability.entries.map((
-                                  entry,
-                                ) {
-                                  return AvailabilityModel(
-                                    day: entry.key,
-                                    time: entry.value.map((slot) {
-                                      return TimeSlotsModel(
-                                        startTime: slot.startTime,
-                                        endTime: slot.endTime,
-                                      );
-                                    }).toList(),
-                                  );
-                                }).toList(),
-                                isAvailable: _isAvailable,
-                                serviceDescription:
-                                    bloc.descriptionController.text,
-                                location: bloc.locationController.text,
-                                phoneNumber: state.selectedService?.phoneNumber,
-                                id: ProfileManager().serviceProvider?.id,
-                              );
-                              bloc.add(
-                                EditServiceEvent(
-                                  state.selectedService?.id ?? '',
-                                  request,
-                                ),
-                              );
-                            }
-                          },
-                          buttonLabel: 'save'.tr(),
-                        ),
+                    width: context.setWidth(300),
+                    isLoading: state.editServiceStatus.isLoading,
+                    onPressed: hasChanges
+                        ? () {
+                      if (bloc.formKey.currentState!.validate()) {
+                        final request = ServiceRequest(
+                          availability: state.availability.entries
+                              .map((entry) {
+                            return AvailabilityModel(
+                              day: entry.key,
+                              time: entry.value.map((slot) {
+                                return TimeSlotsModel(
+                                  startTime: slot.startTime,
+                                  endTime: slot.endTime,
+                                );
+                              }).toList(),
+                            );
+                          }).toList(),
+                          isAvailable: _isAvailable,
+                          serviceDescription:
+                          bloc.descriptionController.text,
+                          location: bloc.locationController.text,
+                          phoneNumber:
+                          state.selectedService?.phoneNumber,
+                          id: ProfileManager().serviceProvider?.id,
+                        );
+                        bloc.add(
+                          EditServiceEvent(
+                            state.selectedService?.id ?? '',
+                            request,
+                          ),
+                        );
+                      }
+                    }
+                        : null,
+                    buttonLabel: 'save'.tr(),
+                  ),
                 ],
               ),
             ),
