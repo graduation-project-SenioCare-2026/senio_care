@@ -22,7 +22,6 @@ class ServiceProviderHomeTap extends StatelessWidget {
         builder: (context) {
           return Scaffold(
             extendBody: true,
-
             body: DisplayService(),
             floatingActionButton: GradientIconContainer(
               width: 60,

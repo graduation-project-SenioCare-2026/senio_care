@@ -58,7 +58,6 @@ class _ServiceProviderMainLayoutState extends State<ServiceProviderMainLayout> {
             context: context,
             removeBottom: true,
             child: Scaffold(
-              extendBody: true,
               appBar: AppBar(
                 backgroundColor: Colors.transparent,
                 centerTitle: true,
