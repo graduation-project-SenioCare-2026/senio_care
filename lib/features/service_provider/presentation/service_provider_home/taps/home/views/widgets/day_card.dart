@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
+import 'package:senio_care/core/theme/font_manager.dart';
 import 'package:senio_care/core/theme/font_style.dart';
 
 import '../../../../../../domain/entity/time_slot_entity.dart';
@@ -60,10 +61,7 @@ class DayScheduleCard extends StatelessWidget {
                 ),
               ),
               SizedBox(width: context.setWidth(10)),
-              GestureDetector(
-                onTap: onDelete,
-                child: Icon(Icons.close),
-              ),
+              GestureDetector(onTap: onDelete, child: Icon(Icons.close)),
             ],
           ),
           SizedBox(height: context.setHeight(15)),
@@ -80,10 +78,13 @@ class DayScheduleCard extends StatelessWidget {
                 child: Row(
                   children: [
                     const Icon(Icons.add, size: 18),
-                    const SizedBox(width: 4),
+                    SizedBox(width: context.setWidth(4)),
                     Text(
                       "addSlot".tr(),
-                      style: getBoldStyle(color: AppColors.black, fontSize: 13),
+                      style: getBoldStyle(
+                        color: AppColors.black,
+                        fontSize: context.setSp(FontSize.s13),
+                      ),
                     ),
                   ],
                 ),
@@ -95,29 +96,31 @@ class DayScheduleCard extends StatelessWidget {
           if (slots.isEmpty)
             _buildSlotRow(context)
           else
-            ...slots.map((slot) => Padding(
-              padding: EdgeInsets.only(bottom: context.setHeight(8)),
-              child: Row(
-                children: [
-                  Expanded(child: _buildTimeChip(slot.startTime)),
-                  const SizedBox(width: 8),
-                  Text("to".tr()),
-                  const SizedBox(width: 8),
-                  Expanded(child: _buildTimeChip(slot.endTime)),
-                  const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: () => context.read<ServicesBloc>().add(
-                      RemoveTimeSlotEvent(day: day, slot: slot),
+            ...slots.map(
+              (slot) => Padding(
+                padding: EdgeInsets.only(bottom: context.setHeight(8)),
+                child: Row(
+                  children: [
+                    Expanded(child: _buildTimeChip(slot.startTime)),
+                     SizedBox(width: context.setWidth(8)),
+                    Text("to".tr()),
+                    SizedBox(width: context.setWidth(8)),
+                    Expanded(child: _buildTimeChip(slot.endTime)),
+                    SizedBox(width: context.setWidth(8)),
+                    GestureDetector(
+                      onTap: () => context.read<ServicesBloc>().add(
+                        RemoveTimeSlotEvent(day: day, slot: slot),
+                      ),
+                      child: Icon(
+                        Icons.close,
+                        size: 18,
+                        color: Colors.grey.shade500,
+                      ),
                     ),
-                    child: Icon(
-                      Icons.close,
-                      size: 18,
-                      color: Colors.grey.shade500,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            )),
+            ),
         ],
       ),
     );
@@ -127,9 +130,9 @@ class DayScheduleCard extends StatelessWidget {
     return Row(
       children: [
         Expanded(child: _buildTimeChip('--:--')),
-        const SizedBox(width: 10),
+        SizedBox(width: context.setWidth(10)),
         Text("to".tr()),
-        const SizedBox(width: 10),
+        SizedBox(width: context.setWidth(10)),
         Expanded(child: _buildTimeChip('--:--')),
       ],
     );
@@ -137,13 +140,13 @@ class DayScheduleCard extends StatelessWidget {
 
   Widget _buildTimeChip(String time) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: EdgeInsets.symmetric(vertical: 12),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Text(time, style: TextStyle(color: Colors.grey.shade600)),
+      child: Text(time, style: getRegularStyle(color: Colors.grey.shade600)),
     );
   }
 }

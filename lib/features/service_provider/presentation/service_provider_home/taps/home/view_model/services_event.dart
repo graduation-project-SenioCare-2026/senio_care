@@ -54,3 +54,5 @@ class SelectedService extends ServicesEvent {
   final ServicesEntity servicesEntity;
   SelectedService(this.servicesEntity);
 }
+
+class ClearTimeSlotErrorEvent extends ServicesEvent {}

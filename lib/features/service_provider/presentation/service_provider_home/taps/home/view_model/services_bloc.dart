@@ -40,16 +40,26 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
     on<ClearFormEvent>(_onClearForm);
     on<EditServiceEvent>(_editService);
     on<SelectedService>(_selectedService);
+    on<ClearTimeSlotErrorEvent>(_onClearTimeSlotError);
+  }
+
+  void _onClearTimeSlotError(
+      ClearTimeSlotErrorEvent event,
+      Emitter<ServicesState> emit,
+      ) {
+    emit(state.copyWith(timeSlotError: null));
   }
 
   void _selectedService(SelectedService event, Emitter<ServicesState> emit) {
     final availabilityMap = <String, List<TimeSlot>>{};
     for (final avail in event.servicesEntity.availability ?? []) {
       availabilityMap[avail.day] = (avail.time as List<dynamic>)
-          .map((t) => TimeSlot(
-        startTime: t.startTime as String,
-        endTime: t.endTime as String,
-      ))
+          .map(
+            (t) => TimeSlot(
+              startTime: t.startTime as String,
+              endTime: t.endTime as String,
+            ),
+          )
           .toList();
     }
 
@@ -66,26 +76,31 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
   }
 
   Future<void> _editService(
-      EditServiceEvent event,
-      Emitter<ServicesState> emit,
-      ) async {
-
+    EditServiceEvent event,
+    Emitter<ServicesState> emit,
+  ) async {
     emit(state.copyWith(editServiceStatus: StateStatus.loading()));
     final result = await _editServiceUseCase.call(event.id, event.request);
     switch (result) {
       case Success<ServicesEntity>():
         final updatedList = List<ServicesEntity>.from(
-          state.servicesList.map((s) => s.id == result.data.id ? result.data : s),
+          state.servicesList.map(
+            (s) => s.id == result.data.id ? result.data : s,
+          ),
         );
-        emit(state.copyWith(
-          editServiceStatus: StateStatus.success(result.data),
-          servicesList: updatedList,
-        ));
+        emit(
+          state.copyWith(
+            editServiceStatus: StateStatus.success(result.data),
+            servicesList: updatedList,
+          ),
+        );
 
       case Failure<ServicesEntity>():
-        emit(state.copyWith(
-          editServiceStatus: StateStatus.failure(result.responseException),
-        ));
+        emit(
+          state.copyWith(
+            editServiceStatus: StateStatus.failure(result.responseException),
+          ),
+        );
     }
   }
 
@@ -168,17 +183,42 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
     }
   }
 
+  /// Parses "hh:mm AM/PM" into total minutes since midnight for comparison.
+  int _toMinutes(String time) {
+    final parts = time.split(RegExp(r'[: ]'));
+    int hour = int.parse(parts[0]);
+    final int minute = int.parse(parts[1]);
+    final String period = parts[2].toUpperCase();
+
+    if (period == 'PM' && hour != 12) hour += 12;
+    if (period == 'AM' && hour == 12) hour = 0;
+
+    return hour * 60 + minute;
+  }
+
   Future<void> _addTimeSlot(
     AddTimeSlotEvent event,
     Emitter<ServicesState> emit,
   ) async {
+    final startMinutes = _toMinutes(event.slot.startTime);
+    final endMinutes = _toMinutes(event.slot.endTime);
+
+    // Validate: start must be strictly before end
+    if (startMinutes >= endMinutes) {
+      emit(state.copyWith(timeSlotError: 'startTimeMustBeBeforeEndTime'));
+      return;
+    }
+
     final updated = _deepCopy(state.availability);
-
     updated.putIfAbsent(event.day, () => []);
-
     updated[event.day]!.add(event.slot);
 
-    emit(state.copyWith(availability: updated));
+    emit(
+      state.copyWith(
+        availability: updated,
+        timeSlotError: null, // clear any previous error
+      ),
+    );
   }
 
   Future<void> _removeTimeSlot(
@@ -211,6 +251,7 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
         addServiceStatus: StateStatus.initial(),
         editServiceStatus: StateStatus.initial(),
         selectedService: null,
+        timeSlotError: null,
       ),
     );
   }

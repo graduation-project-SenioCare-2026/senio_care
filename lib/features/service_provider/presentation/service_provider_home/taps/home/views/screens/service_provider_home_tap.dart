@@ -15,15 +15,14 @@ class ServiceProviderHomeTap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<ServicesBloc>()
-        ..add(
-          GetServiceEvent(
-            ProfileManager().serviceProvider!.id!,
-          ),
-        ),
+      create: (_) =>
+          getIt<ServicesBloc>()
+            ..add(GetServiceEvent(ProfileManager().serviceProvider!.id!)),
       child: Builder(
         builder: (context) {
           return Scaffold(
+            extendBody: true,
+
             body: DisplayService(),
             floatingActionButton: GradientIconContainer(
               width: 60,
@@ -36,7 +35,7 @@ class ServiceProviderHomeTap extends StatelessWidget {
                   arguments: context.read<ServicesBloc>(),
                 );
               },
-              child: Icon(Icons.add, color: Colors.white,size: 30,),
+              child: Icon(Icons.add, color: Colors.white, size: 35),
             ),
           );
         },

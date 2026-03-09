@@ -12,15 +12,17 @@ class ServicesState extends Equatable {
   final List<ServicesEntity> servicesList;
   final Map<String, List<TimeSlot>> availability;
   final ServicesEntity? selectedService;
+  final String? timeSlotError;
 
-   const ServicesState({
+  const ServicesState({
     this.getServicesStatus = const StateStatus.initial(),
     this.addServiceStatus = const StateStatus.initial(),
     this.deleteServiceStatus = const StateStatus.initial(),
     this.editServiceStatus = const StateStatus.initial(),
     this.servicesList = const [],
     this.availability = const {},
-    this.selectedService
+    this.selectedService,
+    this.timeSlotError,
   });
 
   ServicesState copyWith({
@@ -30,7 +32,8 @@ class ServicesState extends Equatable {
     StateStatus<String>? deleteServiceStatus,
     List<ServicesEntity>? servicesList,
     Map<String, List<TimeSlot>>? availability,
-    ServicesEntity? selectedService
+    ServicesEntity? selectedService,
+    String? timeSlotError,
   }) {
     return ServicesState(
       getServicesStatus: getServicesStatus ?? this.getServicesStatus,
@@ -39,7 +42,8 @@ class ServicesState extends Equatable {
       availability: availability ?? this.availability,
       deleteServiceStatus: deleteServiceStatus ?? this.deleteServiceStatus,
       editServiceStatus: editServiceStatus ?? this.editServiceStatus,
-      selectedService: selectedService??this.selectedService,
+      selectedService: selectedService ?? this.selectedService,
+      timeSlotError: timeSlotError ?? this.timeSlotError,
     );
   }
 
@@ -51,6 +55,7 @@ class ServicesState extends Equatable {
     availability,
     deleteServiceStatus,
     editServiceStatus,
-    selectedService
+    selectedService,
+    timeSlotError,
   ];
 }

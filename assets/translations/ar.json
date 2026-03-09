@@ -306,5 +306,6 @@
   "friday": "الجمعه",
   "saturday": "السبت",
   "sunday": "الاحد",
-  "shareYourExpertiseWithSeniorsInNeed": "شارك خبرتك مع كبار السن المحتاجين"
+  "shareYourExpertiseWithSeniorsInNeed": "شارك خبرتك مع كبار السن المحتاجين",
+  "startTimeMustBeBeforeEndTime": "وقت البداية يجب أن يكون قبل وقت النهاية"
 }

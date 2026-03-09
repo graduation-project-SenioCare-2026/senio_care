@@ -28,7 +28,7 @@ class _AddDaySectionState extends State<AddDaySection> {
     _selectedDays = List<String>.from(widget.initialDays);
   }
 
-  static  final List<String> _allDays = [
+  final List<String> _allDays = [
     'monday'.tr(),
     'tuesday'.tr(),
     'wednesday'.tr(),
@@ -61,8 +61,8 @@ class _AddDaySectionState extends State<AddDaySection> {
 
     if (available.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(content: Text('allDaysHaveBeenAdded!'.tr()),
-      ));
+        SnackBar(content: Text('allDaysHaveBeenAdded!'.tr())),
+      );
       return;
     }
 
@@ -76,7 +76,7 @@ class _AddDaySectionState extends State<AddDaySection> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(context.setHeight(16)),
               child: Text(
                 'selectADay'.tr(),
                 style: getBoldStyle(color: AppColors.black, fontSize: 16),
@@ -84,14 +84,20 @@ class _AddDaySectionState extends State<AddDaySection> {
             ),
             ...available.map(
                   (day) => ListTile(
-                title: Text(day),
+                title: Text(
+                  day,
+                  style: getRegularStyle(
+                    color: AppColors.black,
+                    fontSize: context.setSp(FontSize.s13),
+                  ),
+                ),
                 onTap: () {
                   setState(() => _selectedDays.add(day));
                   Navigator.pop(context);
                 },
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: context.setHeight(16)),
           ],
         ),
       ),
@@ -106,94 +112,148 @@ class _AddDaySectionState extends State<AddDaySection> {
   void _showTimeSlotPicker(String day) {
     TimeOfDay? startTime;
     TimeOfDay? endTime;
+    // ✅ Local error — fully isolated from bloc state, always starts null
+    String? errorMessage;
+
+    final bloc = context.read<ServicesBloc>();
+    final int slotCountBefore = bloc.state.availability[day]?.length ?? 0;
 
     showDialog(
       context: context,
       useRootNavigator: true,
-      builder: (dialogContext) => StatefulBuilder(
-        builder: (dialogContext, setDialogState) => AlertDialog(
-           backgroundColor: Colors.white,
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text(
-            'addTimeSlot'.tr(),
-            style: getBoldStyle(color: AppColors.black),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Start time
-              GestureDetector(
-                onTap: () async {
-                  final picked = await showTimePicker(
-                    context: context,
-                    initialTime: TimeOfDay.now(),
-                    useRootNavigator: true,
-                    builder: _timePickerTheme,
-                  );
-                  if (picked != null) {
-                    setDialogState(() => startTime = picked);
-                  }
-                },
-                child: _timeBox(
-                  time: startTime,
-                  ctx: dialogContext,
-                  isSelected: startTime != null,
-                ),
+      builder: (dialogContext) => BlocProvider.value(
+        value: bloc,
+        child: BlocListener<ServicesBloc, ServicesState>(
+          // Close dialog only when a new slot is successfully added
+          listenWhen: (prev, curr) =>
+          (curr.availability[day]?.length ?? 0) > slotCountBefore,
+          listener: (_, __) => Navigator.pop(dialogContext),
+          child: StatefulBuilder(
+            builder: (_, setDialogState) => AlertDialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
               ),
-              SizedBox(height: context.setHeight(12)),
-              Text('to'.tr(), style: getBoldStyle(color: AppColors.black)),
-              SizedBox(height: context.setHeight(12)),
-              // End time
-              GestureDetector(
-                onTap: () async {
-                  final picked = await showTimePicker(
-                    context: context,
-                    initialTime: TimeOfDay.now(),
-                    useRootNavigator: true,
-                    builder: _timePickerTheme,
-                  );
-                  if (picked != null) {
-                    setDialogState(() => endTime = picked);
-                  }
-                },
-                child: _timeBox(
-                  time: endTime,
-                  ctx: dialogContext,
-                  isSelected: endTime != null,
-                ),
+              title: Text(
+                'addTimeSlot'.tr(),
+                style: getBoldStyle(color: AppColors.black),
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              style: TextButton.styleFrom(foregroundColor: AppColors.blue),
-              child:  Text('cancel'.tr()),
-            ),
-            ElevatedButton(
-              onPressed: startTime != null && endTime != null
-                  ? () {
-                context.read<ServicesBloc>().add(
-                  AddTimeSlotEvent(
-                    day: day,
-                    slot: TimeSlot(
-                      startTime: startTime!.format(context),
-                      endTime: endTime!.format(context),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Start time
+                  GestureDetector(
+                    onTap: () async {
+                      final picked = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                        useRootNavigator: true,
+                        builder: _timePickerTheme,
+                      );
+                      if (picked != null) {
+                        setDialogState(() {
+                          startTime = picked;
+                          errorMessage = null; // clear error on new pick
+                        });
+                      }
+                    },
+                    child: _timeBox(
+                      time: startTime,
+                      ctx: dialogContext,
+                      isSelected: startTime != null,
+                      hasError: errorMessage != null,
                     ),
                   ),
-                );
-                Navigator.pop(dialogContext);
-              }
-                  : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.blue,
-                foregroundColor: Colors.white,
-                disabledBackgroundColor: Colors.grey.shade300,
+                  SizedBox(height: context.setHeight(12)),
+                  Text('to'.tr(), style: getBoldStyle(color: AppColors.black)),
+                  SizedBox(height: context.setHeight(12)),
+                  // End time
+                  GestureDetector(
+                    onTap: () async {
+                      final picked = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                        useRootNavigator: true,
+                        builder: _timePickerTheme,
+                      );
+                      if (picked != null) {
+                        setDialogState(() {
+                          endTime = picked;
+                          errorMessage = null; // clear error on new pick
+                        });
+                      }
+                    },
+                    child: _timeBox(
+                      time: endTime,
+                      ctx: dialogContext,
+                      isSelected: endTime != null,
+                      hasError: errorMessage != null,
+                    ),
+                  ),
+                  // Local error message — no stale state possible
+                  if (errorMessage != null)
+                    Padding(
+                      padding: EdgeInsets.only(top: context.setHeight(10)),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.error_outline,
+                              color: Colors.red, size: 16),
+                          SizedBox(width: context.setWidth(6)),
+                          Expanded(
+                            child: Text(
+                              errorMessage!.tr(),
+                              style: getRegularStyle(
+                                color: Colors.red,
+                                fontSize: context.setSp(FontSize.s12),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
               ),
-              child:  Text('add'.tr()),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(dialogContext),
+                  style: TextButton.styleFrom(foregroundColor: AppColors.blue),
+                  child: Text('cancel'.tr()),
+                ),
+                ElevatedButton(
+                  onPressed: startTime != null && endTime != null
+                      ? () {
+                    final startMinutes =
+                        startTime!.hour * 60 + startTime!.minute;
+                    final endMinutes =
+                        endTime!.hour * 60 + endTime!.minute;
+
+                    // ✅ Validate locally — no bloc state involved
+                    if (startMinutes >= endMinutes) {
+                      setDialogState(() {
+                        errorMessage = 'startTimeMustBeBeforeEndTime';
+                      });
+                      return;
+                    }
+
+                    bloc.add(AddTimeSlotEvent(
+                      day: day,
+                      slot: TimeSlot(
+                        startTime: startTime!.format(context),
+                        endTime: endTime!.format(context),
+                      ),
+                    ));
+                  }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.blue,
+                    foregroundColor: Colors.white,
+                    disabledBackgroundColor: Colors.grey.shade300,
+                  ),
+                  child: Text('add'.tr()),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -203,20 +263,32 @@ class _AddDaySectionState extends State<AddDaySection> {
     required TimeOfDay? time,
     required BuildContext ctx,
     required bool isSelected,
+    bool hasError = false,
   }) {
+    final Color borderColor = hasError
+        ? Colors.red
+        : isSelected
+        ? AppColors.blue
+        : Colors.grey.shade300;
+
+    final Color bgColor = hasError
+        ? Colors.red.withOpacity(0.05)
+        : isSelected
+        ? AppColors.blue.withOpacity(0.07)
+        : Colors.grey.shade100;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: EdgeInsets.symmetric(
+        horizontal: context.setWidth(16),
+        vertical: context.setHeight(14),
+      ),
       decoration: BoxDecoration(
-        color: isSelected
-            ? AppColors.blue.withOpacity(0.07)
-            : Colors.grey.shade100,
+        color: bgColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isSelected
-              ? AppColors.blue
-              : Colors.grey.shade300,
-          width: isSelected ? 1.5 : 1,
+          color: borderColor,
+          width: isSelected || hasError ? 1.5 : 1,
         ),
       ),
       child: Row(
@@ -225,16 +297,19 @@ class _AddDaySectionState extends State<AddDaySection> {
           Text(
             time == null ? '--:-- --' : time.format(ctx),
             style: TextStyle(
-              color: isSelected
+              color: hasError
+                  ? Colors.red
+                  : isSelected
                   ? AppColors.blue
                   : Colors.grey.shade500,
-              fontWeight:
-              isSelected ? FontWeight.w600 : FontWeight.normal,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
           Icon(
             Icons.access_time,
-            color: isSelected
+            color: hasError
+                ? Colors.red
+                : isSelected
                 ? AppColors.blue
                 : Colors.grey.shade400,
           ),
@@ -283,11 +358,7 @@ class _AddDaySectionState extends State<AddDaySection> {
                     ),
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.add,
-                          size: 18,
-                          color: Colors.grey.shade600,
-                        ),
+                        Icon(Icons.add, size: 18, color: Colors.grey.shade600),
                         SizedBox(width: context.setWidth(4)),
                         Text(
                           "addDay".tr(),
@@ -302,7 +373,6 @@ class _AddDaySectionState extends State<AddDaySection> {
                 ),
               ],
             ),
-            // Day cards
             ..._selectedDays.map(
                   (day) => DayScheduleCard(
                 key: ValueKey(day),
@@ -312,7 +382,6 @@ class _AddDaySectionState extends State<AddDaySection> {
                 onAddSlot: () => _showTimeSlotPicker(day),
               ),
             ),
-            // Empty state
             if (_selectedDays.isEmpty)
               Padding(
                 padding: EdgeInsets.symmetric(vertical: context.setHeight(16)),

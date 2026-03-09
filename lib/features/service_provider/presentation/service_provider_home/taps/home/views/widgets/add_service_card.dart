@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/validator/validator.dart';
 
 import '../../../../../../../../core/common_widgets/app_form_field.dart';
 import '../../../../../../../../core/common_widgets/custom_card.dart';
@@ -48,10 +49,12 @@ class AddServiceCard extends StatelessWidget {
                   AppFormField(
                     label: "description".tr(),
                     controller: bloc.descriptionController,
+                    validator: (val) => Validator.validateRequired(val),
                   ),
                   AppFormField(
                     label: "location".tr(),
                     controller: bloc.locationController,
+                    validator: (val) => Validator.validateRequired(val),
                   ),
 
                   const AddDaySection(),
