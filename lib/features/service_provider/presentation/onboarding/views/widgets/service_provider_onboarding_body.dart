@@ -60,10 +60,11 @@ class ServiceProviderOnboardingBody extends StatelessWidget {
               HeaderText(
                 title: 'welcomeToSenioCare'.tr(),
                 titleSize: FontSize.s32,
-                subTitle: '',
-                subTitleSize: 0.0,
+                subTitle: 'shareYourExpertiseWithSeniorsInNeed'.tr(),
+                subTitleSize: FontSize.s20,
+                titlePadding: 10,
               ),
-              SizedBox(height: context.setHeight(40)),
+              SizedBox(height: context.setHeight(25)),
               BlurContainer(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,

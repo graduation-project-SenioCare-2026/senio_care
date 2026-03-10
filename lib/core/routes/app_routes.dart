@@ -19,10 +19,13 @@ import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/g
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/blood_sugar_screen.dart';
 import 'package:senio_care/features/service_provider/presentation/onboarding/views/screens/service_provider_onboarding_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/onboarding/views/screens/caregiver_onboarding_screen.dart';
+import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/home/views/screens/add_services_screen.dart';
+import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/home/views/screens/edit_service_screen.dart';
 
 import '../../features/elder/presentation/view/screens/elder_home/elder_profile/edit_personal_info_screen.dart';
 import '../../features/elder/presentation/view/screens/elder_home/elder_profile/elder_personal_info_screen.dart';
 import '../../features/service_provider/presentation/service_provider_home/service_provider_main_layout.dart';
+import '../../features/service_provider/presentation/service_provider_home/taps/home/view_model/services_bloc.dart';
 import '../../features/service_provider/presentation/service_provider_home/taps/profile/views/screens/service_provider_edit_profile.dart';
 
 import '../../features/caregiver/presentation/caregiver_home/taps/graph/view_model/caregiver_graph_bloc.dart';
@@ -73,8 +76,25 @@ abstract class Routes {
       case RoutesNames.serviceProviderHome:
         return MaterialPageRoute(builder: (_) => ServiceProviderMainLayout());
 
+      case RoutesNames.addServicesScreen:
+        final bloc = setting.arguments as ServicesBloc;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: bloc,
+            child: const AddServicesScreen(),
+          ),
+        );
+
       case RoutesNames.serviceProviderEditProfile:
         return MaterialPageRoute(builder: (_) => ServiceProviderEditProfile());
+        case RoutesNames.editServicesScreen:
+          final bloc = setting.arguments as ServicesBloc;
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: bloc,
+              child: const EditServiceScreen(),
+            ),
+          );
 
       case RoutesNames.elderPersonalInfoScreen:
         return MaterialPageRoute(builder: (_) => ElderPersonalInfoScreen());

@@ -28,5 +28,9 @@ class ServiceProviderEditProfileState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [serviceProviderEditProfileState, getServiceProviderStatus, entity];
+  List<Object?> get props => [
+    serviceProviderEditProfileState,
+    getServiceProviderStatus,
+    entity,
+  ];
 }

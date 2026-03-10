@@ -23,5 +23,5 @@ class ServiceProviderOnboardingState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [serviceProviderOnboardingState];
+  List<Object?> get props => [serviceProviderOnboardingState,selectedGender];
 }

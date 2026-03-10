@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:senio_care/core/common_widgets/setting_drawer.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/screens/caregiver_graph_tab.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/home/views/screens/caregiver_home_tab.dart';
@@ -7,6 +8,8 @@ import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/p
 
 import '../../../../core/common_widgets/bg_gradient.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/font_manager.dart';
+import '../../../../core/theme/font_style.dart';
 
 class CaregiverMainLayout extends StatefulWidget {
   const CaregiverMainLayout({super.key});
@@ -22,6 +25,11 @@ class _CaregiverMainLayoutState extends State<CaregiverMainLayout> {
     CaregiverGraphTab(),
     CaregiverProfileTab(),
   ];
+  List<String> appBarTitles = [
+    "home".tr(),
+    "vitalsMonitoring".tr(),
+    "myProfile".tr(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +37,22 @@ class _CaregiverMainLayoutState extends State<CaregiverMainLayout> {
       children: [
         BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
         Scaffold(
+          extendBody: true,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            centerTitle: true,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            surfaceTintColor: Colors.transparent,
+            title: Text(
+              appBarTitles[currentIndex],
+              style: getBoldStyle(
+                color: AppColors.black,
+                fontSize: context.setSp(FontSize.s24),
+              ),
+            ),
+          ),
+          endDrawer: SettingDrawer(),
           body: taps[currentIndex],
           bottomNavigationBar: Padding(
             padding:  EdgeInsets.all(context.setHeight(15)),

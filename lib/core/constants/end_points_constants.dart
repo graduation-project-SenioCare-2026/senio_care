@@ -12,5 +12,9 @@ abstract class EndPointsConstants {
   static const String medicalDocByElder="medical-documents/elder/{elder_id}";
   static const String services="/services/";
 
+  static const String addService="/services/";
+  static const String getService="/services/provider/{service_provider_id}";
+  static const String deleteService="/services/{id}";
+  static const String editService="/services/{id}";
 
 }
