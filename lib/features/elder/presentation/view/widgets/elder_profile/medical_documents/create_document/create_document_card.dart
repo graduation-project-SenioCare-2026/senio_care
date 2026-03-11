@@ -51,6 +51,8 @@ class _CreateDocumentCardState extends State<CreateDocumentCard> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MedicalDocumentsBloc, MedicalDocumentsState>(
+      listenWhen: (previous, current) =>
+      previous.createDocumentStatus != current.createDocumentStatus,
       listener: (context, state) {
         if(state.createDocumentStatus.isFailure){
           Loaders.showErrorMessage(message: state.createDocumentStatus.error!.message, context: context);

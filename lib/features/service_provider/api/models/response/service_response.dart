@@ -43,6 +43,7 @@ class ServiceResponse {
 
   ServicesEntity toEntity() {
     return ServicesEntity(
+      id: id,
       serviceDescription: serviceDescription,
       location: location,
       availability: availability
