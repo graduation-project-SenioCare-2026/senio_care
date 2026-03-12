@@ -70,6 +70,7 @@ class GraphBody extends StatelessWidget {
                 color: Color(0xff5418ec),
                 bgIconColor: Color(0xffcfb8f4),
               ),
+              SizedBox(height: context.setHeight(40),)
             ],
           ),
         ],
