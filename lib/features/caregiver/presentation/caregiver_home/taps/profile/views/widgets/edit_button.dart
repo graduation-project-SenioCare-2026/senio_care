@@ -2,8 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/core/common_widgets/custom_elevated_button.dart';
-import 'package:senio_care/core/common_widgets/loading_btn.dart';
-import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/features/caregiver/api/models/request/onboarding/caregiver_onboarding_request.dart';
@@ -11,37 +9,16 @@ import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/p
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/view_model/caregiver_edit_profile_event.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/view_model/caregiver_edit_profile_state.dart';
 
-class EditCaregiverButton extends StatefulWidget {
+import '../../../../../../../../core/common_widgets/loading_btn.dart';
+import '../../../../../../../../core/loaders/loaders.dart';
+
+class EditCaregiverButton extends StatelessWidget {
   const EditCaregiverButton({super.key});
 
-  @override
-  State<EditCaregiverButton> createState() => _EditCaregiverButtonState();
-}
-
-class _EditCaregiverButtonState extends State<EditCaregiverButton> {
-  late CaregiverEditProfileBloc _bloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _bloc = context.read<CaregiverEditProfileBloc>();
-    // Listen to controller changes to rebuild the button
-    _bloc.phoneNumberController.addListener(_onChanged);
-    _bloc.genderController.addListener(_onChanged);
-    _bloc.relationShipController.addListener(_onChanged);
-  }
-
-  void _onChanged() => setState(() {});
-
-  @override
-  void dispose() {
-    _bloc.phoneNumberController.removeListener(_onChanged);
-    _bloc.genderController.removeListener(_onChanged);
-    _bloc.relationShipController.removeListener(_onChanged);
-    super.dispose();
-  }
-
-  bool _hasChanges(CaregiverEditProfileState state) {
+  bool _hasChanges(
+    CaregiverEditProfileState state,
+    CaregiverEditProfileBloc bloc,
+  ) {
     final caregiver = ProfileManager().caregiver;
     if (caregiver == null) return false;
 
@@ -52,83 +29,85 @@ class _EditCaregiverButtonState extends State<EditCaregiverButton> {
             .toList() ??
         [];
 
-    final originalElderIds =
-        caregiver.elders?.map((e) => e.id).whereType<String>().toList() ?? [];
+    final originalElderIds = bloc.initialElderIds;
 
-    final elderIdsChanged =
+    final elderChanged =
         currentElderIds.length != originalElderIds.length ||
         !currentElderIds.every((id) => originalElderIds.contains(id));
 
-    return _bloc.phoneNumberController.text != (caregiver.phoneNumber ?? '') ||
-        _bloc.genderController.text != (caregiver.gender ?? '') ||
-        _bloc.relationShipController.text != (caregiver.relationship ?? '') ||
-        elderIdsChanged;
+    final phoneChanged =
+        bloc.phoneNumberController.text != (caregiver.phoneNumber ?? '');
+
+    final genderChanged =
+        bloc.genderController.text != (caregiver.gender ?? '');
+
+    final relationChanged =
+        bloc.relationShipController.text != (caregiver.relationship ?? '');
+
+    return phoneChanged || genderChanged || relationChanged || elderChanged;
   }
 
   @override
   Widget build(BuildContext context) {
-    final caregiver = ProfileManager().caregiver;
+    final bloc = context.read<CaregiverEditProfileBloc>();
 
-    return SliverToBoxAdapter(
-      child: BlocConsumer<CaregiverEditProfileBloc, CaregiverEditProfileState>(
-        listener: (context, state) {
-          if (state.caregiverEditProfileState.isSuccess) {
-            ProfileManager().caregiver = state.caregiverEditProfileState.data;
-            Navigator.pop(context, true);
-            Loaders.showSuccessMessage(
-              message: "profileEditedSuccessfully".tr(),
-              context: context,
-            );
-          }
-          if (state.caregiverEditProfileState.isFailure) {
-            Loaders.showErrorMessage(
-              message: state.caregiverEditProfileState.error!.message,
-              context: context,
-            );
-          }
-        },
-        builder: (context, state) {
-          final hasChanges = _hasChanges(state);
+    return BlocConsumer<CaregiverEditProfileBloc, CaregiverEditProfileState>(
+      listener: (context, state) {
+        if (state.caregiverEditProfileState.isSuccess) {
+          ProfileManager().caregiver = state.caregiverEditProfileState.data;
+          Navigator.pop(context, true);
+          Loaders.showSuccessMessage(
+            message: "profileEditedSuccessfully".tr(),
+            context: context,
+          );
+        }
+      },
+      buildWhen: (previous, current) =>
+          previous.getElderState != current.getElderState ||
+          previous.caregiverEditProfileState !=
+              current.caregiverEditProfileState,
+      builder: (context, state) {
+        final hasChanges = _hasChanges(state, bloc);
 
-          final elderIds =
-              state.getElderState.data
-                  ?.map((e) => e.id)
-                  .whereType<String>()
-                  .toList() ??
-              [];
-
-          return Padding(
+        return SliverToBoxAdapter(
+          child: Padding(
             padding: EdgeInsets.symmetric(horizontal: context.setWidth(20)),
             child: Column(
               children: [
-                if (state.caregiverEditProfileState.isLoading)
-                  LoadingBtn()
-                else
-                  CustomElevatedButton(
-                    onPressed: hasChanges
-                        ? () {
-                            final request = CaregiverOnboardingRequest(
-                              phoneNumber: _bloc.phoneNumberController.text,
-                              gender: _bloc.genderController.text,
-                              relationship: _bloc.relationShipController.text,
-                              elderIds: elderIds,
-                            );
-                            _bloc.add(
-                              CaregiverEditProfileEvent(
-                                caregiver!.id!,
-                                request,
-                              ),
-                            );
-                          }
-                        : null,
-                    buttonLabel: 'save'.tr(),
-                  ),
+                state.caregiverEditProfileState.isLoading
+                    ? const LoadingBtn()
+                    : CustomElevatedButton(
+                  buttonLabel: "save".tr(),
+                  isLoading: state.caregiverEditProfileState.isLoading,
+                  onPressed: hasChanges
+                      ? () {
+                    final request = CaregiverOnboardingRequest(
+                      phoneNumber: bloc.phoneNumberController.text,
+                      gender: bloc.genderController.text,
+                      relationship: bloc.relationShipController.text,
+                      elderIds: state.getElderState.data
+                          ?.map((e) => e.id)
+                          .whereType<String>()
+                          .toList(),
+                    );
+
+                    bloc.add(
+                      CaregiverEditProfileEvent(
+                        ProfileManager().caregiver!.id!,
+                        request,
+                      ),
+                    );
+                  }
+                      : null,
+                ),
                 SizedBox(height: context.setHeight(20)),
               ],
-            ),
-          );
-        },
-      ),
+            )
+
+
+          ),
+        );
+      },
     );
   }
 }

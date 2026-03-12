@@ -13,6 +13,7 @@ abstract class RoutesNames {
   static const String serviceProviderEditProfile="ServiceProviderEditProfile";
   static const String addServicesScreen="addServicesScreen";
   static const String editServicesScreen="editServicesScreen";
+  static const String caregiverProfile = "CaregiverProfile";
   static const String caregiverEditProfile = "CaregiverEditProfile";
   static const String bloodSugarGraph = "BloodSugarGraph";
   static const String heartRateGraph = "heartRateGraph";

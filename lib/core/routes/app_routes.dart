@@ -9,6 +9,7 @@ import 'package:senio_care/features/auth/presentation/views/screens/roles_screen
 import 'package:senio_care/features/auth/presentation/views/screens/splash_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/caregiver_main_layout.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/views/screen/caregiver_edit_profile.dart';
+import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/views/screen/caregiver_profile.dart';
 import 'package:senio_care/features/elder/domain/entity/medical_document_entity.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_main_layout.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_profile/create_document_screen.dart';
@@ -70,6 +71,10 @@ abstract class Routes {
 
       case RoutesNames.caregiverHome:
         return MaterialPageRoute(builder: (_) => CaregiverMainLayout());
+
+      case RoutesNames.caregiverProfile:
+        return MaterialPageRoute(builder: (_) => CaregiverProfile());
+
       case RoutesNames.caregiverEditProfile:
         return MaterialPageRoute(builder: (_) => CaregiverEditProfile());
 
@@ -97,9 +102,15 @@ abstract class Routes {
           );
 
       case RoutesNames.elderPersonalInfoScreen:
-        return MaterialPageRoute(builder: (_) => ElderPersonalInfoScreen());
+        return MaterialPageRoute(
+          builder: (_) => ElderPersonalInfoScreen(),
+          settings: setting,
+        );
+        // return MaterialPageRoute(builder: (_) => ElderPersonalInfoScreen());
 
       case RoutesNames.elderEditProfile:
+        return MaterialPageRoute(builder: (_) => EditPersonalInfoScreen());
+
         return MaterialPageRoute(builder: (_) => EditPersonalInfoScreen());
       case RoutesNames.bloodSugarGraph:
         final bloc = setting.arguments as CaregiverGraphBloc;
@@ -107,6 +118,7 @@ abstract class Routes {
           builder: (context) =>
               BlocProvider.value(value: bloc, child: const BloodSugarScreen()),
         );
+
       case RoutesNames.heartRateGraph:
         final bloc = setting.arguments as CaregiverGraphBloc;
         return MaterialPageRoute(

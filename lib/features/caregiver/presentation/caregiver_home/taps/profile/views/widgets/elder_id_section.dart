@@ -6,9 +6,10 @@ import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
 import '../../../../../../../../core/theme/app_colors.dart';
 import '../../../../../../../../core/theme/font_manager.dart';
 import '../../../../../../../../core/theme/font_style.dart';
+import '../../../../../../../../core/user/profile_manager.dart';
 import 'info_raw.dart';
 
-class ElderIdsSection extends StatelessWidget {
+class ElderIdsSection extends StatefulWidget {
   final List<ElderEntity> elder;
   final bool isLoading;
   final bool hasError;
@@ -21,9 +22,25 @@ class ElderIdsSection extends StatelessWidget {
   });
 
   @override
+  State<ElderIdsSection> createState() => _ElderIdsSectionState();
+}
+
+class _ElderIdsSectionState extends State<ElderIdsSection> {
+  int? _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    final savedElder = ProfileManager().selectedElder;
+    if (savedElder != null) {
+      _selectedIndex = widget.elder.indexWhere((e) => e.id == savedElder.id);
+      if (_selectedIndex == -1) _selectedIndex = null;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Loading state
-    if (isLoading) {
+    if (widget.isLoading) {
       return Padding(
         padding: EdgeInsets.all(context.setWidth(16)),
         child: Column(
@@ -41,8 +58,7 @@ class ElderIdsSection extends StatelessWidget {
       );
     }
 
-    // Empty state
-    if (elder.isEmpty) {
+    if (widget.elder.isEmpty) {
       return Column(
         children: [
           InfoRow(
@@ -54,7 +70,6 @@ class ElderIdsSection extends StatelessWidget {
       );
     }
 
-    // Display elders
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -80,9 +95,10 @@ class ElderIdsSection extends StatelessWidget {
         Padding(
           padding: EdgeInsetsDirectional.only(start: context.setWidth(25)),
           child: Column(
-            children: elder.asMap().entries.map<Widget>((entry) {
+            children: widget.elder.asMap().entries.map<Widget>((entry) {
               final elderEntity = entry.value;
               final index = entry.key;
+              final isSelected = _selectedIndex == index;
 
               return Padding(
                 padding: EdgeInsets.only(bottom: context.setHeight(8)),
@@ -90,22 +106,57 @@ class ElderIdsSection extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       backgroundColor: AppColors.blue.withAlpha(80),
-                      radius: context.setMinSize(15),
+                      radius: context.setMinSize(13),
                       child: Text(
                         "${index + 1}",
                         style: getRegularStyle(
                           color: AppColors.blue,
-                          fontSize: FontSize.s14,
+                          fontSize: FontSize.
+                          s12,
                         ),
                       ),
                     ),
                     SizedBox(width: context.setWidth(10)),
                     Expanded(
                       child: Text(
-                        elderEntity.id ?? '',  // ✅ use ElderEntity.id
+                        elderEntity.id ?? '',
                         style: getRegularStyle(
                           color: AppColors.gray[600] ?? AppColors.gray,
-                          fontSize: FontSize.s14,
+                          fontSize: FontSize.s13,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedIndex = isSelected ? null : index;
+                        });
+                        if (!isSelected) {
+                          ProfileManager().selectedElder = elderEntity;
+                        } else {
+                          ProfileManager().selectedElder = null;
+                        }
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        padding: EdgeInsets.all(context.setWidth(6)),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: isSelected ? AppColors.blue : Colors.transparent,
+                          border: Border.all(
+                            color: AppColors.blue,
+                            width: 1.2,
+                          ),
+                        ),
+                        child: isSelected
+                            ? Icon(
+                          Icons.check,
+                          size: context.setSp(12),
+                          color: AppColors.white,
+                        )
+                            : SizedBox(
+                          width: context.setSp(12),
+                          height: context.setSp(12),
                         ),
                       ),
                     ),

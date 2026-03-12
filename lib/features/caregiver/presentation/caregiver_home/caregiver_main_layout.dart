@@ -36,8 +36,11 @@ class _CaregiverMainLayoutState extends State<CaregiverMainLayout> {
     return Stack(
       children: [
         BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
+    MediaQuery.removePadding(
+    context: context,
+    removeBottom: true,
+        child:
         Scaffold(
-          extendBody: true,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             centerTitle: true,
@@ -53,6 +56,7 @@ class _CaregiverMainLayoutState extends State<CaregiverMainLayout> {
             ),
           ),
           endDrawer: SettingDrawer(),
+          extendBody: true,
           body: taps[currentIndex],
           bottomNavigationBar: Padding(
             padding:  EdgeInsets.all(context.setHeight(15)),
@@ -92,6 +96,7 @@ class _CaregiverMainLayoutState extends State<CaregiverMainLayout> {
             ),
           ),
         ),
+    ),
       ],
     );
   }

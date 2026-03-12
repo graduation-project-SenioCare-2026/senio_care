@@ -25,6 +25,7 @@ class CaregiverEditProfileBloc
   final relationShipController = TextEditingController();
   final genderController = TextEditingController();
   final elderIdController = TextEditingController();
+  List<String> initialElderIds = [];
 
   CaregiverEditProfileBloc(
       this._caregiverByIdUseCase,
@@ -48,6 +49,9 @@ class CaregiverEditProfileBloc
     genderController.text = caregiver?.gender ?? '';
 
     final elders = caregiver?.elders ?? [];
+
+    initialElderIds =
+        elders.map((e) => e.id).whereType<String>().toList();
 
     emit(
       state.copyWith(

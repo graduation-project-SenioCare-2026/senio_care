@@ -9,6 +9,7 @@ import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/core/theme/app_theme.dart';
 import 'package:senio_care/firebase_options.dart';
 import 'config/di/di.dart';
+import 'core/cache/secure_storage_service.dart';
 import 'core/responsive/size_provider.dart';
 import 'features/auth/presentation/view_model/user_session_view_model/user_session_bloc.dart';
 
@@ -21,7 +22,7 @@ void main() async {
   );
   await configureDependencies();
 // In your app, add a button or run this once
-//    await getIt<SecureStorageService>(). clearSession();
+  // await getIt<SecureStorageService>(). clearSession();
 
   runApp(
     EasyLocalization(
