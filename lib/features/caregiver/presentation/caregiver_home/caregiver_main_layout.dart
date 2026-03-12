@@ -36,6 +36,10 @@ class _CaregiverMainLayoutState extends State<CaregiverMainLayout> {
     return Stack(
       children: [
         BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
+    MediaQuery.removePadding(
+    context: context,
+    removeBottom: true,
+        child:
         Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -91,6 +95,7 @@ class _CaregiverMainLayoutState extends State<CaregiverMainLayout> {
             ),
           ),
         ),
+    ),
       ],
     );
   }
