@@ -24,7 +24,7 @@ class CaregiverProfileBody extends StatelessWidget {
     return BlocBuilder<CaregiverEditProfileBloc, CaregiverEditProfileState>(
       builder: (BuildContext context, state) {
         final caregiver = state.getCaregiverProfileState.data;
-        final elders=state.getElderState.data??[];
+        final elders = state.getElderState.data ?? [];
         final isLoading = state.getElderState.isLoading;
         return Scaffold(
           body: Skeletonizer(
@@ -35,6 +35,16 @@ class CaregiverProfileBody extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   centerTitle: true,
                   elevation: 0,
+                  leading: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: AppColors.black,
+                      size: context.setWidth(25),
+                    ),
+                  ),
                   title: Text(
                     "personalInformation".tr(),
                     style: getBoldStyle(
@@ -114,7 +124,10 @@ class CaregiverProfileBody extends StatelessWidget {
                               value: caregiver?.relationship,
                             ),
                             const Divider(),
-                            ElderIdsSection(elder: elders,isLoading: isLoading,),
+                            ElderIdsSection(
+                              elder: elders,
+                              isLoading: isLoading,
+                            ),
                           ],
                         ),
                       ),

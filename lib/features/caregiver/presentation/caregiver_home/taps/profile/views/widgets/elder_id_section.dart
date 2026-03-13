@@ -31,6 +31,13 @@ class _ElderIdsSectionState extends State<ElderIdsSection> {
   @override
   void initState() {
     super.initState();
+
+    if (widget.elder.length == 1) {
+      _selectedIndex = 0;
+      ProfileManager().selectedElder = widget.elder.first;
+      return;
+    }
+
     final savedElder = ProfileManager().selectedElder;
     if (savedElder != null) {
       _selectedIndex = widget.elder.indexWhere((e) => e.id == savedElder.id);
@@ -63,7 +70,7 @@ class _ElderIdsSectionState extends State<ElderIdsSection> {
         children: [
           InfoRow(
             label: "elders".tr(),
-            icon: Icons.person_outline,
+            icon: Icons.elderly,
             value: "noElders".tr(),
           ),
         ],

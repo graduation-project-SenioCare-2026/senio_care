@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
@@ -9,14 +8,14 @@ import '../../../../../../../../core/theme/font_style.dart';
 
 class InfoRow extends StatelessWidget {
   final IconData? icon;
-  final String? label;
+  final String label;
   final String? value;
   final bool copyEnabled;
   final String? dataToCopy;
 
   const InfoRow({
     this.icon,
-    this.label,
+    required this.label,
     this.value,
     super.key,
     this.copyEnabled = false,
@@ -26,46 +25,51 @@ class InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(icon, size: context.setWidth(25), color: AppColors.gray[600]),
         SizedBox(width: context.setWidth(8)),
-
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "$label",
+                    label,
                     style: getBoldStyle(
                       color: AppColors.black,
                       fontSize: FontSize.s16,
                     ),
                   ),
-                  if (copyEnabled && dataToCopy != null)
-                    IconButton(
-                      onPressed: () {
-                        Clipboard.setData(ClipboardData(text: dataToCopy!));
-                      },
-                      icon: Icon(
-                        Icons.copy,
-                        size: context.setWidth(20),
-                        color: AppColors.gray[600],
+                  if (value != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: Text(
+                        value!,
+                        style: getRegularStyle(
+                          color: AppColors.gray[700] ?? AppColors.gray,
+                          fontSize: FontSize.s16,
+                        ),
                       ),
                     ),
                 ],
               ),
-              Text(
-                value ?? "notProvided".tr(),
-                overflow: TextOverflow.ellipsis,
-                style: getRegularStyle(
-                  color: AppColors.gray[600] ?? AppColors.gray,
-                  fontSize: FontSize.s14,
+              if (copyEnabled && dataToCopy != null)
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: dataToCopy!));
+                  },
+                  icon: Icon(
+                    Icons.copy,
+                    size: context.setWidth(20),
+                    color: AppColors.gray[600],
+                  ),
                 ),
-              ),
-
             ],
           ),
         ),

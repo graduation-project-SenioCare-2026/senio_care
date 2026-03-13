@@ -8,6 +8,7 @@ import 'package:senio_care/core/theme/font_style.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/view_model/caregiver_edit_profile_bloc.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/view_model/caregiver_edit_profile_event.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/view_model/caregiver_edit_profile_state.dart';
+import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
 
 class ElderIdsEditSection extends StatefulWidget {
   const ElderIdsEditSection({super.key});
@@ -18,23 +19,12 @@ class ElderIdsEditSection extends StatefulWidget {
 
 class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
   final TextEditingController _elderIdController = TextEditingController();
-  bool _isAddingElder = false;
-  bool _isRemovingElder = false;
+  List<ElderEntity> _cachedElders = [];
 
   @override
   void dispose() {
     _elderIdController.dispose();
     super.dispose();
-  }
-
-  void _showSuccessMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.green,
-        duration: const Duration(seconds: 2),
-      ),
-    );
   }
 
   void _showErrorMessage(String message) {
@@ -51,37 +41,17 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
   Widget build(BuildContext context) {
     return BlocConsumer<CaregiverEditProfileBloc, CaregiverEditProfileState>(
       listenWhen: (prev, curr) => prev.getElderState != curr.getElderState,
-      listener: (context, state) {
-        if (_isAddingElder) {
-          if (state.getElderState.isSuccess) {
-            _showSuccessMessage("elderAddedSuccessfully".tr());
-            setState(() => _isAddingElder = false);
-          } else if (state.getElderState.isFailure) {
-            final error =
-                state.getElderState.error?.message ?? "failedToAddElder".tr();
-            _showErrorMessage(error);
-            setState(() => _isAddingElder = false);
-          }
-        }
-
-        if (_isRemovingElder) {
-          if (state.getElderState.isSuccess) {
-            _showSuccessMessage("elderRemovedSuccessfully".tr());
-            setState(() => _isRemovingElder = false);
-          } else if (state.getElderState.isFailure) {
-            final error =
-                state.getElderState.error?.message ??
-                "failedToRemoveElder".tr();
-            _showErrorMessage(error);
-            setState(() => _isRemovingElder = false);
-          }
-        }
-      },
+      listener: (context, state) {},
       buildWhen: (prev, curr) => prev.getElderState != curr.getElderState,
       builder: (context, state) {
-        final elders = state.getElderState.data ?? [];
         final isLoading = state.getElderState.isLoading;
         final hasError = state.getElderState.isFailure;
+
+        if (state.getElderState.data != null) {
+          _cachedElders = state.getElderState.data!;
+        }
+
+        final elders = _cachedElders;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,80 +65,73 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
               ),
             ),
             SizedBox(height: context.setHeight(12)),
-
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _elderIdController,
-                        enabled: !isLoading,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.person_add,
-                            color: AppColors.blue,
-                          ),
-                          hintText: "enterElderId".tr(),
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: AppColors.gray[300] ?? Colors.grey,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: AppColors.gray[300] ?? Colors.grey,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: AppColors.blue,
-                              width: 2,
-                            ),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: context.setWidth(12),
-                            vertical: context.setHeight(12),
-                          ),
+                Expanded(
+                  child: TextField(
+                    controller: _elderIdController,
+                    enabled: !isLoading,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.person_add,
+                        color: AppColors.blue,
+                      ),
+                      hintText: "enterElderId".tr(),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: AppColors.gray[300] ?? Colors.grey,
                         ),
                       ),
-                    ),
-                    SizedBox(width: context.setWidth(8)),
-                    GestureDetector(
-                      onTap: () {
-                        final id = _elderIdController.text.trim();
-                        if (id.isEmpty) {
-                          _showErrorMessage("pleaseEnterElderId".tr());
-                          return;
-                        }
-                        if (elders.any((e) => e.id == id)) {
-                          _showErrorMessage("elderIdAlreadyExists".tr());
-                          return;
-                        }
-                        setState(() => _isAddingElder = true);
-                        context.read<CaregiverEditProfileBloc>().add(
-                          AddElderId(id),
-                        );
-                        _elderIdController.clear();
-                      },
-                      child: Icon(
-                        Icons.add,
-                        color: Colors.black,
-                        size: context.setMinSize(24),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: AppColors.gray[300] ?? Colors.grey,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: AppColors.blue,
+                          width: 2,
+                        ),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: context.setWidth(12),
+                        vertical: context.setHeight(12),
                       ),
                     ),
-                  ],
+                  ),
+                ),
+                SizedBox(width: context.setWidth(8)),
+                GestureDetector(
+                  onTap: () {
+                    final id = _elderIdController.text.trim();
+                    if (id.isEmpty) {
+                      _showErrorMessage("pleaseEnterElderId".tr());
+                      return;
+                    }
+                    if (elders.any((e) => e.id == id)) {
+                      _showErrorMessage("elderIdAlreadyExists".tr());
+                      return;
+                    }
+                    context.read<CaregiverEditProfileBloc>().add(
+                      AddElderId(id),
+                    );
+                    _elderIdController.clear();
+                  },
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.black,
+                    size: context.setMinSize(24),
+                  ),
                 ),
               ],
             ),
             SizedBox(height: context.setHeight(16)),
-            if (!isLoading && elders.isNotEmpty)
+            if (elders.isNotEmpty)
               Column(
                 children: elders.asMap().entries.map((entry) {
                   final elder = entry.value;
@@ -200,22 +163,16 @@ class _ElderIdsEditSectionState extends State<ElderIdsEditSection> {
                           ),
                           SizedBox(width: context.setWidth(12)),
                           Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  elder.id ?? '',
-                                  style: getRegularStyle(
-                                    color: AppColors.black,
-                                    fontSize: FontSize.s14,
-                                  ),
-                                ),
-                              ],
+                            child: Text(
+                              elder.id ?? '',
+                              style: getRegularStyle(
+                                color: AppColors.black,
+                                fontSize: FontSize.s14,
+                              ),
                             ),
                           ),
                           GestureDetector(
                             onTap: () {
-                              setState(() => _isRemovingElder = true);
                               context.read<CaregiverEditProfileBloc>().add(
                                 RemoveElderId(elder.id ?? ''),
                               );

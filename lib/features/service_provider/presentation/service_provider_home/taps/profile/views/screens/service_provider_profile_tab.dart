@@ -26,37 +26,6 @@ class ServiceProviderProfileTab extends StatelessWidget {
             enabled: state.getServiceProviderStatus.isLoading,
             child: CustomScrollView(
               slivers: [
-                // SliverAppBar(
-                //   // leading: GestureDetector(
-                //   //   onTap: () async {
-                //   //     final wasUpdated = await Navigator.pushNamed(
-                //   //       context,
-                //   //       RoutesNames.serviceProviderEditProfile,
-                //   //     );
-                //   //
-                //   //     if (wasUpdated == true && context.mounted) {
-                //   //       final id = ProfileManager().serviceProvider?.id;
-                //   //       if (id != null) {
-                //   //         context
-                //   //             .read<ServiceProviderEditProfileBloc>()
-                //   //             .add(GetServiceProviderByIdEvent(id));
-                //   //       }
-                //   //     }
-                //   //   },
-                //   //   child: Padding(
-                //   //     padding: EdgeInsetsDirectional.only(
-                //   //       end: context.setWidth(10),
-                //   //     ),
-                //   //     child: Image.asset(
-                //   //       AppIcons.editInfo,
-                //   //       color: AppColors.black,
-                //   //       width: context.setWidth(30),
-                //   //       height: context.setHeight(30),
-                //   //     ),
-                //   //   ),
-                //   // ),
-                // ),
-
                 /// Avatar + Name + Role
                 AvatarContainer(),
 

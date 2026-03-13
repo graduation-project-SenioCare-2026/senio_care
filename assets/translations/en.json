@@ -316,5 +316,7 @@
   "saturday": "Saturday",
   "sunday": "Sunday",
   "shareYourExpertiseWithSeniorsInNeed": "Share your expertise with seniors in need",
-  "startTimeMustBeBeforeEndTime": "Start time must be before end time"
+  "startTimeMustBeBeforeEndTime": "Start time must be before end time",
+  "elderIdAlreadyExists": "Elder ID Already Exists",
+  "pleaseEnterElderId": "Please Enter Elder ID"
 }

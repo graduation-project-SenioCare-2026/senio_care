@@ -66,7 +66,7 @@ class CaregiverOnboardingBody extends StatelessWidget {
                       autoValidateMode: AutovalidateMode.onUserInteraction,
                       hint: '',
                       validator: (_) => Validator.validatePhoneNumber(
-                        bloc.phoneNumberController.text,
+                        bloc.phoneNumberController.text.trim(),
                       ),
                       keyboardType: TextInputType.phone,
                     ),
@@ -76,7 +76,7 @@ class CaregiverOnboardingBody extends StatelessWidget {
                       autoValidateMode: AutovalidateMode.onUserInteraction,
                       hint: "",
                       validator: (_) => Validator.validateRequired(
-                        bloc.relationController.text,
+                        bloc.relationController.text.trim(),
                       ),
                       keyboardType: TextInputType.text,
                     ),
@@ -86,7 +86,7 @@ class CaregiverOnboardingBody extends StatelessWidget {
                       autoValidateMode: AutovalidateMode.onUserInteraction,
                       hint: "",
                       validator: (_) =>
-                          Validator.validateId(bloc.elderIdController.text),
+                          Validator.validateId(bloc.elderIdController.text.trim()),
                       keyboardType: TextInputType.text,
                     ),
 
@@ -112,10 +112,10 @@ class CaregiverOnboardingBody extends StatelessWidget {
                   onPressed: () {
                     if (bloc.formKey.currentState!.validate()) {
                       final request = CaregiverOnboardingRequest(
-                        phoneNumber: bloc.phoneNumberController.text,
+                        phoneNumber: bloc.phoneNumberController.text.trim(),
                         gender: state.selectedGender,
-                        relationship: bloc.relationController.text,
-                        elderIds: [bloc.elderIdController.text],
+                        relationship: bloc.relationController.text.trim(),
+                        elderIds: [bloc.elderIdController.text.trim()],
                       );
 
                       context.read<CaregiverOnboardingBloc>().add(
