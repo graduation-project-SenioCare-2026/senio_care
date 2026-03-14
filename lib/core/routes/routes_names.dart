@@ -22,4 +22,5 @@ abstract class RoutesNames {
   static const String elderMedicalDocumentsScreen="elderMedicalDocumentScreen";
   static const String createDocumentScreen="addDocumentScreen";
   static const String documentDetailsScreen="documentDetailsScreen";
+  static const String elderProfileTabScreen="elderProfileTabScreen";
 }

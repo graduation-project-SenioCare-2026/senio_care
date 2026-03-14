@@ -20,7 +20,8 @@ class SelectImagesEvent extends MedicalDocumentsEvent {
 }
 
 class SaveDocumentEvent extends MedicalDocumentsEvent {
-  const SaveDocumentEvent();
+  final String elderId;
+  const SaveDocumentEvent(this.elderId);
 }
 
 class GetElderDocuments extends MedicalDocumentsEvent {

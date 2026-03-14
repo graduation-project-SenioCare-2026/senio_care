@@ -85,7 +85,9 @@ class DocumentItem extends StatelessWidget {
                               ),
                             ),
                             confirmText: "delete".tr(),
-                            onConfirm: () => bloc.add(DeleteDocumentEvent(document.id)),
+                            onConfirm: () {
+                              bloc.add(DeleteDocumentEvent(document.id));
+                            },
                           );
                         },
                       );
