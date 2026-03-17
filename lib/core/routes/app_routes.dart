@@ -15,6 +15,7 @@ import 'package:senio_care/features/elder/presentation/view/screens/elder_home/e
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_profile/create_document_screen.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_profile/document_details_screen.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_profile/medical_documents_screen.dart';
+import 'package:senio_care/features/elder/presentation/view/screens/elder_home/taps/elder_profile_tab.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_onboarding/elder_onboarding_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/blood_pressure_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/blood_sugar_screen.dart';
@@ -23,6 +24,7 @@ import 'package:senio_care/features/caregiver/presentation/onboarding/views/scre
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/home/views/screens/add_services_screen.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/home/views/screens/edit_service_screen.dart';
 
+import '../../features/auth/domain/entity/elder_entity.dart';
 import '../../features/elder/presentation/view/screens/elder_home/elder_profile/edit_personal_info_screen.dart';
 import '../../features/elder/presentation/view/screens/elder_home/elder_profile/elder_personal_info_screen.dart';
 import '../../features/service_provider/presentation/service_provider_home/service_provider_main_layout.dart';

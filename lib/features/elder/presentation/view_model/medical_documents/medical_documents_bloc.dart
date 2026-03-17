@@ -94,7 +94,7 @@ class MedicalDocumentsBloc
 
         // ── Step 2: Build request from BLoC state ─────────────────────────
         final request = MedicalDocumentRequest(
-          elderId: ProfileManager().elder!.id!,
+          elderId: event.elderId,
           documentName: state.documentName.trim(),
           date: state.selectedDate!.toIso8601String().substring(0, 10),
           images: uploadResult.data,

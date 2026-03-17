@@ -62,7 +62,7 @@ class CaregiverProfileTab extends StatelessWidget {
                       ProfileManager().selectedElder ?? caregiver?.elders?[0];
                   Navigator.pushNamed(
                     context,
-                    RoutesNames.elderPersonalInfoScreen,
+                    RoutesNames.elderProfileTabScreen,
                     arguments: elderToShow,
                   );
                 },
@@ -80,7 +80,7 @@ class CaregiverProfileTab extends StatelessWidget {
                     ),
                     SizedBox(width: context.setWidth(15)),
                     Text(
-                      "elderInformation".tr(),
+                      "elderProfile".tr(),
                       style: getRegularStyle(
                         color: AppColors.black,
                         fontSize: context.setSp(FontSize.s20),

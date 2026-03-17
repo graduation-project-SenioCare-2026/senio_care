@@ -16,26 +16,22 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await configureDependencies();
-// In your app, add a button or run this once
+  // In your app, add a button or run this once
   //await getIt<SecureStorageService>(). clearSession();
 
   runApp(
     EasyLocalization(
       path: 'assets/translations',
-      supportedLocales: const [
-        Locale('en'),
-        Locale('ar'),
-      ],
+      supportedLocales: const [Locale('en'), Locale('ar')],
       startLocale: Locale("en"),
       child: DevicePreview(
         enabled: true,
         builder: (_) => BlocProvider(
           create: (_) => getIt<SessionBloc>(),
-            child: const MyApp()),
+          child: const MyApp(),
+        ),
       ),
     ),
   );

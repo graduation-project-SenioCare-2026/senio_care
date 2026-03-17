@@ -14,12 +14,28 @@ import 'package:senio_care/features/elder/presentation/view_model/medical_docume
 import 'package:senio_care/features/elder/presentation/view_model/medical_documents/medical_documents_event.dart';
 import '../../../widgets/elder_profile/medical_documents/medical_documents_list/medical_documents_view_body.dart';
 
-
-class MedicalDocumentsScreen extends StatelessWidget {
+class MedicalDocumentsScreen extends StatefulWidget {
   const MedicalDocumentsScreen({super.key});
 
   @override
+  State<MedicalDocumentsScreen> createState() => _MedicalDocumentsScreenState();
+}
+
+class _MedicalDocumentsScreenState extends State<MedicalDocumentsScreen> {
+  late String? _elderId;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments;
+    _elderId = (args is String) ? args : ProfileManager().elder?.id;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_elderId == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return Stack(
       children: [
         BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
@@ -27,7 +43,7 @@ class MedicalDocumentsScreen extends StatelessWidget {
           child: BlocProvider(
             create: (context) =>
                 getIt<MedicalDocumentsBloc>()
-                  ..add(GetElderDocuments(ProfileManager().elder!.id!)),
+                  ..add(GetElderDocuments(_elderId!)),
             child: Builder(
               builder: (context) {
                 return Scaffold(
@@ -57,7 +73,7 @@ class MedicalDocumentsScreen extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (_) => BlocProvider.value(
                                 value: bloc,
-                                child: const CreateDocumentScreen(),
+                                child: CreateDocumentScreen(elderId: _elderId!),
                               ),
                             ),
                           );
@@ -86,7 +102,7 @@ class MedicalDocumentsScreen extends StatelessWidget {
                   ),
                   body: MedicalDocumentsViewBody(),
                 );
-              }
+              },
             ),
           ),
         ),

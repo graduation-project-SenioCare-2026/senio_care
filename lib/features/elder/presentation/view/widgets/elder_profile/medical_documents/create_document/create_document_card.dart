@@ -15,7 +15,8 @@ import 'package:senio_care/features/elder/presentation/view_model/medical_docume
 import 'package:senio_care/features/elder/presentation/view_model/medical_documents/medical_documents_state.dart';
 
 class CreateDocumentCard extends StatefulWidget {
-  const CreateDocumentCard({super.key});
+  final String? elderId;
+  const CreateDocumentCard({super.key, this.elderId});
 
   @override
   State<CreateDocumentCard> createState() => _CreateDocumentCardState();
@@ -45,20 +46,32 @@ class _CreateDocumentCardState extends State<CreateDocumentCard> {
     final selectedDate = state.selectedDate ?? DateTime.now();
     context.read<MedicalDocumentsBloc>().add(PickDateEvent(selectedDate));
 
-    context.read<MedicalDocumentsBloc>().add(const SaveDocumentEvent());
+    if (widget.elderId == null || widget.elderId!.isEmpty) {
+      return;
+    }
+
+    context.read<MedicalDocumentsBloc>().add(
+      SaveDocumentEvent(widget.elderId!),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MedicalDocumentsBloc, MedicalDocumentsState>(
       listenWhen: (previous, current) =>
-      previous.createDocumentStatus != current.createDocumentStatus,
+          previous.createDocumentStatus != current.createDocumentStatus,
       listener: (context, state) {
-        if(state.createDocumentStatus.isFailure){
-          Loaders.showErrorMessage(message: state.createDocumentStatus.error!.message, context: context);
+        if (state.createDocumentStatus.isFailure) {
+          Loaders.showErrorMessage(
+            message: state.createDocumentStatus.error!.message,
+            context: context,
+          );
         }
-        if(state.createDocumentStatus.isSuccess){
-          Loaders.showSuccessMessage(message: "documentAddedSuccessfully".tr(), context: context);
+        if (state.createDocumentStatus.isSuccess) {
+          Loaders.showSuccessMessage(
+            message: "documentAddedSuccessfully".tr(),
+            context: context,
+          );
           Navigator.pop(context);
         }
       },

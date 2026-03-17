@@ -8,7 +8,8 @@ import 'package:senio_care/core/theme/font_style.dart';
 import 'package:senio_care/features/elder/presentation/view/widgets/elder_profile/medical_documents/create_document/create_document_card.dart';
 
 class CreateDocumentScreen extends StatelessWidget {
-  const CreateDocumentScreen({super.key});
+  final String? elderId;
+  const CreateDocumentScreen({super.key, this.elderId});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,9 @@ class CreateDocumentScreen extends StatelessWidget {
                 ),
               ),
             ),
-            body: SingleChildScrollView(child: CreateDocumentCard()),
+            body: SingleChildScrollView(
+              child: CreateDocumentCard(elderId: elderId),
+            ),
           ),
         ),
       ],
