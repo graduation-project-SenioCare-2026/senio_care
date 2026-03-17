@@ -154,6 +154,10 @@ abstract class Routes {
         return MaterialPageRoute(
           builder: (context) => DocumentDetailsScreen(document: document),
         );
+      case RoutesNames.elderProfileTabScreen:
+        return MaterialPageRoute(builder: (context) => ElderProfileTap(),
+            settings: setting
+        );
 
       default:
         return MaterialPageRoute(
