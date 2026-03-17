@@ -14,6 +14,7 @@ class SecureStorageService {
   static const _caregiverIdKey = 'caregiver_id';
   static const _elderIdKey = 'elder_id';
   static const _serviceProviderIdKey = 'service_provider_id';
+  static const _userIdKey = 'user_id';
 
   Future<void> saveToken(String token) async =>
       _storage.write(key: _tokenKey, value: token);
@@ -66,6 +67,11 @@ class SecureStorageService {
 
   Future<String?> getAvatar() async => _storage.read(key: _avatarKey);
 
+  Future<void> saveUserId(String id) async =>
+      _storage.write(key: _userIdKey, value: id);
+
+  Future<String?> getUserId() async =>
+      _storage.read(key: _userIdKey);
 
 // Clear all session data including user info
   Future<void> clearSession() async {
@@ -77,5 +83,6 @@ class SecureStorageService {
     await _storage.delete(key: _nameKey);
     await _storage.delete(key: _emailKey);
     await _storage.delete(key: _avatarKey);
+    await _storage.delete(key: _userIdKey);
   }
 }

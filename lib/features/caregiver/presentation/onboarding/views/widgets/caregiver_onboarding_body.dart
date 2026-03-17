@@ -9,6 +9,7 @@ import 'package:senio_care/core/common_widgets/loading_btn.dart';
 import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/routes/routes_names.dart';
+import 'package:senio_care/core/user/user_manager.dart';
 import 'package:senio_care/core/validator/validator.dart';
 import 'package:senio_care/features/caregiver/api/models/request/onboarding/caregiver_onboarding_request.dart';
 import 'package:senio_care/features/caregiver/presentation/onboarding/view_model/caregiver_onboarding_bloc.dart';
@@ -116,6 +117,7 @@ class CaregiverOnboardingBody extends StatelessWidget {
                         gender: state.selectedGender,
                         relationship: bloc.relationController.text.trim(),
                         elderIds: [bloc.elderIdController.text.trim()],
+                          userId: UserManager().userId
                       );
 
                       context.read<CaregiverOnboardingBloc>().add(

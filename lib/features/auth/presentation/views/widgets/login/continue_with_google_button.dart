@@ -25,20 +25,40 @@ class ContinueWithGoogleButton extends StatelessWidget {
             message: "loginSuccess".tr(),
             context: context,
           );
-          if(state.loginStatus.data?.role==UserRole.elder) {
+
+          final user = state.loginStatus.data;
+
+          // ✅ onBoard = true  → profile exists in response → go to home
+          // ✅ onBoard = false → profile was null           → go to onboarding
+          final bool isOnBoarded = user?.onBoard ?? false;
+
+          if (user?.role == UserRole.elder) {
             Navigator.pushNamedAndRemoveUntil(
-              context, RoutesNames.elderOnboarding, (route) => false,);
-          }
-        else if(state.loginStatus.data?.role==UserRole.caregiver){
+              context,
+              isOnBoarded
+                  ? RoutesNames.elderHome
+                  : RoutesNames.elderOnboarding,
+                  (route) => false,
+            );
+          } else if (user?.role == UserRole.caregiver) {
             Navigator.pushNamedAndRemoveUntil(
-              context, RoutesNames.caregiverOnboardingScreen, (route) => false,);
-          }
-        else if(state.loginStatus.data?.role==UserRole.serviceProvider)
-          {
+              context,
+              isOnBoarded
+                  ? RoutesNames.caregiverHome
+                  : RoutesNames.caregiverOnboardingScreen,
+                  (route) => false,
+            );
+          } else if (user?.role == UserRole.serviceProvider) {
             Navigator.pushNamedAndRemoveUntil(
-              context, RoutesNames.serviceProviderOnboardingScreen, (route) => false,);
+              context,
+              isOnBoarded
+                  ? RoutesNames.serviceProviderHome
+                  : RoutesNames.serviceProviderOnboardingScreen,
+                  (route) => false,
+            );
           }
         }
+
         if (state.loginStatus.isFailure) {
           Loaders.showErrorMessage(
             message: state.loginStatus.error!.message,
@@ -48,20 +68,19 @@ class ContinueWithGoogleButton extends StatelessWidget {
         }
       },
       builder: (context, state) {
-         if(state.loginStatus.isLoading) {
-           return LoadingBtn();
-         }
-          return CustomElevatedButton(
-            onPressed: () {
-              context.read<AuthBloc>().add(SignInWithGoogleEvent(role));
-            },
-            buttonLabel: 'continueWithGoogle'.tr(),
-            backgroundColor: AppColors.white,
-            isText: false,
-            buttonIcon: AppIcons.google,
-            labelColor: AppColors.black,
-          );
-
+        if (state.loginStatus.isLoading) {
+          return LoadingBtn();
+        }
+        return CustomElevatedButton(
+          onPressed: () {
+            context.read<AuthBloc>().add(SignInWithGoogleEvent(role));
+          },
+          buttonLabel: 'continueWithGoogle'.tr(),
+          backgroundColor: AppColors.white,
+          isText: false,
+          buttonIcon: AppIcons.google,
+          labelColor: AppColors.black,
+        );
       },
     );
   }

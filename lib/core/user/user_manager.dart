@@ -22,12 +22,26 @@ class UserManager {
   String? get name => _user?.name;
   String? get email => _user?.email;
   String? get avatar => _user?.avatar;
+  String? get userId => _user?.id;
 
   void setUser(UserEntity user) {
     _user = user;
-    _storage.saveName(user.name);
-    _storage.saveEmail(user.email);
-    _storage.saveAvatar(user.avatar);
+
+    if (user.id != null) {
+      _storage.saveUserId(user.id!);
+    }
+
+    if (user.name != null) {
+      _storage.saveName(user.name);
+    }
+
+    if (user.email != null) {
+      _storage.saveEmail(user.email);
+    }
+
+    if (user.avatar != null) {
+      _storage.saveAvatar(user.avatar);
+    }
   }
 
   void clear() {

@@ -106,12 +106,10 @@ abstract class Routes {
           builder: (_) => ElderPersonalInfoScreen(),
           settings: setting,
         );
-        // return MaterialPageRoute(builder: (_) => ElderPersonalInfoScreen());
 
       case RoutesNames.elderEditProfile:
         return MaterialPageRoute(builder: (_) => EditPersonalInfoScreen());
 
-        return MaterialPageRoute(builder: (_) => EditPersonalInfoScreen());
       case RoutesNames.bloodSugarGraph:
         final bloc = setting.arguments as CaregiverGraphBloc;
         return MaterialPageRoute(

@@ -12,10 +12,18 @@ class ServiceProviderOnboardingRequest {
   @JsonKey(name: "gender")
   final String? gender;
 
+  @JsonKey(name: "userId")
+  final String? userId;
+
+  @JsonKey(name: "name")
+  final String? name;
+
   ServiceProviderOnboardingRequest({
     this.phoneNumber,
     this.specialization,
     this.gender,
+    this.name,
+     this.userId
   });
 
   factory ServiceProviderOnboardingRequest.fromJson(Map<String, dynamic> json) {

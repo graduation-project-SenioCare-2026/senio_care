@@ -13,7 +13,7 @@ class MedicalDocumentResponse {
   final String? date;
   @JsonKey(name: "images")
   final List<String>? images;
-  @JsonKey(name: "id")
+  @JsonKey(name: "_id")
   final String? id;
 
   MedicalDocumentResponse({

@@ -10,6 +10,7 @@ import 'package:senio_care/core/loaders/loaders.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
+import 'package:senio_care/core/user/user_manager.dart';
 import 'package:senio_care/core/validator/validator.dart';
 import 'package:senio_care/features/service_provider/api/models/request/onboarding/service_provider_onboarding_request.dart';
 import 'package:senio_care/features/service_provider/presentation/onboarding/view_model/service_provider_bloc.dart';
@@ -111,7 +112,8 @@ class ServiceProviderOnboardingBody extends StatelessWidget {
                       final request = ServiceProviderOnboardingRequest(
                         phoneNumber: bloc.phoneNumberController.text,
                         specialization: bloc.specializationController.text,
-                        gender: state.selectedGender
+                        gender: state.selectedGender,
+userId: UserManager().userId
                       );
                       bloc.add(ServiceProviderSubmitDataEvent(request));
                     }

@@ -5,6 +5,7 @@ import 'package:senio_care/core/common_widgets/custom_elevated_button.dart';
 import 'package:senio_care/core/common_widgets/loading_btn.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
+import 'package:senio_care/core/user/user_manager.dart';
 import 'package:senio_care/features/elder/api/models/request/onboarding/elder_onboarding_request.dart';
 import 'package:senio_care/features/elder/presentation/view_model/elder_onboarding/elder_onboarding_bloc.dart';
 import 'package:senio_care/features/elder/presentation/view_model/elder_onboarding/elder_onboarding_event.dart';
@@ -73,6 +74,7 @@ class ElderOnboardingActions extends StatelessWidget {
                     bloodType: state.selectedBloodType?.type,
                     mobilityStatus: state.selectedMobilityState?.en,
                     caregiverIds: state.caregiverIds,
+userId: UserManager().userId
                   );
                   bloc.add(SubmitElderOnboardingDataEvent(request: request));
                 }
