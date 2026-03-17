@@ -3,7 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:injectable/injectable.dart';
 import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
-import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/features/elder/api/models/request/medical_document_request.dart';
 import 'package:senio_care/features/elder/domain/entity/medical_document_entity.dart';
 import 'package:senio_care/features/elder/domain/use_case/cloudinary/upload_images_to_cloudinary_use_case.dart';

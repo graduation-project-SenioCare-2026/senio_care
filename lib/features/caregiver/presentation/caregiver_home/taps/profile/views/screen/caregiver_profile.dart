@@ -8,7 +8,6 @@ import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/p
 import '../../../../../../../../core/common_widgets/bg_gradient.dart';
 import '../../../../../../../../core/theme/app_colors.dart';
 import '../../../../../../../../core/user/profile_manager.dart';
-import '../../../../../../../../core/user/user_manager.dart';
 
 class CaregiverProfile extends StatelessWidget {
   const CaregiverProfile({super.key});
