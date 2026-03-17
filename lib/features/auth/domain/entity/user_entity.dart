@@ -1,21 +1,24 @@
-import 'package:equatable/equatable.dart';
 import 'package:senio_care/core/user/user_manager.dart';
 
-class UserEntity extends Equatable{
+class UserEntity {
   final String? id;
   final String? name;
   final String? email;
   final String? avatar;
   final UserRole? role;
 
-  const UserEntity ({
+  /// true  → profile existed in login response → skip onboarding, go to home
+  /// false → profile was null in login response → show onboarding screen
+  final bool onBoard;
+
+  UserEntity({
     this.id,
     this.name,
     this.email,
     this.avatar,
     this.role,
+    this.onBoard = false,
   });
-
 
   UserEntity copyWith({
     String? id,
@@ -23,6 +26,7 @@ class UserEntity extends Equatable{
     String? email,
     String? avatar,
     UserRole? role,
+    bool? onBoard,
   }) {
     return UserEntity(
       id: id ?? this.id,
@@ -30,26 +34,7 @@ class UserEntity extends Equatable{
       email: email ?? this.email,
       avatar: avatar ?? this.avatar,
       role: role ?? this.role,
+      onBoard: onBoard ?? this.onBoard,
     );
   }
-
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'email': email,
-    'avatar': avatar,
-    'role': role?.name,
-  };
-
-
-  factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
-    id: json['id'],
-    name: json['name'],
-    email: json['email'],
-    avatar: json['avatar'],
-    role: json['role'] != null ? UserRole.values.firstWhere((r) => r.name == json['role']) : null,
-  );
-
-  @override
-  List<Object?> get props => [id,name,email,avatar,role];
 }

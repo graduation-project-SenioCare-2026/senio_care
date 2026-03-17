@@ -18,6 +18,10 @@ class ServiceProviderProfileTab extends StatelessWidget {
       ServiceProviderEditProfileBloc,
       ServiceProviderEditProfileState
     >(
+      buildWhen: (previous, current) {
+        return previous.getServiceProviderStatus !=
+            current.getServiceProviderStatus;
+      },
       builder: (context, state) {
         final serviceProvider = state.getServiceProviderStatus.data;
 
@@ -71,28 +75,31 @@ class ServiceProviderProfileTab extends StatelessWidget {
                       elevation: 3,
                       child: Padding(
                         padding: EdgeInsets.all(context.setWidth(14)),
-                        child: Column(
-                          children: [
-                            InfoRow(
-                              icon: Icons.phone,
-                              label: "Phone",
-                              value: serviceProvider?.phoneNumber,
-                            ),
-                            const Divider(),
-                            InfoRow(
-                              label: "gender".tr(),
-                              icon: serviceProvider?.gender == 'male'
-                                  ? Icons.male
-                                  : Icons.female,
-                              value: serviceProvider?.gender,
-                            ),
-                            const Divider(),
-                            InfoRow(
-                              icon: Icons.work,
-                              label: "Specialization",
-                              value: serviceProvider?.specialization,
-                            ),
-                          ],
+                        child: Skeletonizer(
+                          enabled: state.getServiceProviderStatus.isLoading,
+                          child: Column(
+                            children: [
+                              InfoRow(
+                                icon: Icons.phone,
+                                label: "Phone",
+                                value: serviceProvider?.phoneNumber,
+                              ),
+                              const Divider(),
+                              InfoRow(
+                                label: "gender".tr(),
+                                icon: serviceProvider?.gender == 'male'
+                                    ? Icons.male
+                                    : Icons.female,
+                                value: serviceProvider?.gender,
+                              ),
+                              const Divider(),
+                              InfoRow(
+                                icon: Icons.work,
+                                label: "Specialization",
+                                value: serviceProvider?.specialization,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

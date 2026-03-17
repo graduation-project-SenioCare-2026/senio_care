@@ -46,15 +46,20 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     final name = await _secureStorage.getName();
     final email = await _secureStorage.getEmail();
     final avatar = await _secureStorage.getAvatar();
+    final userId = await _secureStorage.getUserId();
+
 
     if (name != null || email != null) {
-      UserManager().setUser(
-        UserEntity(
-          name: name,
-          email: email,
-          avatar: avatar,
-        ),
-      );
+      if (userId != null) {
+        UserManager().setUser(
+          UserEntity(
+            id: userId,
+            name: name,
+            email: email,
+            avatar: avatar,
+          ),
+        );
+      }
     }
 
     final role = (await _secureStorage.getRole())?.toUserRole();
@@ -126,7 +131,12 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
           case Success<ServiceProviderEntity>():
             ProfileManager().serviceProvider = result.data;
 
-            final currentUser = UserManager().user!;
+            final currentUser = UserManager().user;
+
+            if (currentUser == null) {
+              emit(state.copyWith(sessionChecked: true));
+              return;
+            }
             UserManager().setUser(
               currentUser.copyWith(
                 id: result.data.id,

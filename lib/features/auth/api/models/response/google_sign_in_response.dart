@@ -7,26 +7,31 @@ part 'google_sign_in_response.g.dart';
 class GoogleSignInResponse {
   @JsonKey(name: "message")
   final String? message;
+
   @JsonKey(name: "token")
   final String? token;
+
   @JsonKey(name: "user")
   final UserResponse? user;
 
-  GoogleSignInResponse ({
+  @JsonKey(name: "role")
+  final String? role;
+
+  /// null  → first-time user, never onboarded
+  /// non-null → returning user, profile already exists
+  @JsonKey(name: "profile")
+  final Map<String, dynamic>? profile;
+
+  GoogleSignInResponse({
     this.message,
     this.token,
     this.user,
+    this.role,
+    this.profile,
   });
 
-  factory GoogleSignInResponse.fromJson(Map<String, dynamic> json) {
-    return _$GoogleSignInResponseFromJson(json);
-  }
+  factory GoogleSignInResponse.fromJson(Map<String, dynamic> json) =>
+      _$GoogleSignInResponseFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    return _$GoogleSignInResponseToJson(this);
-  }
-
+  Map<String, dynamic> toJson() => _$GoogleSignInResponseToJson(this);
 }
-
-
-

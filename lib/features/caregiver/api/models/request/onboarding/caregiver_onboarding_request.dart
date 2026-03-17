@@ -14,11 +14,15 @@ class CaregiverOnboardingRequest {
   @JsonKey(name: "relationship")
   final String? relationship;
 
+  @JsonKey(name: "userId")
+  final String? userId;
+
   CaregiverOnboardingRequest({
     this.phoneNumber,
     this.elderIds,
     this.gender,
     this.relationship,
+     this.userId
   });
 
   factory CaregiverOnboardingRequest.fromJson(Map<String, dynamic> json) {

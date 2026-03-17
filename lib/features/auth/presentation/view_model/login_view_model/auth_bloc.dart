@@ -44,13 +44,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     switch (result) {
       case Success<UserEntity>():
-        UserManager().setUser(
-          UserEntity(
-            name: result.data.name,
-            email: result.data.email,
-            avatar: result.data.avatar,
-          ),
-        );
+      // ✅ Pass result.data directly — preserves role and onBoard flag
+      // that were set in auth_remote_ds_impl
+        UserManager().setUser(result.data);
 
         emit(state.copyWith(
           loginStatus: StateStatus.success(result.data),
@@ -58,14 +54,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         break;
 
       case Failure<UserEntity>():
-        emit(
-          state.copyWith(
-            loginStatus: StateStatus.failure(result.responseException),
-          ),
-        );
+        emit(state.copyWith(
+          loginStatus: StateStatus.failure(result.responseException),
+        ));
         break;
     }
   }
+
+  // The three methods below are only used after onboarding completes
+  // to fetch and store the newly created profile entity
 
   Future<void> _getElderById(
       GetElderByIdEvent event,
@@ -93,11 +90,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         break;
 
       case Failure<ElderEntity>():
-        emit(
-          state.copyWith(
-            getElderStatus: StateStatus.failure(result.responseException),
-          ),
-        );
+        emit(state.copyWith(
+          getElderStatus: StateStatus.failure(result.responseException),
+        ));
         break;
     }
   }
@@ -128,12 +123,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         break;
 
       case Failure<CaregiverEntity>():
-        emit(
-          state.copyWith(
-            getCaregiverStatus:
-            StateStatus.failure(result.responseException),
-          ),
-        );
+        emit(state.copyWith(
+          getCaregiverStatus: StateStatus.failure(result.responseException),
+        ));
         break;
     }
   }
@@ -159,19 +151,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
 
         emit(state.copyWith(
-          getServiceProviderStatus:
-          StateStatus.success(result.data),
+          getServiceProviderStatus: StateStatus.success(result.data),
         ));
         break;
 
       case Failure<ServiceProviderEntity>():
-        emit(
-          state.copyWith(
-            getServiceProviderStatus: StateStatus.failure(
-              result.responseException,
-            ),
-          ),
-        );
+        emit(state.copyWith(
+          getServiceProviderStatus: StateStatus.failure(result.responseException),
+        ));
         break;
     }
   }

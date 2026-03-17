@@ -22,6 +22,8 @@ class ElderOnboardingRequest{
   final String? bloodType;
   @JsonKey(name: "mobilityStatus")
   final String? mobilityStatus;
+  @JsonKey(name: "userId")
+  final String? userId;
 
   ElderOnboardingRequest ({
     this.age,
@@ -33,6 +35,7 @@ class ElderOnboardingRequest{
     this.caregiverIds,
     this.bloodType,
     this.mobilityStatus,
+     this.userId
   });
 
   factory ElderOnboardingRequest.fromJson(Map<String, dynamic> json) {
