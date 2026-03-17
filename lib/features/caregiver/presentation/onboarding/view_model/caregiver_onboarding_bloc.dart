@@ -47,7 +47,7 @@ class CaregiverOnboardingBloc
       case Success<CaregiverEntity>():
         ProfileManager().caregiver = result.data;
 
-        await _secureStorage.saveCaregiverId(result.data.id ?? '');
+        await _secureStorage.saveCaregiverId(result.data.id !);
         await _secureStorage.saveRole(UserRole.caregiver.name);
 
         final currentUser = UserManager().user!;

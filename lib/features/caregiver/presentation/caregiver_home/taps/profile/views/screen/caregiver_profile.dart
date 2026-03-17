@@ -16,7 +16,7 @@ class CaregiverProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final caregiverId =
-        ProfileManager().caregiver?.id;
+        ProfileManager().caregiver?.id ;
 
     if (caregiverId == null) {
       return Scaffold(body: Center(child: Text("caregiver_not_found".tr())));

@@ -51,7 +51,7 @@ class InfoRow extends StatelessWidget {
                         value!,
                         style: getRegularStyle(
                           color: AppColors.gray[700] ?? AppColors.gray,
-                          fontSize: FontSize.s16,
+                          fontSize: FontSize.s14,
                         ),
                       ),
                     ),
