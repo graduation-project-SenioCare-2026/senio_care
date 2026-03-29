@@ -323,6 +323,10 @@
   "saturday": "السبت",
   "sunday": "الاحد",
   "shareYourExpertiseWithSeniorsInNeed": "شارك خبرتك مع كبار السن المحتاجين",
-  "startTimeMustBeBeforeEndTime": "وقت البداية يجب أن يكون قبل وقت النهاية"
-
+  "startTimeMustBeBeforeEndTime": "وقت البداية يجب أن يكون قبل وقت النهاية",
+  "tablet": "قرص",
+  "capsule": "كبسولة",
+  "ml": "مل",
+  "drop": "نقطه",
+  "gm": "جم"
 }

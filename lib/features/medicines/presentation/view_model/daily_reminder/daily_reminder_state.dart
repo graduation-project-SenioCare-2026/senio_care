@@ -1,6 +1,31 @@
-part of 'daily_reminder_bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:senio_care/core/state_status/state_status.dart';
+import 'package:senio_care/features/medicines/domain/entity/daily_reminder_entity.dart';
 
-@immutable
-sealed class DailyReminderState {}
+class DailyReminderState extends Equatable {
+  final StateStatus<List<DailyReminderEntity>> getDailyReminderState;
+  final String selectedDate;
 
-final class DailyReminderInitial extends DailyReminderState {}
+  DailyReminderState({
+    this.getDailyReminderState = const StateStatus.initial(),
+    String? selectedDate,
+  }) : selectedDate = selectedDate ?? _todayFormatted();
+
+  static String _todayFormatted() {
+    final now = DateTime.now();
+    return '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+  }
+
+  DailyReminderState copyWith({
+    StateStatus<List<DailyReminderEntity>>? getDailyReminderState,
+    String? selectedDate,
+  }) {
+    return DailyReminderState(
+      getDailyReminderState: getDailyReminderState ?? this.getDailyReminderState,
+      selectedDate: selectedDate ?? this.selectedDate,
+    );
+  }
+
+  @override
+  List<Object?> get props => [getDailyReminderState, selectedDate];
+}

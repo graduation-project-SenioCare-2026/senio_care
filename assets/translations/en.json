@@ -318,5 +318,10 @@
   "shareYourExpertiseWithSeniorsInNeed": "Share your expertise with seniors in need",
   "startTimeMustBeBeforeEndTime": "Start time must be before end time",
   "elderIdAlreadyExists": "Elder ID Already Exists",
-  "pleaseEnterElderId": "Please Enter Elder ID"
+  "pleaseEnterElderId": "Please Enter Elder ID",
+  "tablet": "tablet",
+  "capsule": "capsule",
+  "ml": "ml",
+  "drop": "drop",
+  "gm": "gm"
 }
