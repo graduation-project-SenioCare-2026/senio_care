@@ -17,4 +17,6 @@ abstract class EndPointsConstants {
   static const String deleteService="/services/{id}";
   static const String editService="/services/{id}";
 
+  static const String addMedicine="/daily-medicines/";
+
 }

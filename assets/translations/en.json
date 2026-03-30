@@ -318,5 +318,28 @@
   "shareYourExpertiseWithSeniorsInNeed": "Share your expertise with seniors in need",
   "startTimeMustBeBeforeEndTime": "Start time must be before end time",
   "elderIdAlreadyExists": "Elder ID Already Exists",
-  "pleaseEnterElderId": "Please Enter Elder ID"
+  "pleaseEnterElderId": "Please Enter Elder ID",
+
+  "addNewReminder": "Add New Reminder",
+  "dosage": "Dosage",
+  "medicineType": "Medicine Type",
+  "pleaseAddAtLeastOneReminderTime": "Please add at least one reminder time",
+  "pleaseFillInNameDosageAndType": "Please fill in name, dosage and type",
+  "selectType": "Select Type",
+  "noTimesAddedYet": "No Times Added Yet",
+  "reminderTimes": "Reminder Times",
+  "startDate": "Start Date",
+  "autoSetTo3MonthsFromStartDateIfNotChosen": "Auto set to 3 months from start date if not chosen",
+  "endDate(default+3Months)": "End Date(default +3 Months)",
+  "endDate": "End Date",
+  "notes(optional)": "Notes (optional)",
+  "tablet": "Tablet",
+  "capsule": "Capsule",
+  "syrup": "Syrup",
+  "injection": "Injection",
+  "drops": "Drops",
+  "cream": "Cream",
+  "inhaler": "Inhaler",
+  "patch": "Patch"
+
 }

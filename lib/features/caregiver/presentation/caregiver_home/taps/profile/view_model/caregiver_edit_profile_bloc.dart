@@ -77,6 +77,8 @@ class CaregiverEditProfileBloc
       UserManager().setUser(
         currentUser.copyWith(id: result.data.id, role: UserRole.caregiver),
       );
+      print("User is ${ProfileManager().caregiver?.id}");
+      print("User is ${UserManager().userId}");
 
       // ✅ API already returns elders embedded — no extra fetch needed
       final elders = result.data.elders ?? [];

@@ -11,7 +11,9 @@ class CaregiverOnboardingRepoImpl implements CaregiverOnboardingRepo {
   CaregiverOnboardingRepoImpl(this._caregiverRemoteDs);
 
   @override
-  Future<Result<CaregiverEntity>> submitCaregiverOnboardingData(CaregiverOnboardingRequest request) {
+  Future<Result<CaregiverEntity>> submitCaregiverOnboardingData(
+    CaregiverOnboardingRequest request,
+  ) {
     return _caregiverRemoteDs.submitCaregiverOnboardingData(request);
   }
 }
