@@ -12,7 +12,10 @@ class HeaderSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: context.setWidth(18)),
+      padding: EdgeInsets.symmetric(
+        horizontal: context.setWidth(18),
+        vertical: context.setHeight(10),
+      ),
       child: Row(
         children: [
           Text(

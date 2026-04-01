@@ -29,4 +29,12 @@ class DailyReminderRemoteDsImpl implements DailyReminderDs{
    },);
   }
 
+  @override
+  Future<Result<String>> deleteReminder(String id) {
+   return safeCall(() async{
+     final response= await _dailyReminderApiClient.deleteReminder(id);
+     return response;
+   },);
+  }
+
 }

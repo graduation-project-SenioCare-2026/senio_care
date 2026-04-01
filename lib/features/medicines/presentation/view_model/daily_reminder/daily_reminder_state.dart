@@ -7,11 +7,13 @@ class DailyReminderState extends Equatable {
   final StateStatus<List<DailyReminderEntity>> getDailyReminderState;
   final String selectedDate;
   final StateStatus<MedicineEntity> updateReminderState;
+  final StateStatus<String> deleteReminderState;
 
   DailyReminderState({
     this.getDailyReminderState = const StateStatus.initial(),
     String? selectedDate,
     this.updateReminderState = const StateStatus.initial(),
+    this.deleteReminderState = const StateStatus.initial(),
   }) : selectedDate = selectedDate ?? _todayFormatted();
 
   static String _todayFormatted() {
@@ -23,12 +25,14 @@ class DailyReminderState extends Equatable {
     StateStatus<List<DailyReminderEntity>>? getDailyReminderState,
     String? selectedDate,
     StateStatus<MedicineEntity>? updateReminderState,
+    StateStatus<String>? deleteReminderState
   }) {
     return DailyReminderState(
       getDailyReminderState:
           getDailyReminderState ?? this.getDailyReminderState,
       selectedDate: selectedDate ?? this.selectedDate,
       updateReminderState: updateReminderState ?? this.updateReminderState,
+      deleteReminderState: deleteReminderState??this.deleteReminderState
     );
   }
 
@@ -37,5 +41,6 @@ class DailyReminderState extends Equatable {
     getDailyReminderState,
     selectedDate,
     updateReminderState,
+    deleteReminderState
   ];
 }

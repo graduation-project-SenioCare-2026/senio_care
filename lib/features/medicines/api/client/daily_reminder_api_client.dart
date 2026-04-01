@@ -26,4 +26,9 @@ abstract class DailyReminderApiClient {
       @Path("id") String id,
       @Body() UpdateReminderStateRequest request
       );
+
+  @DELETE(EndPointsConstants.deleteReminder)
+  Future<String> deleteReminder(
+      @Path("id") String id,
+      );
 }

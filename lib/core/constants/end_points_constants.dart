@@ -18,4 +18,6 @@ abstract class EndPointsConstants {
   static const String editService = "/services/{id}";
   static const String dailyReminderByDate = "/daily-medicines/elder/{elder_id}";
   static const String updateReminderState="/daily-medicines/{id}/log";
+  static const String deleteReminder="/daily-medicines/{id}";
+
 }

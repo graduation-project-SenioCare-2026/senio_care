@@ -6,6 +6,7 @@ import 'package:senio_care/core/state_status/state_status.dart';
 import 'package:senio_care/core/utils/date_parser.dart';
 import 'package:senio_care/features/medicines/domain/entity/daily_reminder_entity.dart';
 import 'package:senio_care/features/medicines/domain/entity/medicine_entity.dart';
+import 'package:senio_care/features/medicines/domain/use_case/delete_reminder_use_case.dart';
 import 'package:senio_care/features/medicines/domain/use_case/get_daily_reminders_use_case.dart';
 import 'package:senio_care/features/medicines/domain/use_case/update_reminder_state_use_case.dart';
 import 'package:senio_care/features/medicines/presentation/view_model/daily_reminder/daily_reminder_event.dart';
@@ -15,15 +16,18 @@ import 'package:senio_care/features/medicines/presentation/view_model/daily_remi
 class DailyReminderBloc extends Bloc<DailyReminderEvent, DailyReminderState> {
   final GetDailyRemindersUseCase _getDailyRemindersUseCase;
   final UpdateReminderStateUseCase _updateReminderStateUseCase;
+final DeleteReminderUseCase _deleteReminderUseCase;
 
   DailyReminderBloc(
       this._getDailyRemindersUseCase,
       this._updateReminderStateUseCase,
+      this._deleteReminderUseCase
       ) : super(DailyReminderState()) {
     on<GetDailyReminderEvent>(_getDailyReminders);
     on<ChangeDateEvent>(_changeDate);
     on<UpdateReminderStateEvent>(_updateReminderState);
     on<CheckMissedRemindersEvent>(_checkMissedReminders);
+    on<DeleteRemindersEvent>(_deleteReminder);
   }
 
   Future<void> _getDailyReminders(
@@ -146,5 +150,42 @@ class DailyReminderBloc extends Bloc<DailyReminderEvent, DailyReminderState> {
     emit(state.copyWith(
       getDailyReminderState: StateStatus.success(updatedList),
     ));
+  }
+
+  Future<void> _deleteReminder(
+      DeleteRemindersEvent event,
+      Emitter<DailyReminderState> emit,
+      ) async {
+    // حفظ القائمة الحالية قبل الحذف
+    final currentList = state.getDailyReminderState.data ?? [];
+
+    // تحديث القائمة بشكل متفائل: إزالة العنصر قبل الحصول على النتيجة النهائية
+    final updatedList = currentList.where((reminder) => reminder.id != event.id).toList();
+
+    // إرسال حالة تحميل
+    emit(state.copyWith(
+      deleteReminderState: StateStatus.loading(),
+      getDailyReminderState: StateStatus.success(updatedList), // optimistic update
+    ));
+
+    // محاولة الحذف عبر الـ UseCase
+    final result = await _deleteReminderUseCase.call(event.id);
+
+    switch (result) {
+      case Success<String>():
+      // إذا نجح الحذف، تحديث حالة deleteReminderState للنجاح
+        emit(state.copyWith(
+          deleteReminderState: StateStatus.success(result.data),
+        ));
+        break;
+
+      case Failure<String>():
+      // إذا فشل الحذف، إعادة القائمة الأصلية وعرض الخطأ
+        emit(state.copyWith(
+          getDailyReminderState: StateStatus.success(currentList),
+          deleteReminderState: StateStatus.failure(result.responseException),
+        ));
+        break;
+    }
   }
 }

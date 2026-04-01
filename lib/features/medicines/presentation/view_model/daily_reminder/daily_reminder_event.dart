@@ -31,3 +31,9 @@ class UpdateReminderStateEvent extends DailyReminderEvent {
 }
 
 class CheckMissedRemindersEvent extends DailyReminderEvent {}
+
+class DeleteRemindersEvent extends DailyReminderEvent {
+  final String id;
+
+  DeleteRemindersEvent({required this.id});
+}

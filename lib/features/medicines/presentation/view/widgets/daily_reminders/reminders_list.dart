@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:senio_care/core/common_widgets/medication_card.dart';
+import 'package:senio_care/features/medicines/presentation/view/widgets/daily_reminders/medication_card.dart';
 import 'package:senio_care/features/medicines/api/models/request/update_reminder_state_request.dart';
 import 'package:senio_care/features/medicines/domain/entity/daily_reminder_entity.dart';
 import 'package:senio_care/features/medicines/presentation/view_model/daily_reminder/daily_reminder_bloc.dart';
@@ -20,12 +20,9 @@ class RemindersList extends StatefulWidget {
 
   @override
   State<RemindersList> createState() => _RemindersListState();
-
 }
 
 class _RemindersListState extends State<RemindersList> {
-
-
   @override
   Widget build(BuildContext context) {
     return Skeletonizer(
@@ -36,21 +33,19 @@ class _RemindersListState extends State<RemindersList> {
           String currentDate =
               '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
 
-
           return ListView.builder(
             itemCount: widget.reminders.length,
             itemBuilder: (context, index) {
               final reminder = widget.reminders[index];
               bool canTakeMedicine =
                   reminder.state != "taken" &&
-                      reminder.state != "missed" &&
-                      state.selectedDate == currentDate;
+                  reminder.state != "missed" &&
+                  state.selectedDate == currentDate;
               return MedicationCard(
                 reminder: reminder,
                 isTaken: reminder.state == "taken",
                 onTap: canTakeMedicine
                     ? () {
-
                         final request = UpdateReminderStateRequest(
                           date: currentDate,
                           time: reminder.date?.substring(11),
@@ -66,6 +61,9 @@ class _RemindersListState extends State<RemindersList> {
                         );
                       }
                     : () {},
+                onDelete: (context) => context.read<DailyReminderBloc>().add(
+                  DeleteRemindersEvent(id: reminder.id ?? ""),
+                ),
               );
             },
           );

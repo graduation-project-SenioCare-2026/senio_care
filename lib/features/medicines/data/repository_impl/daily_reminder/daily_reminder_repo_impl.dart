@@ -21,4 +21,9 @@ class DailyReminderRepoImpl implements DailyReminderRepo{
   Future<Result<MedicineEntity>> updateReminderState(String id,UpdateReminderStateRequest request) {
     return _dailyReminderDs.updateReminderState(id,request);
   }
+
+  @override
+  Future<Result<String>> deleteReminder(String id) {
+    return _dailyReminderDs.deleteReminder(id);
+  }
 }

@@ -6,4 +6,5 @@ import 'package:senio_care/features/medicines/domain/entity/medicine_entity.dart
 abstract interface class DailyReminderDs {
   Future<Result<List<DailyReminderEntity>>> getDailyReminders(String elderId,String date);
   Future<Result<MedicineEntity>> updateReminderState(String id,UpdateReminderStateRequest request);
+  Future<Result<String>> deleteReminder(String id);
 }
