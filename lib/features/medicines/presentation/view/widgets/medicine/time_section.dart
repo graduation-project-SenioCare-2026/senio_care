@@ -34,7 +34,13 @@ class TimesSection extends StatelessWidget {
       ),
     );
     if (picked != null && context.mounted) {
-      context.read<MedicinesBloc>().add(TimeAdded(picked.format(context)));
+
+      final hour = picked.hourOfPeriod == 0 ? 12 : picked.hourOfPeriod;
+      final minute = picked.minute.toString().padLeft(2, '0');
+      final period = picked.period == DayPeriod.am ? 'AM' : 'PM';
+      final formattedTime = '$hour:$minute $period';
+
+      context.read<MedicinesBloc>().add(TimeAdded(formattedTime));
     }
   }
 
