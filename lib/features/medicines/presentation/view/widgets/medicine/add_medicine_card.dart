@@ -14,8 +14,8 @@ import '../../../../api/models/request/medicine_request.dart';
 import '../../../view_model/medicine/medicine_bloc.dart';
 import '../../../view_model/medicine/medicine_event.dart';
 import '../../../view_model/medicine/medicine_state.dart';
-import 'package:senio_care/features/elder/presentation/view/widgets/elder_onboarding/steps/elder_health_info/multi_select_drop_down/custom_multi_select_dropdown.dart';
 import 'end_date.dart';
+import 'medicine_type.dart';
 import 'start_date.dart';
 import 'time_section.dart';
 
@@ -31,18 +31,39 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
   final _medicineNameController = TextEditingController();
   final _dosageController = TextEditingController();
   final _notesController = TextEditingController();
-  final List<String> _selectedTypes = [];
 
-  static List<String> get _types => [
-    'tablet'.tr(),
-    'capsule'.tr(),
-    'syrup'.tr(),
-    'injection'.tr(),
-    'drops'.tr(),
-    'cream'.tr(),
-    'inhaler'.tr(),
-    'patch'.tr(),
+  String? _selectedType;
+
+  static const List<String> _typeKeys = [
+    'tablet',
+    'capsule',
+    'syrup',
+    'injection',
+    'drops',
+    'cream',
+    'inhaler',
+    'patch',
   ];
+
+  static const Map<String, String> _typeUnits = {
+    'tablet':    'e.g. 1 tablet',
+    'capsule':   'e.g. 1 capsule',
+    'syrup':     'e.g. 5ml',
+    'injection': 'e.g. 1ml',
+    'drops':     'e.g. 2 drops',
+    'cream':     'e.g. 2g',
+    'inhaler':   'e.g. 1 puff',
+    'patch':     'e.g. 1 patch',
+  };
+
+  static List<String> get _types => _typeKeys.map((k) => k.tr()).toList();
+
+  String get _dosageHint {
+    if (_selectedType == null) return 'e.g. 500mg';
+    final index = _types.indexOf(_selectedType!);
+    if (index == -1) return 'e.g. 500mg';
+    return _typeUnits[_typeKeys[index]] ?? 'e.g. 500mg';
+  }
 
   @override
   void dispose() {
@@ -56,7 +77,7 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
     final name = _medicineNameController.text.trim();
     final dosage = _dosageController.text.trim();
 
-    if (name.isEmpty || dosage.isEmpty || _selectedTypes.isEmpty) {
+    if (name.isEmpty || dosage.isEmpty || _selectedType == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('pleaseFillInNameDosageAndType'.tr()),
@@ -77,11 +98,12 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
     }
 
     final fmt = DateFormat('yyyy-MM-dd');
+
     final medicine = MedicineRequest(
       elderId: widget.elderId,
       medicineName: name,
       dosage: dosage,
-      medicineType: _selectedTypes.first,
+      medicineType: _selectedType!,
       times: state.times,
       startDate: fmt.format(state.startDate),
       endDate: fmt.format(state.effectiveEndDate),
@@ -98,13 +120,13 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
   Widget build(BuildContext context) {
     return BlocConsumer<MedicinesBloc, MedicinesState>(
       listenWhen: (prev, curr) =>
-          prev.addMedicineState != curr.addMedicineState,
+      prev.addMedicineState != curr.addMedicineState,
       listener: (context, state) {
         if (state.addMedicineState.isSuccess) {
           _medicineNameController.clear();
           _dosageController.clear();
           _notesController.clear();
-          setState(() => _selectedTypes.clear());
+          setState(() => _selectedType = null);
           Navigator.of(context).pop();
         }
       },
@@ -116,9 +138,9 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
           ),
           child: CustomCard(
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+
                 AppFormField(
                   label: 'medicineName'.tr(),
                   controller: _medicineNameController,
@@ -126,16 +148,8 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
                   validator: (val) => Validator.validateRequired(val),
                 ),
 
-                AppFormField(
-                  label: 'dosage'.tr(),
-                  controller: _dosageController,
-                  hint: 'e.g. 500mg',
-                  validator: (val) => Validator.validateRequired(val),
-                ),
-
                 Text(
-                  "medicineType".tr(),
-                  textAlign: TextAlign.start,
+                  'medicineType'.tr(),
                   style: getBoldStyle(
                     color: AppColors.black,
                     fontSize: context.setSp(FontSize.s16),
@@ -143,42 +157,39 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(
-                    bottom: context.setHeight(15),
-                    top: context.setHeight(15),
+                  padding: EdgeInsets.symmetric(
+                    vertical: context.setHeight(15),
                   ),
-                  child: CustomMultiSelectDropdown<String>(
-                    parentContext: context,
-                    items: _types,
-                    selectedItems: _selectedTypes,
-                    onItemsSelected: (selected) {
+                  child: MedicineTypePicker(
+                    selectedType: _selectedType,
+                    types: _types,
+                    onSelected: (type) {
                       setState(() {
-                        _selectedTypes
-                          ..clear()
-                          ..addAll(selected);
+                        _selectedType = type;
                       });
-                    },
-                    itemAsString: (t) => t,
-                    compareFn: (a, b) => a == b,
-                    hintText: 'selectType'.tr(),
-                    searchHintText: 'search'.tr(),
-                    emptyResultText: 'noResults'.tr(),
-                    doneButtonText: 'done',
-                    enableOtherOption: false,
-                    showChips: true,
-                    onChipDeleted: (item) {
-                      setState(() => _selectedTypes.remove(item));
                     },
                   ),
                 ),
 
+                AppFormField(
+                  label: 'dosage'.tr(),
+                  controller: _dosageController,
+                  hint: _dosageHint,
+                  validator: (val) => Validator.validateRequired(val),
+                ),
+
+                SizedBox(height: context.setHeight(12)),
+
                 TimesSection(times: state.times ?? []),
+
                 SizedBox(height: context.setHeight(12)),
 
                 StartDateField(startDate: state.startDate),
+
                 SizedBox(height: context.setHeight(12)),
 
                 EndDateField(state: state, startDate: state.startDate),
+
                 SizedBox(height: context.setHeight(12)),
 
                 AppFormField(
@@ -193,9 +204,7 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
                 else
                   CustomElevatedButton(
                     width: context.setWidth(300),
-                    onPressed: state.addMedicineState.isLoading
-                        ? null
-                        : () => _submit(context, state),
+                    onPressed: () => _submit(context, state),
                     buttonLabel: 'addMedicine'.tr(),
                   ),
               ],
