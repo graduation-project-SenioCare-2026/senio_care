@@ -1,14 +1,17 @@
 import 'package:equatable/equatable.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
 import 'package:senio_care/features/medicines/domain/entity/daily_reminder_entity.dart';
+import 'package:senio_care/features/medicines/domain/entity/medicine_entity.dart';
 
 class DailyReminderState extends Equatable {
   final StateStatus<List<DailyReminderEntity>> getDailyReminderState;
   final String selectedDate;
+  final StateStatus<MedicineEntity> updateReminderState;
 
   DailyReminderState({
     this.getDailyReminderState = const StateStatus.initial(),
     String? selectedDate,
+    this.updateReminderState = const StateStatus.initial(),
   }) : selectedDate = selectedDate ?? _todayFormatted();
 
   static String _todayFormatted() {
@@ -19,13 +22,20 @@ class DailyReminderState extends Equatable {
   DailyReminderState copyWith({
     StateStatus<List<DailyReminderEntity>>? getDailyReminderState,
     String? selectedDate,
+    StateStatus<MedicineEntity>? updateReminderState,
   }) {
     return DailyReminderState(
-      getDailyReminderState: getDailyReminderState ?? this.getDailyReminderState,
+      getDailyReminderState:
+          getDailyReminderState ?? this.getDailyReminderState,
       selectedDate: selectedDate ?? this.selectedDate,
+      updateReminderState: updateReminderState ?? this.updateReminderState,
     );
   }
 
   @override
-  List<Object?> get props => [getDailyReminderState, selectedDate];
+  List<Object?> get props => [
+    getDailyReminderState,
+    selectedDate,
+    updateReminderState,
+  ];
 }

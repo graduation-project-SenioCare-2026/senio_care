@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:senio_care/core/common_widgets/gradient_icon_container.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/theme/font_style.dart';
 
@@ -22,17 +23,24 @@ class HeaderSection extends StatelessWidget {
             ),
           ),
           const Spacer(),
+
           GradientIconContainer(
             childPadding: 0,
-            width: context.setWidth(35),
-            height: context.setHeight(40),
-            radius: context.setMinSize(25),
-            child: Center(
-              child: Icon(
+            width: 40,
+            height: 40,
+            radius: 25,
+            child: IconButton(
+              /// update navigator here
+              onPressed: () => Navigator.pushNamed(
+                context,
+                RoutesNames.createDocumentScreen,
+              ),
+              icon: Icon(
                 Icons.add,
-                size: context.setMinSize(35),
+                size: context.setMinSize(40),
                 color: AppColors.white,
               ),
+              padding: EdgeInsets.zero,
             ),
           ),
         ],

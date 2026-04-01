@@ -27,7 +27,12 @@ class _ElderDailyRemindersTabState extends State<ElderDailyRemindersTab> {
   void _onDateChanged(DateTime date) {
     final formatted =
         '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-
+    context.read<DailyReminderBloc>().add(
+      ChangeDateEvent(
+        date: formatted,
+        elderId: ProfileManager().elder!.id!,
+      ),
+    );
     context.read<DailyReminderBloc>().add(
       GetDailyReminderEvent(ProfileManager().elder!.id!, formatted),
     );

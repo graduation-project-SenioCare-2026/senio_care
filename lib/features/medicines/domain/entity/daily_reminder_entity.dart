@@ -32,4 +32,26 @@ class DailyReminderEntity extends Equatable {
     notes,
     state,
   ];
+
+  DailyReminderEntity copyWith({
+    String? id,
+    String? elderId,
+    String? medicineName,
+    String? dosage,
+    String? medicineType,
+    String? date,
+    String? notes,
+    String? state,
+  }) {
+    return DailyReminderEntity(
+      id: id ?? this.id,
+      elderId: elderId ?? this.elderId,
+      medicineName: medicineName ?? this.medicineName,
+      dosage: dosage ?? this.dosage,
+      medicineType: medicineType ?? this.medicineType,
+      date: date ?? this.date,
+      notes: notes ?? this.notes,
+      state: state ?? this.state,
+    );
+  }
 }

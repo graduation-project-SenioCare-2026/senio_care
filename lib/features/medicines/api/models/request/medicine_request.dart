@@ -39,8 +39,19 @@ class MedicineRequest {
     return _$MedicineRequestFromJson(json);
   }
 
+
   Map<String, dynamic> toJson() {
-    return _$MedicineRequestToJson(this);
+    final map = <String, dynamic>{};
+    if (elderId != null) map['elder_id'] = elderId;
+    if (medicineName != null) map['medicine_name'] = medicineName;
+    if (dosage != null) map['dosage'] = dosage;
+    if (medicineType != null) map['medicine_type'] = medicineType;
+    if (times != null) map['times'] = times;
+    if (startDate != null) map['start_date'] = startDate;
+    if (endDate != null) map['end_date'] = endDate;
+    if (notes != null) map['notes'] = notes;
+    if (state != null) map['state'] = state;
+    return map;
   }
 }
 
