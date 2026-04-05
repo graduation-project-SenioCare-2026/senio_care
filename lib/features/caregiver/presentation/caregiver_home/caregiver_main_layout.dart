@@ -1,10 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:senio_care/config/di/di.dart';
 import 'package:senio_care/core/common_widgets/setting_drawer.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/screens/caregiver_graph_tab.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/home/views/screens/caregiver_home_tab.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/views/screen/caregiver_profile_tab.dart';
+import 'package:senio_care/features/medicines/presentation/view_model/daily_reminder/daily_reminder_bloc.dart';
 
 import '../../../../core/common_widgets/bg_gradient.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -21,7 +24,9 @@ class CaregiverMainLayout extends StatefulWidget {
 class _CaregiverMainLayoutState extends State<CaregiverMainLayout> {
   int currentIndex = 0;
   List<Widget> taps = [
-    CaregiverHomeTab(),
+    BlocProvider(create: (context) => getIt<DailyReminderBloc>(),
+        child:    CaregiverHomeTab()),
+
     CaregiverGraphTab(),
     CaregiverProfileTab(),
   ];
