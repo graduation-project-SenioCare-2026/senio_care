@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:senio_care/core/enums/medicine_types.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/font_style.dart';
+import 'package:senio_care/core/user/user_manager.dart';
 import 'package:senio_care/core/utils/date_parser.dart';
 import 'package:senio_care/features/medicines/domain/entity/daily_reminder_entity.dart';
 
@@ -19,7 +20,7 @@ class MedicationCard extends StatelessWidget {
     required this.isTaken,
     required this.onTap,
     required this.reminder,
-    required this.onDelete
+    required this.onDelete,
   });
 
   @override
@@ -67,10 +68,7 @@ class MedicationCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(context.setMinSize(16)),
-          border: Border.all(
-            color: color,
-            width: context.setWidth(1.5),
-          ),
+          border: Border.all(color: color, width: context.setWidth(1.5)),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(context.setMinSize(16)),
@@ -90,12 +88,10 @@ class MedicationCard extends StatelessWidget {
               ],
             ),
             child: InkWell(
-              onTap: onTap,
+              onTap: UserManager().role != UserRole.elder ? null : onTap,
               child: Container(
                 padding: EdgeInsets.all(context.setWidth(16)),
-                decoration: BoxDecoration(
-                  color: lightColor,
-                ),
+                decoration: BoxDecoration(color: lightColor),
                 child: Row(
                   children: [
                     Container(

@@ -156,31 +156,25 @@ final DeleteReminderUseCase _deleteReminderUseCase;
       DeleteRemindersEvent event,
       Emitter<DailyReminderState> emit,
       ) async {
-    // حفظ القائمة الحالية قبل الحذف
     final currentList = state.getDailyReminderState.data ?? [];
 
-    // تحديث القائمة بشكل متفائل: إزالة العنصر قبل الحصول على النتيجة النهائية
     final updatedList = currentList.where((reminder) => reminder.id != event.id).toList();
 
-    // إرسال حالة تحميل
     emit(state.copyWith(
       deleteReminderState: StateStatus.loading(),
       getDailyReminderState: StateStatus.success(updatedList), // optimistic update
     ));
 
-    // محاولة الحذف عبر الـ UseCase
     final result = await _deleteReminderUseCase.call(event.id);
 
     switch (result) {
       case Success<String>():
-      // إذا نجح الحذف، تحديث حالة deleteReminderState للنجاح
         emit(state.copyWith(
           deleteReminderState: StateStatus.success(result.data),
         ));
         break;
 
       case Failure<String>():
-      // إذا فشل الحذف، إعادة القائمة الأصلية وعرض الخطأ
         emit(state.copyWith(
           getDailyReminderState: StateStatus.success(currentList),
           deleteReminderState: StateStatus.failure(result.responseException),

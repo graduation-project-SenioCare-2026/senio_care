@@ -13,6 +13,8 @@ class ElderDailyRemindersTab extends StatefulWidget {
 }
 
 class _ElderDailyRemindersTabState extends State<ElderDailyRemindersTab> {
+  final elderId =
+      ProfileManager().selectedElder?.id ?? ProfileManager().elder?.id;
   @override
   void initState() {
     super.initState();
@@ -20,7 +22,7 @@ class _ElderDailyRemindersTabState extends State<ElderDailyRemindersTab> {
     final today = context.read<DailyReminderBloc>().state.selectedDate;
 
     context.read<DailyReminderBloc>().add(
-      GetDailyReminderEvent(ProfileManager().elder!.id!, today),
+      GetDailyReminderEvent(elderId!, today),
     );
   }
 
@@ -28,20 +30,15 @@ class _ElderDailyRemindersTabState extends State<ElderDailyRemindersTab> {
     final formatted =
         '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
     context.read<DailyReminderBloc>().add(
-      ChangeDateEvent(
-        date: formatted,
-        elderId: ProfileManager().elder!.id!,
-      ),
+      ChangeDateEvent(date: formatted, elderId: elderId!),
     );
     context.read<DailyReminderBloc>().add(
-      GetDailyReminderEvent(ProfileManager().elder!.id!, formatted),
+      GetDailyReminderEvent(elderId!, formatted),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return DailyRemindersViewBody(
-      onDateChanged: _onDateChanged,
-    );
+    return DailyRemindersViewBody(onDateChanged: _onDateChanged);
   }
 }
