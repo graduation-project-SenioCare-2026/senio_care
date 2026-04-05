@@ -4,6 +4,7 @@ import 'package:retrofit/retrofit.dart';
 import 'package:senio_care/core/constants/end_points_constants.dart';
 import 'package:senio_care/features/medicines/api/models/request/update_reminder_state_request.dart';
 import 'package:senio_care/features/medicines/api/models/response/daily_reminder_response.dart';
+import 'package:senio_care/features/medicines/api/models/request/medicine_request.dart';
 import 'package:senio_care/features/medicines/api/models/response/medicine_response.dart';
 
 part 'daily_reminder_api_client.g.dart';
@@ -20,6 +21,9 @@ abstract class DailyReminderApiClient {
       @Path("elder_id") String elderId,
       @Query("date") String date
       );
+  @POST(EndPointsConstants.addMedicine)
+  Future<MedicineResponse> addMedicine(@Body() MedicineRequest request);
+}
 
   @PUT(EndPointsConstants.updateReminderState)
   Future<MedicineResponse> updateState(

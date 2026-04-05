@@ -23,20 +23,20 @@ import 'package:senio_care/features/service_provider/presentation/onboarding/vie
 import 'package:senio_care/features/caregiver/presentation/onboarding/views/screens/caregiver_onboarding_screen.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/home/views/screens/add_services_screen.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/home/views/screens/edit_service_screen.dart';
-
 import '../../features/elder/presentation/view/screens/elder_home/elder_profile/edit_personal_info_screen.dart';
 import '../../features/elder/presentation/view/screens/elder_home/elder_profile/elder_personal_info_screen.dart';
+import '../../features/medicines/presentation/view/screens/medicine/add_medicine.dart';
+import '../../features/medicines/presentation/view_model/medicine/medicine_bloc.dart';
 import '../../features/service_provider/presentation/service_provider_home/service_provider_main_layout.dart';
 import '../../features/service_provider/presentation/service_provider_home/taps/home/view_model/services_bloc.dart';
 import '../../features/service_provider/presentation/service_provider_home/taps/profile/views/screens/service_provider_edit_profile.dart';
-
 import '../../features/caregiver/presentation/caregiver_home/taps/graph/view_model/caregiver_graph_bloc.dart';
 import '../../features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/heart_rate_screen.dart';
 import '../../features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/oxygen_screen.dart';
 
 abstract class Routes {
   static final GlobalKey<NavigatorState> navigatorKey =
-      GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState>();
 
   static Route onGenerate(RouteSettings setting) {
     final url = Uri.parse(setting.name ?? "");
@@ -53,11 +53,11 @@ abstract class Routes {
         return MaterialPageRoute(builder: (_) => RolesScreen());
 
       case RoutesNames.loginScreen:
-        String role = setting.arguments as String;
+        final role = setting.arguments as String;
         return MaterialPageRoute(builder: (_) => LoginScreen(role: role));
 
       case RoutesNames.elderOnboarding:
-        return MaterialPageRoute(builder: (context) => ElderOnboardingScreen());
+        return MaterialPageRoute(builder: (_) => ElderOnboardingScreen());
 
       case RoutesNames.serviceProviderOnboardingScreen:
         return MaterialPageRoute(
@@ -68,7 +68,7 @@ abstract class Routes {
         return MaterialPageRoute(builder: (_) => CaregiverOnboardingScreen());
 
       case RoutesNames.elderHome:
-        return MaterialPageRoute(builder: (context) => ElderHome());
+        return MaterialPageRoute(builder: (_) => ElderHome());
 
       case RoutesNames.caregiverHome:
         return MaterialPageRoute(builder: (_) => CaregiverMainLayout());
@@ -82,6 +82,9 @@ abstract class Routes {
       case RoutesNames.serviceProviderHome:
         return MaterialPageRoute(builder: (_) => ServiceProviderMainLayout());
 
+      case RoutesNames.serviceProviderEditProfile:
+        return MaterialPageRoute(builder: (_) => ServiceProviderEditProfile());
+
       case RoutesNames.addServicesScreen:
         final bloc = setting.arguments as ServicesBloc;
         return MaterialPageRoute(
@@ -91,16 +94,14 @@ abstract class Routes {
           ),
         );
 
-      case RoutesNames.serviceProviderEditProfile:
-        return MaterialPageRoute(builder: (_) => ServiceProviderEditProfile());
-        case RoutesNames.editServicesScreen:
-          final bloc = setting.arguments as ServicesBloc;
-          return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-              value: bloc,
-              child: const EditServiceScreen(),
-            ),
-          );
+      case RoutesNames.editServicesScreen:
+        final bloc = setting.arguments as ServicesBloc;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: bloc,
+            child: const EditServiceScreen(),
+          ),
+        );
 
       case RoutesNames.elderPersonalInfoScreen:
         return MaterialPageRoute(
@@ -114,55 +115,63 @@ abstract class Routes {
       case RoutesNames.bloodSugarGraph:
         final bloc = setting.arguments as CaregiverGraphBloc;
         return MaterialPageRoute(
-          builder: (context) =>
+          builder: (_) =>
               BlocProvider.value(value: bloc, child: const BloodSugarScreen()),
         );
 
       case RoutesNames.heartRateGraph:
         final bloc = setting.arguments as CaregiverGraphBloc;
         return MaterialPageRoute(
-          builder: (context) =>
+          builder: (_) =>
               BlocProvider.value(value: bloc, child: const HeartRateScreen()),
         );
 
       case RoutesNames.oxygenGraph:
         final bloc = setting.arguments as CaregiverGraphBloc;
         return MaterialPageRoute(
-          builder: (context) =>
+          builder: (_) =>
               BlocProvider.value(value: bloc, child: const OxygenScreen()),
         );
+
       case RoutesNames.bloodPressureGraph:
         final bloc = setting.arguments as CaregiverGraphBloc;
         return MaterialPageRoute(
-          builder: (context) => BlocProvider.value(
+          builder: (_) => BlocProvider.value(
             value: bloc,
             child: const BloodPressureScreen(),
           ),
         );
 
       case RoutesNames.elderMedicalDocumentsScreen:
-        return MaterialPageRoute(
-          builder: (context) => MedicalDocumentsScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => MedicalDocumentsScreen());
 
       case RoutesNames.createDocumentScreen:
-        return MaterialPageRoute(builder: (context) => CreateDocumentScreen());
+        return MaterialPageRoute(builder: (_) => CreateDocumentScreen());
 
       case RoutesNames.documentDetailsScreen:
         final document = setting.arguments as MedicalDocumentEntity;
         return MaterialPageRoute(
-          builder: (context) => DocumentDetailsScreen(document: document),
+          builder: (_) => DocumentDetailsScreen(document: document),
         );
+
       case RoutesNames.elderProfileTabScreen:
-        return MaterialPageRoute(builder: (context) => ElderProfileTap(),
-            settings: setting
+        return MaterialPageRoute(
+          builder: (_) => ElderProfileTap(),
+          settings: setting,
+        );
+
+      case RoutesNames.addNewMedicineScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<MedicinesBloc>(),
+            child: AddMedicineScreen(),
+          ),
         );
 
       default:
         return MaterialPageRoute(
-          builder: (context) {
-            return Scaffold(body: Center(child: Text('noRouteFound'.tr())));
-          },
+          builder: (_) =>
+              Scaffold(body: Center(child: Text('noRouteFound'.tr()))),
         );
     }
   }
