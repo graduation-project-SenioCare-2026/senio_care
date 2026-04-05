@@ -15,24 +15,20 @@ abstract class DailyReminderApiClient {
   @factoryMethod
   factory DailyReminderApiClient(Dio dio) = _DailyReminderApiClient;
 
-
   @GET(EndPointsConstants.dailyReminderByDate)
   Future<List<DailyReminderResponse>> getDailyReminders(
-      @Path("elder_id") String elderId,
-      @Query("date") String date
-      );
+    @Path("elder_id") String elderId,
+    @Query("date") String date,
+  );
   @POST(EndPointsConstants.addMedicine)
   Future<MedicineResponse> addMedicine(@Body() MedicineRequest request);
-}
 
   @PUT(EndPointsConstants.updateReminderState)
   Future<MedicineResponse> updateState(
-      @Path("id") String id,
-      @Body() UpdateReminderStateRequest request
-      );
+    @Path("id") String id,
+    @Body() UpdateReminderStateRequest request,
+  );
 
   @DELETE(EndPointsConstants.deleteReminder)
-  Future<String> deleteReminder(
-      @Path("id") String id,
-      );
+  Future<String> deleteReminder(@Path("id") String id);
 }

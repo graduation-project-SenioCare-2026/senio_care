@@ -28,6 +28,8 @@ class _RemindersListState extends State<RemindersList> {
     return Skeletonizer(
       enabled: widget.isLoading,
       child: BlocBuilder<DailyReminderBloc, DailyReminderState>(
+        buildWhen:  (prev, curr) =>
+        prev.getDailyReminderState != curr.getDailyReminderState,
         builder: (context, state) {
           DateTime now = DateTime.now();
           String currentDate =
