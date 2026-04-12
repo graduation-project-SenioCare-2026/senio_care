@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/features/medicines/presentation/view/widgets/daily_reminders/medication_card.dart';
 import 'package:senio_care/features/medicines/api/models/request/update_reminder_state_request.dart';
 import 'package:senio_care/features/medicines/domain/entity/daily_reminder_entity.dart';
+import 'package:senio_care/features/medicines/presentation/view/widgets/daily_reminders/medication_card_skeleton.dart';
 import 'package:senio_care/features/medicines/presentation/view_model/daily_reminder/daily_reminder_bloc.dart';
 import 'package:senio_care/features/medicines/presentation/view_model/daily_reminder/daily_reminder_event.dart';
 import 'package:senio_care/features/medicines/presentation/view_model/daily_reminder/daily_reminder_state.dart';
@@ -27,8 +28,17 @@ class _RemindersListState extends State<RemindersList> {
   Widget build(BuildContext context) {
     return Skeletonizer(
       enabled: widget.isLoading,
-      child: BlocBuilder<DailyReminderBloc, DailyReminderState>(
-        buildWhen:  (prev, curr) =>
+      effect: ShimmerEffect(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+      ),
+      child: widget.isLoading
+          ? ListView.builder(
+        itemCount: 5,
+        itemBuilder: (_, __) => const MedicationCardSkeleton(),
+      )
+          : BlocBuilder<DailyReminderBloc, DailyReminderState>(
+        buildWhen: (prev, curr) =>
         prev.getDailyReminderState != curr.getDailyReminderState,
         builder: (context, state) {
           DateTime now = DateTime.now();
@@ -39,33 +49,37 @@ class _RemindersListState extends State<RemindersList> {
             itemCount: widget.reminders.length,
             itemBuilder: (context, index) {
               final reminder = widget.reminders[index];
+
               bool canTakeMedicine =
                   reminder.state != "taken" &&
-                  reminder.state != "missed" &&
-                  state.selectedDate == currentDate;
+                      reminder.state != "missed" &&
+                      state.selectedDate == currentDate;
+
               return MedicationCard(
                 reminder: reminder,
                 isTaken: reminder.state == "taken",
                 onTap: canTakeMedicine
                     ? () {
-                        final request = UpdateReminderStateRequest(
-                          date: currentDate,
-                          time: reminder.date?.substring(11),
-                          state: "taken",
-                        );
+                  final request = UpdateReminderStateRequest(
+                    date: currentDate,
+                    time: reminder.date?.substring(11),
+                    state: "taken",
+                  );
 
-                        context.read<DailyReminderBloc>().add(
-                          UpdateReminderStateEvent(
-                            id: reminder.id ?? "",
-                            dateTime: reminder.date ?? "",
-                            request: request,
-                          ),
-                        );
-                      }
+                  context.read<DailyReminderBloc>().add(
+                    UpdateReminderStateEvent(
+                      id: reminder.id ?? "",
+                      dateTime: reminder.date ?? "",
+                      request: request,
+                    ),
+                  );
+                }
                     : () {},
-                onDelete: (context) => context.read<DailyReminderBloc>().add(
-                  DeleteRemindersEvent(id: reminder.id ?? ""),
-                ),
+                onDelete: (context) =>
+                    context.read<DailyReminderBloc>().add(
+                      DeleteRemindersEvent(
+                          id: reminder.id ?? ""),
+                    ),
               );
             },
           );
