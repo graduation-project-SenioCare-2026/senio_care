@@ -344,5 +344,6 @@
   "ml": "ml",
   "drop": "drop",
   "gm": "gm",
-  "noRemindersAdded": "No reminders added yet"
+  "noRemindersAdded": "No reminders added yet",
+  "addMedicine": "Add Medicine"
 }

@@ -22,8 +22,10 @@ class MedicinesBloc extends Bloc<MedicinesEvent, MedicinesState> {
     on<TimeRemoved>(_onTimeRemoved);
   }
 
-  Future<void> _addMedicine(AddMedicineEvent event,
-      Emitter<MedicinesState> emit,) async {
+  Future<void> _addMedicine(
+      AddMedicineEvent event,
+      Emitter<MedicinesState> emit,
+      ) async {
     emit(state.copyWith(addMedicineState: StateStatus.loading()));
 
     final result = await _addMedicineUseCase.call(event.request);
@@ -31,7 +33,6 @@ class MedicinesBloc extends Bloc<MedicinesEvent, MedicinesState> {
     switch (result) {
       case Success<MedicineEntity>():
         final medicine = result.data;
-
         final times = state.times ?? [];
 
         for (int i = 0; i < times.length; i++) {
@@ -39,15 +40,27 @@ class MedicinesBloc extends Bloc<MedicinesEvent, MedicinesState> {
           final scheduledDate = buildScheduledDate(timeStr);
 
           print("NOW: ${DateTime.now()}");
-          print("SCHEDULED: $scheduledDate");
+          print("SCHEDULE: $scheduledDate");
 
-          NotificationService.scheduleNotification(
+          // ✅ Main notification — at exact medicine time
+          await NotificationService.scheduleNotification(
             id: NotificationIdGenerator.fromMedicine(medicine.id!, i),
             title: "Medicine Time 💊",
-            body: "Take your ${medicine.medicineName}",
+            body: "Time to take your ${medicine.medicineName}",
             scheduledDate: scheduledDate,
           );
-          print("Scheduling notification at: $timeStr");
+
+          // ✅ Reminder notification — 5 minutes before
+          final reminderDate = scheduledDate.subtract(const Duration(minutes: 5));
+
+          if (reminderDate.isAfter(DateTime.now())) {
+            await NotificationService.scheduleNotification(
+              id: NotificationIdGenerator.fromMedicineReminder(medicine.id!, i),
+              title: "Upcoming Medicine ⏰",
+              body: "Don't forget! Take your ${medicine.medicineName} in 5 minutes",
+              scheduledDate: reminderDate,
+            );
+          }
         }
 
         emit(
@@ -65,8 +78,10 @@ class MedicinesBloc extends Bloc<MedicinesEvent, MedicinesState> {
     }
   }
 
-  void _onStartDateChanged(StartDateChanged event,
-      Emitter<MedicinesState> emit,) {
+  void _onStartDateChanged(
+      StartDateChanged event,
+      Emitter<MedicinesState> emit,
+      ) {
     final endIsBeforeStart =
         state.endDate != null && state.endDate!.isBefore(event.startDate);
 
@@ -78,8 +93,10 @@ class MedicinesBloc extends Bloc<MedicinesEvent, MedicinesState> {
     );
   }
 
-  void _onEndDateChanged(EndDateChanged event,
-      Emitter<MedicinesState> emit,) {
+  void _onEndDateChanged(
+      EndDateChanged event,
+      Emitter<MedicinesState> emit,
+      ) {
     if (event.endDate == null) {
       emit(state.copyWith(clearEndDate: true));
     } else {
@@ -103,7 +120,6 @@ class MedicinesBloc extends Bloc<MedicinesEvent, MedicinesState> {
 
   DateTime buildScheduledDate(String timeString) {
     final format = DateFormat("hh:mm a");
-
     final parsedTime = format.parse(timeString);
     final now = DateTime.now();
 
@@ -115,7 +131,7 @@ class MedicinesBloc extends Bloc<MedicinesEvent, MedicinesState> {
       parsedTime.minute,
     );
 
-    // 🔥 لو الوقت فات → بكرة
+    // If time already passed today → schedule for tomorrow
     if (scheduled.isBefore(now)) {
       scheduled = scheduled.add(const Duration(days: 1));
     }

@@ -46,6 +46,10 @@ class _ElderHomeState extends State<ElderHome> {
     return Stack(
       children: [
         BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
+    MediaQuery.removePadding(
+    context: context,
+    removeBottom: true,
+    child:
         Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -118,6 +122,7 @@ class _ElderHomeState extends State<ElderHome> {
             ),
           ),
         ),
+    ),
       ],
     );
   }
