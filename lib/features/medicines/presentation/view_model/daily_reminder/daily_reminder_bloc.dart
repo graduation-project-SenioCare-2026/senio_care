@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:senio_care/core/exceptions/response_exception.dart';
+import 'package:senio_care/core/notifications/notification_service.dart';
+import 'package:senio_care/core/notifications/notification_id_generator.dart';
 import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
 import 'package:senio_care/core/utils/date_parser.dart';
@@ -16,12 +18,12 @@ import 'package:senio_care/features/medicines/presentation/view_model/daily_remi
 class DailyReminderBloc extends Bloc<DailyReminderEvent, DailyReminderState> {
   final GetDailyRemindersUseCase _getDailyRemindersUseCase;
   final UpdateReminderStateUseCase _updateReminderStateUseCase;
-final DeleteReminderUseCase _deleteReminderUseCase;
+  final DeleteReminderUseCase _deleteReminderUseCase;
 
   DailyReminderBloc(
       this._getDailyRemindersUseCase,
       this._updateReminderStateUseCase,
-      this._deleteReminderUseCase
+      this._deleteReminderUseCase,
       ) : super(DailyReminderState()) {
     on<GetDailyReminderEvent>(_getDailyReminders);
     on<ChangeDateEvent>(_changeDate);
@@ -64,9 +66,7 @@ final DeleteReminderUseCase _deleteReminderUseCase;
       case Failure<List<DailyReminderEntity>>():
         emit(
           state.copyWith(
-            getDailyReminderState: StateStatus.failure(
-              result.responseException,
-            ),
+            getDailyReminderState: StateStatus.failure(result.responseException),
           ),
         );
     }
@@ -98,9 +98,11 @@ final DeleteReminderUseCase _deleteReminderUseCase;
       return reminder;
     }).toList();
 
-    emit(state.copyWith(
-      getDailyReminderState: StateStatus.success(optimisticList),
-    ));
+    emit(
+      state.copyWith(
+        getDailyReminderState: StateStatus.success(optimisticList),
+      ),
+    );
 
     try {
       final result = await _updateReminderStateUseCase.call(
@@ -110,23 +112,36 @@ final DeleteReminderUseCase _deleteReminderUseCase;
 
       switch (result) {
         case Success<MedicineEntity>():
-          emit(state.copyWith(
-            updateReminderState: StateStatus.success(result.data),
-          ));
+          final medicine = result.data;
+
+          emit(
+            state.copyWith(
+              updateReminderState: StateStatus.success(medicine),
+            ),
+          );
+
+          // cancel notification safely
+          await NotificationService.cancelNotification(
+            NotificationIdGenerator.fromReminder(event.id),
+          );
 
         case Failure<MedicineEntity>():
-          emit(state.copyWith(
-            getDailyReminderState: StateStatus.success(originalList),
-            updateReminderState:
-            StateStatus.failure(result.responseException),
-          ));
+          emit(
+            state.copyWith(
+              getDailyReminderState: StateStatus.success(originalList),
+              updateReminderState:
+              StateStatus.failure(result.responseException),
+            ),
+          );
       }
     } catch (e) {
-      emit(state.copyWith(
-        getDailyReminderState: StateStatus.success(originalList),
-        updateReminderState:
-        StateStatus.failure(e as ResponseException),
-      ));
+      emit(
+        state.copyWith(
+          getDailyReminderState: StateStatus.success(originalList),
+          updateReminderState:
+          StateStatus.failure(e as ResponseException),
+        ),
+      );
     }
   }
 
@@ -147,9 +162,11 @@ final DeleteReminderUseCase _deleteReminderUseCase;
       return reminder;
     }).toList();
 
-    emit(state.copyWith(
-      getDailyReminderState: StateStatus.success(updatedList),
-    ));
+    emit(
+      state.copyWith(
+        getDailyReminderState: StateStatus.success(updatedList),
+      ),
+    );
   }
 
   Future<void> _deleteReminder(
@@ -158,28 +175,34 @@ final DeleteReminderUseCase _deleteReminderUseCase;
       ) async {
     final currentList = state.getDailyReminderState.data ?? [];
 
-    final updatedList = currentList.where((reminder) => reminder.id != event.id).toList();
+    final updatedList =
+    currentList.where((reminder) => reminder.id != event.id).toList();
 
-    emit(state.copyWith(
-      deleteReminderState: StateStatus.loading(),
-      getDailyReminderState: StateStatus.success(updatedList), // optimistic update
-    ));
+    emit(
+      state.copyWith(
+        deleteReminderState: StateStatus.loading(),
+        getDailyReminderState: StateStatus.success(updatedList),
+      ),
+    );
 
     final result = await _deleteReminderUseCase.call(event.id);
 
     switch (result) {
       case Success<String>():
-        emit(state.copyWith(
-          deleteReminderState: StateStatus.success(result.data),
-        ));
-        break;
+        emit(
+          state.copyWith(
+            deleteReminderState: StateStatus.success(result.data),
+          ),
+        );
 
       case Failure<String>():
-        emit(state.copyWith(
-          getDailyReminderState: StateStatus.success(currentList),
-          deleteReminderState: StateStatus.failure(result.responseException),
-        ));
-        break;
+        emit(
+          state.copyWith(
+            getDailyReminderState: StateStatus.success(currentList),
+            deleteReminderState:
+            StateStatus.failure(result.responseException),
+          ),
+        );
     }
   }
 }

@@ -1,5 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl/intl.dart';
+import 'package:senio_care/core/notifications/notification_service.dart';
+import 'package:senio_care/core/notifications/notification_id_generator.dart';
 import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
 import 'package:senio_care/features/medicines/domain/entity/medicine_entity.dart';
@@ -9,7 +12,6 @@ import 'package:senio_care/features/medicines/presentation/view_model/medicine/m
 
 @injectable
 class MedicinesBloc extends Bloc<MedicinesEvent, MedicinesState> {
-
   final AddMedicineUseCase _addMedicineUseCase;
 
   MedicinesBloc(this._addMedicineUseCase) : super(MedicinesState()) {
@@ -20,17 +22,40 @@ class MedicinesBloc extends Bloc<MedicinesEvent, MedicinesState> {
     on<TimeRemoved>(_onTimeRemoved);
   }
 
-  Future<void> _addMedicine(
-    AddMedicineEvent event,
-    Emitter<MedicinesState> emit,
-  ) async {
+  Future<void> _addMedicine(AddMedicineEvent event,
+      Emitter<MedicinesState> emit,) async {
     emit(state.copyWith(addMedicineState: StateStatus.loading()));
+
     final result = await _addMedicineUseCase.call(event.request);
+
     switch (result) {
       case Success<MedicineEntity>():
+        final medicine = result.data;
+
+        final times = state.times ?? [];
+
+        for (int i = 0; i < times.length; i++) {
+          final timeStr = times[i];
+          final scheduledDate = buildScheduledDate(timeStr);
+
+          print("NOW: ${DateTime.now()}");
+          print("SCHEDULED: $scheduledDate");
+
+          NotificationService.scheduleNotification(
+            id: NotificationIdGenerator.fromMedicine(medicine.id!, i),
+            title: "Medicine Time 💊",
+            body: "Take your ${medicine.medicineName}",
+            scheduledDate: scheduledDate,
+          );
+          print("Scheduling notification at: $timeStr");
+        }
+
         emit(
-          state.copyWith(addMedicineState: StateStatus.success(result.data)),
+          state.copyWith(
+            addMedicineState: StateStatus.success(medicine),
+          ),
         );
+
       case Failure<MedicineEntity>():
         emit(
           state.copyWith(
@@ -40,11 +65,8 @@ class MedicinesBloc extends Bloc<MedicinesEvent, MedicinesState> {
     }
   }
 
-  void _onStartDateChanged(
-    StartDateChanged event,
-    Emitter<MedicinesState> emit,
-  ) {
-    // If the picked end date is now before the new start date, clear it
+  void _onStartDateChanged(StartDateChanged event,
+      Emitter<MedicinesState> emit,) {
     final endIsBeforeStart =
         state.endDate != null && state.endDate!.isBefore(event.startDate);
 
@@ -56,7 +78,8 @@ class MedicinesBloc extends Bloc<MedicinesEvent, MedicinesState> {
     );
   }
 
-  void _onEndDateChanged(EndDateChanged event, Emitter<MedicinesState> emit) {
+  void _onEndDateChanged(EndDateChanged event,
+      Emitter<MedicinesState> emit,) {
     if (event.endDate == null) {
       emit(state.copyWith(clearEndDate: true));
     } else {
@@ -76,5 +99,27 @@ class MedicinesBloc extends Bloc<MedicinesEvent, MedicinesState> {
         times: state.times?.where((t) => t != event.time).toList(),
       ),
     );
+  }
+
+  DateTime buildScheduledDate(String timeString) {
+    final format = DateFormat("hh:mm a");
+
+    final parsedTime = format.parse(timeString);
+    final now = DateTime.now();
+
+    DateTime scheduled = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      parsedTime.hour,
+      parsedTime.minute,
+    );
+
+    // 🔥 لو الوقت فات → بكرة
+    if (scheduled.isBefore(now)) {
+      scheduled = scheduled.add(const Duration(days: 1));
+    }
+
+    return scheduled;
   }
 }

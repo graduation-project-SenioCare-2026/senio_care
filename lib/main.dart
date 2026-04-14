@@ -1,37 +1,49 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/routes/app_routes.dart';
 import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/core/theme/app_theme.dart';
 import 'package:senio_care/firebase_options.dart';
+
+
 import 'config/di/di.dart';
+import 'core/notifications/notification_service.dart';
+
+import 'package:timezone/data/latest.dart' as tz_data;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:senio_care/core/notifications/notification_service.dart';
+
 import 'core/responsive/size_provider.dart';
 import 'features/auth/presentation/view_model/user_session_view_model/user_session_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await EasyLocalization.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  tz_data.initializeTimeZones();
+  tz.setLocalLocation(tz.getLocation('Africa/Cairo'));
+
+  await NotificationService.init();
+
   await configureDependencies();
-  // In your app, add a button or run this once
- //await getIt<SecureStorageService>(). clearSession();
 
   runApp(
     EasyLocalization(
       path: 'assets/translations',
       supportedLocales: const [Locale('en'), Locale('ar')],
       startLocale: Locale("en"),
-      child: DevicePreview(
-        enabled: true,
-        builder: (_) => BlocProvider(
-          create: (_) => getIt<SessionBloc>(),
-          child: const MyApp(),
-        ),
+      child: BlocProvider(
+        create: (_) => getIt<SessionBloc>(),
+        child: const MyApp(),
       ),
     ),
   );

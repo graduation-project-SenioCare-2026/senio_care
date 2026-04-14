@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:senio_care/core/notifications/notification_service.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import '../../../../../../core/common_widgets/bg_gradient.dart';
 import '../../../../../../core/theme/app_colors.dart';
@@ -35,7 +37,10 @@ class AddMedicineView extends StatelessWidget {
             backgroundColor: Colors.transparent,
             elevation: 0,
           ),
-          body: AddMedicineCard(elderId: elderId),
+          body:
+              AddMedicineCard(elderId: elderId),
+
+
         ),
       ],
     );
