@@ -6,6 +6,7 @@ import 'package:senio_care/features/elder/domain/entity/onboarding/allergy_entit
 import 'package:senio_care/features/elder/domain/entity/onboarding/blood_type_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/disease_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/mobility_status_entity.dart';
+import 'package:senio_care/features/elder/domain/entity/user_profile_entity.dart';
 
 class ElderProfileState extends Equatable {
   final StateStatus<ElderEntity> editElderProfileStatus;
@@ -15,6 +16,7 @@ class ElderProfileState extends Equatable {
   final MobilityStatusEntity? selectedMobilityStatus;
   final StateStatus<ElderEntity>? getElderStatus;
   final List<CaregiverEntity> caregivers;
+  final StateStatus<UserProfileEntity> getUserStatus;
 
   const ElderProfileState({
     this.editElderProfileStatus = const StateStatus.initial(),
@@ -24,6 +26,7 @@ class ElderProfileState extends Equatable {
     this.selectedMobilityStatus,
     this.getElderStatus = const StateStatus.initial(),
     this.caregivers = const [],
+    this.getUserStatus= const StateStatus.initial(),
   });
 
   ElderProfileState copyWith({
@@ -34,6 +37,7 @@ class ElderProfileState extends Equatable {
     MobilityStatusEntity? selectedMobilityStatus,
     StateStatus<ElderEntity>? getElderStatus,
     List<CaregiverEntity>? caregivers,
+    StateStatus<UserProfileEntity>? getUserStatus
   }) {
     return ElderProfileState(
       editElderProfileStatus: editElderProfileStatus ?? this.editElderProfileStatus,
@@ -43,6 +47,7 @@ class ElderProfileState extends Equatable {
       selectedMobilityStatus: selectedMobilityStatus ?? this.selectedMobilityStatus,
       getElderStatus: getElderStatus ?? this.getElderStatus,
       caregivers: caregivers ?? this.caregivers,
+      getUserStatus: getUserStatus??this.getUserStatus
     );
   }
 
@@ -55,5 +60,6 @@ class ElderProfileState extends Equatable {
     selectedMobilityStatus,
     getElderStatus,
     caregivers,
+    getUserStatus
   ];
 }

@@ -10,7 +10,9 @@ import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
 import 'package:senio_care/features/auth/domain/use_case/get_elder_by_id_use_case.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/allergy_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/onboarding/disease_entity.dart';
+import 'package:senio_care/features/elder/domain/entity/user_profile_entity.dart';
 import 'package:senio_care/features/elder/domain/use_case/edit_elder_profile_use_case.dart';
+import 'package:senio_care/features/elder/domain/use_case/get_user_profile.dart';
 import 'package:senio_care/features/elder/presentation/view_model/elder_profile/elder_profile_event.dart';
 import 'package:senio_care/features/elder/presentation/view_model/elder_profile/elder_profile_state.dart';
 
@@ -18,6 +20,7 @@ import 'package:senio_care/features/elder/presentation/view_model/elder_profile/
 class ElderProfileBloc extends Bloc<ElderProfileEvent, ElderProfileState> {
   final EditElderProfileUseCase _editElderProfileUseCase;
   final GetElderByIdUseCase _getElderByIdUseCase;
+  final GetUserProfileUseCase _getUserProfileUseCase;
 
   final ageController = TextEditingController();
   final weightController = TextEditingController();
@@ -29,6 +32,7 @@ class ElderProfileBloc extends Bloc<ElderProfileEvent, ElderProfileState> {
   ElderProfileBloc(
     this._editElderProfileUseCase,
     this._getElderByIdUseCase,
+    this._getUserProfileUseCase,
   ) : super(const ElderProfileState()) {
     on<InitElderProfileEvent>(_onInitProfile);
     on<SetDiseasesEvent>(_onSetDiseases);
@@ -43,7 +47,7 @@ class ElderProfileBloc extends Bloc<ElderProfileEvent, ElderProfileState> {
     on<AddCaregiverEvent>(_addCaregiver);
     on<RemoveCaregiverEvent>(_removeCaregiver);
     on<EditElderProfileEvent>(_editElderProfile);
-
+    on<GetUserProfileEvent>(_getProfileEvent);
   }
 
   void _onInitProfile(
@@ -168,24 +172,25 @@ class ElderProfileBloc extends Bloc<ElderProfileEvent, ElderProfileState> {
     final alreadyExists = state.caregivers.any((c) => c.id == event.id);
     if (!alreadyExists) {
       final newCaregiver = CaregiverEntity(id: event.id);
-      emit(state.copyWith(
-        caregivers: [...state.caregivers, newCaregiver],
-      ));
+      emit(state.copyWith(caregivers: [...state.caregivers, newCaregiver]));
     }
   }
 
-  void _removeCaregiver(RemoveCaregiverEvent event, Emitter<ElderProfileState> emit) {
-    emit(state.copyWith(
-      caregivers: state.caregivers
-          .where((c) => c.id != event.id)
-          .toList(),
-    ));
+  void _removeCaregiver(
+    RemoveCaregiverEvent event,
+    Emitter<ElderProfileState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        caregivers: state.caregivers.where((c) => c.id != event.id).toList(),
+      ),
+    );
   }
 
   Future<void> _getElderById(
-    GetElderEvent event,
-    Emitter<ElderProfileState> emit,
-  ) async {
+      GetElderEvent event,
+      Emitter<ElderProfileState> emit,
+      ) async {
     emit(state.copyWith(getElderStatus: const StateStatus.loading()));
 
     final result = await _getElderByIdUseCase(event.id);
@@ -195,16 +200,46 @@ class ElderProfileBloc extends Bloc<ElderProfileEvent, ElderProfileState> {
 
       final currentUser = UserManager().user!;
       UserManager().setUser(
-        currentUser.copyWith(id: result.data.id, role: UserRole.elder),
+        currentUser.copyWith(
+          id: result.data.id,
+          role: UserRole.elder,
+        ),
       );
 
       emit(state.copyWith(getElderStatus: StateStatus.success(result.data)));
+
+      final userId = result.data.userId;
+
+      if (userId != null) {
+        add(GetUserProfileEvent(userId));
+      }
     } else if (result is Failure<ElderEntity>) {
       emit(
         state.copyWith(
           getElderStatus: StateStatus.failure(result.responseException),
         ),
       );
+    }
+  }
+
+  Future<void> _getProfileEvent(
+    GetUserProfileEvent event,
+    Emitter<ElderProfileState> emit,
+  ) async {
+    emit(state.copyWith(getUserStatus: const StateStatus.loading()));
+    final result = await _getUserProfileUseCase(event.id);
+
+    switch (result) {
+      case Success<UserProfileEntity>():
+        emit(state.copyWith(getUserStatus: StateStatus.success(result.data)));
+
+
+      case Failure<UserProfileEntity>():
+        emit(
+          state.copyWith(
+            getUserStatus: StateStatus.failure(result.responseException),
+          ),
+        );
     }
   }
 
