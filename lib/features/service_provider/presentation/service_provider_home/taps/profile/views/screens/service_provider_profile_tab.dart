@@ -50,7 +50,7 @@ class ServiceProviderProfileTab extends StatelessWidget {
                             children: [
                               InfoRow(
                                 icon: Icons.phone,
-                                label: "Phone",
+                                label: "phoneNumber".tr(),
                                 value: serviceProvider?.phoneNumber,
                               ),
                               const Divider(),
@@ -64,7 +64,7 @@ class ServiceProviderProfileTab extends StatelessWidget {
                               const Divider(),
                               InfoRow(
                                 icon: Icons.work,
-                                label: "Specialization",
+                                label: "specialization".tr(),
                                 value: serviceProvider?.specialization,
                               ),
                             ],

@@ -87,7 +87,7 @@ class _WeeklyLineChartState extends State<WeeklyLineChart>
     final isNormal = _isValueNormal(value, range);
     return {
       'isNormal': isNormal,
-      'text': isNormal ? 'Normal' : 'Abnormal',
+      'text': isNormal ? 'normal'.tr() : 'Abnormal',
       'color': isNormal
           ? const Color(0xFF4CAF50)
           : const Color(0xFFFF9800), // Green : Orange
@@ -503,7 +503,7 @@ class _WeeklyLineChartState extends State<WeeklyLineChart>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Normal Range: ${widget.normalRange} ${widget.unit}',
+                              '${'normalRange'.tr()} ${widget.normalRange} ${widget.unit}',
                               style: getRegularStyle(
                                 color: AppColors.gray,
                                 fontSize: context.setSp(FontSize.s12),

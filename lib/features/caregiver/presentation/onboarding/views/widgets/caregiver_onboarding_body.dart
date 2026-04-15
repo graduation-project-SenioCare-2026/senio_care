@@ -54,10 +54,11 @@ class CaregiverOnboardingBody extends StatelessWidget {
               HeaderText(
                 title: 'welcomeToSenioCare'.tr(),
                 titleSize: FontSize.s32,
-                subTitle: '',
-                subTitleSize: 0.0,
+                subTitle: 'careMadeSimpleForYourFamily'.tr(),
+                subTitleSize: FontSize.s20,
+                titlePadding: 10,
               ),
-              SizedBox(height: context.setHeight(40)),
+              SizedBox(height: context.setHeight(25)),
               BlurContainer(
                 child: Column(
                   children: [
@@ -95,7 +96,7 @@ class CaregiverOnboardingBody extends StatelessWidget {
                       titleKey: 'gender',
                       value: state.selectedGender,
                       validator: Validator.validateGender,
-                      options: {'male': 'male', 'female': 'female'},
+                      options: {'male': 'male'.tr(), 'female': 'female'.tr()},
                       onChanged: (value) {
                         if (value != null) {
                           bloc.add(CaregiverSetGenderEvent(value));

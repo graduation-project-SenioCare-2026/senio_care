@@ -19,7 +19,6 @@ import 'package:senio_care/features/service_provider/presentation/onboarding/vie
 
 import '../../../../../../core/common_widgets/custom_radio_group_form_field.dart';
 
-
 class ServiceProviderOnboardingBody extends StatelessWidget {
   const ServiceProviderOnboardingBody({super.key});
 
@@ -43,13 +42,12 @@ class ServiceProviderOnboardingBody extends StatelessWidget {
           Navigator.pushNamedAndRemoveUntil(
             context,
             RoutesNames.serviceProviderHome,
-                (route) => false,
+            (route) => false,
           );
           Loaders.showSuccessMessage(
             message: "welcomeToSenioCare".tr(),
             context: context,
           );
-
         }
       },
       builder: (BuildContext context, state) {
@@ -70,22 +68,24 @@ class ServiceProviderOnboardingBody extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    AppFormField(label: 'phoneNumber'.tr(),
-                        hint: "",
-                      keyboardType:TextInputType.phone ,
+                    AppFormField(
+                      label: 'phoneNumber'.tr(),
+                      hint: "",
+                      keyboardType: TextInputType.phone,
                       validator: (_) => Validator.validatePhoneNumber(
                         bloc.phoneNumberController.text,
                       ),
                       autoValidateMode: AutovalidateMode.onUserInteraction,
-                      controller:  bloc.phoneNumberController,
+                      controller: bloc.phoneNumberController,
                     ),
-                    AppFormField(label: 'specialization'.tr(),
+                    AppFormField(
+                      label: 'specialization'.tr(),
                       hint: "",
                       validator: (_) => Validator.validateRequired(
                         bloc.specializationController.text,
                       ),
                       autoValidateMode: AutovalidateMode.onUserInteraction,
-                      controller:   bloc.specializationController,
+                      controller: bloc.specializationController,
                     ),
                     CustomRadioGroupFormField<String>(
                       titleKey: 'gender',
@@ -113,7 +113,7 @@ class ServiceProviderOnboardingBody extends StatelessWidget {
                         phoneNumber: bloc.phoneNumberController.text,
                         specialization: bloc.specializationController.text,
                         gender: state.selectedGender,
-userId: UserManager().userId
+                        userId: UserManager().userId,
                       );
                       bloc.add(ServiceProviderSubmitDataEvent(request));
                     }

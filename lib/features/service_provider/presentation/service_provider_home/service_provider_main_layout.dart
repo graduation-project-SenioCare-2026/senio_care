@@ -16,7 +16,6 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/font_manager.dart';
 import '../../../../core/theme/font_style.dart';
 import '../../../../core/user/profile_manager.dart';
-import '../../../../core/user/user_manager.dart';
 
 class ServiceProviderMainLayout extends StatefulWidget {
   const ServiceProviderMainLayout({super.key});
@@ -33,9 +32,9 @@ class _ServiceProviderMainLayoutState extends State<ServiceProviderMainLayout> {
   @override
   void initState() {
     super.initState();
-    final user = UserManager().user;
-    if (user?.id != null) {
-      _profileBloc.add(GetServiceProviderByIdEvent(user!.id!));
+    final profileId = ProfileManager().serviceProvider?.id;
+    if (profileId != null) {
+      _profileBloc.add(GetServiceProviderByIdEvent(profileId));
     }
   }
 

@@ -47,7 +47,7 @@ class GraphBody extends StatelessWidget {
                 routes: RoutesNames.heartRateGraph,
                 title: "heartRate".tr(),
                 value: "74",
-                unit: "BPM".tr(),
+                unit: "bpm".tr(),
                 icon: Icons.favorite,
                 color: Color(0xffd53236),
                 bgIconColor: Color(0xfff8d9d9),

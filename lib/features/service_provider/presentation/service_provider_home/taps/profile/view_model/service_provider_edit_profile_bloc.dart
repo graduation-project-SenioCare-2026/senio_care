@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
-import 'package:senio_care/core/user/user_manager.dart';
 import 'package:senio_care/features/auth/domain/use_case/get_service_provider_by_id_use_case.dart';
 import 'package:senio_care/features/service_provider/domain/use_case/edit_profile/service_provider_edit_profile_use_case.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/profile/view_model/service_provider_edit_profile_event.dart';
@@ -22,7 +21,9 @@ class ServiceProviderEditProfileBloc
   final phoneNumberController = TextEditingController();
   final specializationController = TextEditingController();
   final genderController = TextEditingController();
+
   final GetServiceProviderByIdUseCase _providerByIdUseCase;
+
   ServiceProviderEditProfileBloc(this._case, this._providerByIdUseCase)
     : super(ServiceProviderEditProfileState()) {
     on<ServiceProviderEditEvent>(_serviceProviderEditProfile);
@@ -38,13 +39,13 @@ class ServiceProviderEditProfileBloc
     final result = await _providerByIdUseCase(event.id);
     if (result is Success<ServiceProviderEntity>) {
       ProfileManager().serviceProvider = result.data;
-      final currentUser = UserManager().user!;
-      UserManager().setUser(
-        currentUser.copyWith(
-          id: result.data.id,
-          role: UserRole.serviceProvider,
-        ),
-      );
+      // final currentUser = UserManager().user!;
+      // UserManager().setUser(
+      //   currentUser.copyWith(
+      //     id: result.data.id,
+      //     role: UserRole.serviceProvider,
+      //   ),
+      // );
       emit(
         state.copyWith(
           getServiceProviderStatus: StateStatus.success(result.data),

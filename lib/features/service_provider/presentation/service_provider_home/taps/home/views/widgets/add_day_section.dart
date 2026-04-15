@@ -56,13 +56,14 @@ class _AddDaySectionState extends State<AddDaySection> {
   }
 
   void _showDayPicker() {
-    final available =
-    _allDays.where((d) => !_selectedDays.contains(d)).toList();
+    final available = _allDays
+        .where((d) => !_selectedDays.contains(d))
+        .toList();
 
     if (available.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('allDaysHaveBeenAdded!'.tr())),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('allDaysHaveBeenAdded!'.tr())));
       return;
     }
 
@@ -79,16 +80,19 @@ class _AddDaySectionState extends State<AddDaySection> {
               padding: EdgeInsets.all(context.setHeight(16)),
               child: Text(
                 'selectADay'.tr(),
-                style: getBoldStyle(color: AppColors.black, fontSize: 16),
+                style: getBoldStyle(
+                  color: AppColors.black,
+                  fontSize: context.setSp(FontSize.s18),
+                ),
               ),
             ),
             ...available.map(
-                  (day) => ListTile(
+              (day) => ListTile(
                 title: Text(
                   day,
                   style: getRegularStyle(
                     color: AppColors.black,
-                    fontSize: context.setSp(FontSize.s13),
+                    fontSize: context.setSp(FontSize.s14),
                   ),
                 ),
                 onTap: () {
@@ -126,7 +130,7 @@ class _AddDaySectionState extends State<AddDaySection> {
         child: BlocListener<ServicesBloc, ServicesState>(
           // Close dialog only when a new slot is successfully added
           listenWhen: (prev, curr) =>
-          (curr.availability[day]?.length ?? 0) > slotCountBefore,
+              (curr.availability[day]?.length ?? 0) > slotCountBefore,
           listener: (_, __) => Navigator.pop(dialogContext),
           child: StatefulBuilder(
             builder: (_, setDialogState) => AlertDialog(
@@ -196,8 +200,11 @@ class _AddDaySectionState extends State<AddDaySection> {
                       padding: EdgeInsets.only(top: context.setHeight(10)),
                       child: Row(
                         children: [
-                          const Icon(Icons.error_outline,
-                              color: Colors.red, size: 16),
+                          const Icon(
+                            Icons.error_outline,
+                            color: Colors.red,
+                            size: 16,
+                          ),
                           SizedBox(width: context.setWidth(6)),
                           Expanded(
                             child: Text(
@@ -222,27 +229,29 @@ class _AddDaySectionState extends State<AddDaySection> {
                 ElevatedButton(
                   onPressed: startTime != null && endTime != null
                       ? () {
-                    final startMinutes =
-                        startTime!.hour * 60 + startTime!.minute;
-                    final endMinutes =
-                        endTime!.hour * 60 + endTime!.minute;
+                          final startMinutes =
+                              startTime!.hour * 60 + startTime!.minute;
+                          final endMinutes =
+                              endTime!.hour * 60 + endTime!.minute;
 
-                    // ✅ Validate locally — no bloc state involved
-                    if (startMinutes >= endMinutes) {
-                      setDialogState(() {
-                        errorMessage = 'startTimeMustBeBeforeEndTime';
-                      });
-                      return;
-                    }
+                          // ✅ Validate locally — no bloc state involved
+                          if (startMinutes >= endMinutes) {
+                            setDialogState(() {
+                              errorMessage = 'startTimeMustBeBeforeEndTime';
+                            });
+                            return;
+                          }
 
-                    bloc.add(AddTimeSlotEvent(
-                      day: day,
-                      slot: TimeSlot(
-                        startTime: startTime!.format(context),
-                        endTime: endTime!.format(context),
-                      ),
-                    ));
-                  }
+                          bloc.add(
+                            AddTimeSlotEvent(
+                              day: day,
+                              slot: TimeSlot(
+                                startTime: startTime!.format(context),
+                                endTime: endTime!.format(context),
+                              ),
+                            ),
+                          );
+                        }
                       : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.blue,
@@ -374,7 +383,7 @@ class _AddDaySectionState extends State<AddDaySection> {
               ],
             ),
             ..._selectedDays.map(
-                  (day) => DayScheduleCard(
+              (day) => DayScheduleCard(
                 key: ValueKey(day),
                 day: day,
                 slots: state.availability[day] ?? [],

@@ -113,7 +113,7 @@ class _ServiceProviderEditProfileBodyState
                                 _bloc.phoneNumberController.text,
                               ),
                               autoValidateMode:
-                              AutovalidateMode.onUserInteraction,
+                                  AutovalidateMode.onUserInteraction,
                               hint: '',
                             ),
                             AppFormField(
@@ -137,21 +137,28 @@ class _ServiceProviderEditProfileBodyState
                     else
                       CustomElevatedButton(
                         width: context.setWidth(300),
-                        onPressed:hasChanges? () {
-                          if (
-                              _bloc.formKey.currentState!.validate()) {
-                            final request = ServiceProviderOnboardingRequest(
-                              phoneNumber: _bloc.phoneNumberController.text,
-                              specialization:
-                                  _bloc.specializationController.text,
-                              gender: ProfileManager().serviceProvider?.gender,
-                            );
-                            _bloc.add(
-                              ServiceProviderEditEvent(request, user!.id!),
-
-                            );
-                          }
-                        }:null,
+                        onPressed: hasChanges
+                            ? () {
+                                if (_bloc.formKey.currentState!.validate()) {
+                                  final request =
+                                      ServiceProviderOnboardingRequest(
+                                        phoneNumber:
+                                            _bloc.phoneNumberController.text,
+                                        specialization:
+                                            _bloc.specializationController.text,
+                                        gender: ProfileManager()
+                                            .serviceProvider
+                                            ?.gender,
+                                      );
+                                  _bloc.add(
+                                    ServiceProviderEditEvent(
+                                      request,
+                                      ProfileManager().serviceProvider!.id!,
+                                    ),
+                                  );
+                                }
+                              }
+                            : null,
                         buttonLabel: 'save'.tr(),
                       ),
                     SizedBox(height: context.setHeight(20)),

@@ -7,6 +7,7 @@ import 'package:senio_care/core/validator/validator.dart';
 import '../../../../../../../../core/common_widgets/app_form_field.dart';
 import '../../../../../../../../core/common_widgets/custom_card.dart';
 import '../../../../../../../../core/common_widgets/custom_elevated_button.dart';
+import '../../../../../../../../core/common_widgets/loading_btn.dart';
 import '../../../../../../../../core/user/profile_manager.dart';
 import '../../../../../../api/models/request/home/availability_model.dart';
 import '../../../../../../api/models/request/home/service_model.dart';
@@ -60,6 +61,10 @@ class AddServiceCard extends StatelessWidget {
                   const AddDaySection(),
 
                   SizedBox(height: context.setHeight(20)),
+
+                  if (state.addServiceStatus.isLoading)
+                    LoadingBtn()
+                  else
 
                   CustomElevatedButton(
                     width: context.setWidth(300),
