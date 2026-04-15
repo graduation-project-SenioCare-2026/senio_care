@@ -51,6 +51,7 @@ class _ElderPersonalInfoScreenState extends State<ElderPersonalInfoScreen> {
 
     return Stack(
       children: [
+        Container(color: Colors.white.withOpacity(0.9)),
         BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
         SafeArea(
           child: BlocProvider(

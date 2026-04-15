@@ -39,9 +39,6 @@ class MedicinesBloc extends Bloc<MedicinesEvent, MedicinesState> {
           final timeStr = times[i];
           final scheduledDate = buildScheduledDate(timeStr);
 
-          print("NOW: ${DateTime.now()}");
-          print("SCHEDULE: $scheduledDate");
-
           // ✅ Main notification — at exact medicine time
           await NotificationService.scheduleNotification(
             id: NotificationIdGenerator.fromMedicine(medicine.id!, i),

@@ -15,6 +15,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        Container(color: Colors.white.withOpacity(0.9)),
         BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
         SafeArea(
           child: MultiBlocProvider(
