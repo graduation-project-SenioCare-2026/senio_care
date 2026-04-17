@@ -1,6 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/theme/app_colors.dart';
+import 'package:senio_care/core/theme/font_manager.dart';
 import 'package:senio_care/features/elder/presentation/view/widgets/ai_chat/user_message.dart';
 
+import '../../../../../../core/theme/font_style.dart';
 import 'ai_message.dart';
 import 'input_bar.dart';
 
@@ -33,8 +38,7 @@ class _AiChatBodyState extends State<AiChatBody> {
     Future.delayed(const Duration(milliseconds: 800), () {
       setState(() {
         _messages.add({
-          'text':
-          'I received your message. How else can I assist you today?',
+          'text': 'I received your message. How else can I assist you today?',
           'isUser': false,
         });
       });
@@ -67,23 +71,22 @@ class _AiChatBodyState extends State<AiChatBody> {
           child: _messages.isEmpty
               ? _buildEmptyState(context)
               : ListView.builder(
-            controller: _scrollController,
-            padding: const EdgeInsets.symmetric(
-                horizontal: 16, vertical: 12),
-            itemCount: _messages.length,
-            itemBuilder: (context, index) {
-              final msg = _messages[index];
-              return msg['isUser'] as bool
-                  ? UserMessage(text: msg['text'] as String)
-                  : AiMessage(text: msg['text'] as String);
-            },
-          ),
+                  controller: _scrollController,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.setWidth(16),
+                    vertical: context.setHeight(12),
+                  ),
+                  itemCount: _messages.length,
+                  itemBuilder: (context, index) {
+                    final msg = _messages[index];
+                    return msg['isUser'] as bool
+                        ? UserMessage(text: msg['text'] as String)
+                        : AiMessage(text: msg['text'] as String);
+                  },
+                ),
         ),
 
-        InputBar(
-          controller: _controller,
-          onSend: _sendMessage,
-        ),
+        InputBar(controller: _controller, onSend: _sendMessage),
       ],
     );
   }
@@ -93,21 +96,19 @@ class _AiChatBodyState extends State<AiChatBody> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            'How can I help you?',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: Colors.black87,
-              letterSpacing: -0.3,
+          Text(
+            'howCanIHelpYou?'.tr(),
+            style: getBoldStyle(
+              fontSize: context.setSp(FontSize.s22),
+              color: AppColors.black,
             ),
           ),
-          const SizedBox(height: 8),
-          const Text(
-            'Ask me anything. I\'m here for you.',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.black45,
+          SizedBox(height: context.setHeight(8)),
+          Text(
+            "askMeAnything.I'mHereForYou.".tr(),
+            style: getRegularStyle(
+              color: AppColors.black,
+              fontSize: context.setSp(FontSize.s14),
             ),
           ),
         ],
@@ -115,10 +116,3 @@ class _AiChatBodyState extends State<AiChatBody> {
     );
   }
 }
-
-
-
-
-
-
-

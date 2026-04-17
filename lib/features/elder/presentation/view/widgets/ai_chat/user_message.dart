@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
+
+import '../../../../../../core/theme/font_manager.dart';
+import '../../../../../../core/theme/font_style.dart';
 
 class UserMessage extends StatelessWidget {
   final String text;
@@ -10,8 +14,14 @@ class UserMessage extends StatelessWidget {
     return Align(
       alignment: Alignment.centerRight,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12, left: 60),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        margin: EdgeInsets.only(
+          bottom: context.setHeight(12),
+          left: context.setWidth(60),
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.setWidth(16),
+          vertical: context.setHeight(12),
+        ),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [AppColors.blue.shade300, AppColors.blue.shade500],
@@ -34,10 +44,9 @@ class UserMessage extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 15,
-            height: 1.4,
+          style: getRegularStyle(
+            color: AppColors.white,
+            fontSize: context.setSp(FontSize.s18),
           ),
         ),
       ),

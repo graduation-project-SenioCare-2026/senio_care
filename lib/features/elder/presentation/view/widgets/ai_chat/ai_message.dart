@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/theme/font_style.dart';
 
 import '../../../../../../core/theme/app_colors.dart';
+import '../../../../../../core/theme/font_manager.dart';
 
 class AiMessage extends StatelessWidget {
   final String text;
@@ -11,14 +14,20 @@ class AiMessage extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 16, right: 60),
+        padding: EdgeInsets.only(
+          bottom: context.setHeight(16),
+          right: context.setWidth(60),
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.only(top: 2, right: 10),
-              width: 32,
-              height: 32,
+              margin: EdgeInsets.only(
+                top: context.setHeight(2),
+                right: context.setWidth(10),
+              ),
+              width: context.setWidth(32),
+              height: context.setHeight(32),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: LinearGradient(
@@ -36,10 +45,9 @@ class AiMessage extends StatelessWidget {
             Flexible(
               child: Text(
                 text,
-                style: const TextStyle(
-                  fontSize: 15,
-                  color: Colors.black87,
-                  height: 1.5,
+                style: getRegularStyle(
+                  color: AppColors.black,
+                  fontSize: context.setSp(FontSize.s18),
                 ),
               ),
             ),

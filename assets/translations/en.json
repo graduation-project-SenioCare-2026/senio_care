@@ -344,5 +344,7 @@
   "ml": "ml",
   "drop": "drop",
   "gm": "gm",
-  "noRemindersAdded": "No reminders added yet"
+  "noRemindersAdded": "No reminders added yet",
+  "howCanIHelpYou?": "How can I help you ?",
+  "askMeAnything. I'mHereForYou.": "Ask me anything. I'm here for you."
 }

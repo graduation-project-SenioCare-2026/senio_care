@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
+
+import '../../../../../../core/theme/font_manager.dart';
+import '../../../../../../core/theme/font_style.dart';
 
 class InputBar extends StatelessWidget {
   final TextEditingController controller;
@@ -35,23 +39,28 @@ class InputBar extends StatelessWidget {
                 onSubmitted: (_) => onSend(),
                 maxLines: 4,
                 minLines: 1,
-                style: const TextStyle(fontSize: 15),
-                decoration: const InputDecoration(
+                style: getRegularStyle(
+                  color: AppColors.black,
+                  fontSize: context.setSp(FontSize.s16),
+                ),
+                decoration: InputDecoration(
                   hintText: 'Type your message...',
                   hintStyle: TextStyle(color: Colors.black38),
-                  contentPadding:
-                  EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: context.setWidth(18),
+                    vertical: context.setHeight(12),
+                  ),
                   border: InputBorder.none,
                 ),
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: context.setWidth(10)),
           GestureDetector(
             onTap: onSend,
             child: Container(
-              width: 46,
-              height: 46,
+              width: context.setWidth(46),
+              height: context.setHeight(46),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: LinearGradient(
