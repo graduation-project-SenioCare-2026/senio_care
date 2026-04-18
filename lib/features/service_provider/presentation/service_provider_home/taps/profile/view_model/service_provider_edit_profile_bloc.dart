@@ -11,6 +11,8 @@ import 'package:senio_care/features/service_provider/presentation/service_provid
 
 import '../../../../../../../core/result/result.dart';
 import '../../../../../../auth/domain/entity/service_provider_entity.dart';
+import '../../../../../../elder/domain/entity/user_profile_entity.dart';
+import '../../../../../../elder/domain/use_case/get_user_profile.dart';
 
 @injectable
 class ServiceProviderEditProfileBloc
@@ -22,12 +24,19 @@ class ServiceProviderEditProfileBloc
   final phoneNumberController = TextEditingController();
   final specializationController = TextEditingController();
   final genderController = TextEditingController();
+
   final GetServiceProviderByIdUseCase _providerByIdUseCase;
-  ServiceProviderEditProfileBloc(this._case, this._providerByIdUseCase)
-    : super(ServiceProviderEditProfileState()) {
+  final GetUserProfileUseCase _getUserProfileUseCase;
+
+  ServiceProviderEditProfileBloc(
+    this._case,
+    this._providerByIdUseCase,
+    this._getUserProfileUseCase,
+  ) : super(ServiceProviderEditProfileState()) {
     on<ServiceProviderEditEvent>(_serviceProviderEditProfile);
     on<ServiceProviderInitProfile>(_initProfile);
     on<GetServiceProviderByIdEvent>(_getServiceProviderById);
+    on<GetUserProfileEvent>(_getUserProfile);
   }
 
   void _getServiceProviderById(
@@ -35,7 +44,9 @@ class ServiceProviderEditProfileBloc
     Emitter<ServiceProviderEditProfileState> emit,
   ) async {
     emit(state.copyWith(getServiceProviderStatus: StateStatus.loading()));
+
     final result = await _providerByIdUseCase(event.id);
+
     if (result is Success<ServiceProviderEntity>) {
       ProfileManager().serviceProvider = result.data;
       final currentUser = UserManager().user!;
@@ -50,6 +61,12 @@ class ServiceProviderEditProfileBloc
           getServiceProviderStatus: StateStatus.success(result.data),
         ),
       );
+
+      final userId = result.data.userId;
+
+      if (userId != null) {
+        add(GetUserProfileEvent(userId));
+      }
     } else if (result is Failure<ServiceProviderEntity>) {
       emit(
         state.copyWith(
@@ -95,6 +112,26 @@ class ServiceProviderEditProfileBloc
             serviceProviderEditProfileState: StateStatus.failure(
               result.responseException,
             ),
+          ),
+        );
+    }
+  }
+
+  Future<void> _getUserProfile(
+    GetUserProfileEvent event,
+    Emitter<ServiceProviderEditProfileState> emit,
+  ) async {
+    emit(state.copyWith(getUserStatus: const StateStatus.loading()));
+    final result = await _getUserProfileUseCase(event.id);
+
+    switch (result) {
+      case Success<UserProfileEntity>():
+        emit(state.copyWith(getUserStatus: StateStatus.success(result.data)));
+
+      case Failure<UserProfileEntity>():
+        emit(
+          state.copyWith(
+            getUserStatus: StateStatus.failure(result.responseException),
           ),
         );
     }

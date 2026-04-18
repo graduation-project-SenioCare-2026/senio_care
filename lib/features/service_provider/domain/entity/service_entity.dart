@@ -8,6 +8,7 @@ class ServicesEntity extends Equatable {
   final String? phoneNumber;
   final List<AvailabilityEntity>? availability;
   final bool? isAvailable;
+  final String? userId;
 
   const ServicesEntity({
     required this.id,
@@ -16,6 +17,7 @@ class ServicesEntity extends Equatable {
     required this.availability,
     required this.isAvailable,
     required this.phoneNumber,
+    required this.userId
   });
 
   @override
@@ -26,5 +28,6 @@ class ServicesEntity extends Equatable {
     phoneNumber,
     availability,
     isAvailable,
+    userId
   ];
 }

@@ -17,6 +17,9 @@ class ServiceRequest {
   @JsonKey(name: "phone_number")
   final String? phoneNumber;
 
+  @JsonKey(name: "user_id")
+  final String? userId;
+
   @JsonKey(name: "availability", defaultValue: [])
   final List<AvailabilityModel>? availability;
 
@@ -30,6 +33,7 @@ class ServiceRequest {
     this.isAvailable,
     this.location,
     this.serviceDescription,
+    this.userId,
   });
 
   factory ServiceRequest.fromJson(Map<String, dynamic> json) {
