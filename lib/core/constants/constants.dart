@@ -8,4 +8,7 @@ abstract class Constants {
   static const String caregiver = "caregiver";
   static const String serviceProvider = "serviceProvider";
 
+
+  static const String appName = 'seniocare';
+
 }

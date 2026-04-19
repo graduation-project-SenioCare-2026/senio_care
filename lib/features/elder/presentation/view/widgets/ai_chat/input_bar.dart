@@ -7,12 +7,14 @@ import '../../../../../../core/theme/font_style.dart';
 
 class InputBar extends StatelessWidget {
   final TextEditingController controller;
-  final VoidCallback onSend;
+  final VoidCallback? onSend; // ✅ nullable — null = disabled
 
   const InputBar({super.key, required this.controller, required this.onSend});
 
   @override
   Widget build(BuildContext context) {
+    final bool canSend = onSend != null;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 20),
       decoration: BoxDecoration(
@@ -36,7 +38,8 @@ class InputBar extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 textInputAction: TextInputAction.send,
-                onSubmitted: (_) => onSend(),
+                onSubmitted: canSend ? (_) => onSend!() : null,
+                enabled: canSend, // ✅ disables typing while streaming
                 maxLines: 4,
                 minLines: 1,
                 style: getRegularStyle(
@@ -44,8 +47,8 @@ class InputBar extends StatelessWidget {
                   fontSize: context.setSp(FontSize.s16),
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Type your message...',
-                  hintStyle: TextStyle(color: Colors.black38),
+                  hintText: canSend ? 'Type your message...' : 'Waiting for response...',
+                  hintStyle: const TextStyle(color: Colors.black38),
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: context.setWidth(18),
                     vertical: context.setHeight(12),
@@ -57,29 +60,33 @@ class InputBar extends StatelessWidget {
           ),
           SizedBox(width: context.setWidth(10)),
           GestureDetector(
-            onTap: onSend,
-            child: Container(
-              width: context.setWidth(46),
-              height: context.setHeight(46),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [AppColors.blue.shade300, AppColors.blue.shade500],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.blue.withOpacity(0.35),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
+            onTap: onSend, // ✅ null = no-op tap
+            child: AnimatedOpacity(
+              opacity: canSend ? 1.0 : 0.4, // ✅ visual feedback
+              duration: const Duration(milliseconds: 200),
+              child: Container(
+                width: context.setWidth(46),
+                height: context.setHeight(46),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: [AppColors.blue.shade300, AppColors.blue.shade500],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                ],
-              ),
-              child: const Icon(
-                Icons.send_rounded,
-                color: Colors.white,
-                size: 20,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.blue.withOpacity(0.35),
+                      blurRadius: 8,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.send_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
             ),
           ),

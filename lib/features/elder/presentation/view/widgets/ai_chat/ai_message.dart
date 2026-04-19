@@ -43,7 +43,9 @@ class AiMessage extends StatelessWidget {
               ),
             ),
             Flexible(
-              child: Text(
+              child: text.isEmpty
+                  ? _buildTypingIndicator()
+                  : Text(
                 text,
                 style: getRegularStyle(
                   color: AppColors.black,
@@ -56,4 +58,24 @@ class AiMessage extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildTypingIndicator() {
+    return Row(
+      children: [
+        _dot(),
+        _dot(),
+        _dot(),
+      ],
+    );
+  }
+
+  Widget _dot() => Container(
+    margin: const EdgeInsets.symmetric(horizontal: 2),
+    width: 7,
+    height: 7,
+    decoration: const BoxDecoration(
+      color: Colors.grey,
+      shape: BoxShape.circle,
+    ),
+  );
 }
