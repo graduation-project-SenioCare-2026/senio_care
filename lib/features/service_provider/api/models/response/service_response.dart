@@ -15,6 +15,9 @@ class ServiceResponse {
   @JsonKey(name: "location")
   final String? location;
 
+  @JsonKey(name: "user_id")
+  final String? userId;
+
   @JsonKey(name: "phone_number")
   final String? phoneNumber;
 
@@ -31,6 +34,7 @@ class ServiceResponse {
     this.isAvailable,
     this.location,
     this.serviceDescription,
+    this.userId
   });
 
   factory ServiceResponse.fromJson(Map<String, dynamic> json) {
@@ -51,6 +55,7 @@ class ServiceResponse {
           .toList() ?? [],
       isAvailable: isAvailable,
       phoneNumber: phoneNumber,
+      userId: userId
     );
   }
 }

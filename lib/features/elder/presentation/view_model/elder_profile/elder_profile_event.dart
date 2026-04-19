@@ -68,3 +68,8 @@ class EditElderProfileEvent extends ElderProfileEvent {
   final ElderOnboardingRequest request;
   EditElderProfileEvent(this.id, this.request);
 }
+
+class GetUserProfileEvent extends ElderProfileEvent{
+  final String id;
+  GetUserProfileEvent(this.id);
+}

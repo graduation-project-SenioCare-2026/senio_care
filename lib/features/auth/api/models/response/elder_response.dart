@@ -39,6 +39,9 @@ class ElderResponse {
   @JsonKey(name: "mobilityStatus")
   final String? mobilityStatus;
 
+  @JsonKey(name: "userId")
+  final String? userId;
+
   ElderResponse({
     this.id,
     this.age,
@@ -50,6 +53,7 @@ class ElderResponse {
     this.caregiverIds,
     this.bloodType,
     this.mobilityStatus,
+    this.userId
   });
 
   factory ElderResponse.fromJson(Map<String, dynamic> json) =>
@@ -69,6 +73,7 @@ class ElderResponse {
       bloodType: bloodType,
       mobilityStatus: mobilityStatus,
       caregiverIds: caregiverIds?.map((e) => e.toEntity()).toList(),
+      userId: userId
     );
   }
 

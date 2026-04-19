@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:senio_care/core/constants/end_points_constants.dart';
 import 'package:senio_care/features/auth/api/models/response/elder_response.dart';
+import 'package:senio_care/features/auth/api/models/response/user_profile_response.dart';
 import 'package:senio_care/features/elder/api/models/request/medical_document_request.dart';
 import 'package:senio_care/features/elder/api/models/request/onboarding/elder_onboarding_request.dart';
 import 'package:senio_care/features/elder/api/models/response/medical_document_response.dart';
@@ -44,4 +45,9 @@ abstract class ElderApiServices {
 
   @GET(EndPointsConstants.services)
  Future<List<ServiceResponse>> getAllServices();
+
+  @GET(EndPointsConstants.getUser)
+  Future<UserProfileResponse> getUserProfile(
+      @Path('user_id') String id,
+      );
 }

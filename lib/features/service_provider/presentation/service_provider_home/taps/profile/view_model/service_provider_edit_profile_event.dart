@@ -15,3 +15,8 @@ class GetServiceProviderByIdEvent extends ServiceProviderEditProfileEvent{
   GetServiceProviderByIdEvent(this.id);
 }
 
+class GetUserProfileEvent extends ServiceProviderEditProfileEvent{
+  final String id;
+  GetUserProfileEvent(this.id);
+}
+

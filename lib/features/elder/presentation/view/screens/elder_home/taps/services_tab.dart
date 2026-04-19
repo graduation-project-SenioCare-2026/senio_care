@@ -54,6 +54,7 @@ class ServicesTab extends StatelessWidget {
                         enabled: true,
                         child: ServiceCard(
                           service: ServicesEntity(
+                            userId: "",
                             id: "",
                             phoneNumber: "01144521452",
                             serviceDescription: 'Service Name',

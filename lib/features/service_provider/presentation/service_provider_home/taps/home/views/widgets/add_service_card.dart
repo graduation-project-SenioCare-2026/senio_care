@@ -85,6 +85,7 @@ class AddServiceCard extends StatelessWidget {
                           isAvailable: true,
                           serviceDescription: bloc.descriptionController.text,
                           location: bloc.locationController.text,
+                          userId: ProfileManager().serviceProvider?.userId,
                           phoneNumber:
                               ProfileManager().serviceProvider?.phoneNumber,
                           id: ProfileManager().serviceProvider?.id,

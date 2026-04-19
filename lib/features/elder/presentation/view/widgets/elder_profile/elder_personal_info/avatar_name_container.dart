@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/core/common_widgets/gradient_icon_container.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
 import 'package:senio_care/core/theme/font_style.dart';
-import 'package:senio_care/core/user/user_manager.dart';
+import 'package:senio_care/features/elder/presentation/view_model/elder_profile/elder_profile_bloc.dart';
 
 class AvatarNameContainer extends StatelessWidget {
   const AvatarNameContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final user = UserManager().user;
+    final state = context.watch<ElderProfileBloc>().state;
+
+    final userStatus = state.getUserStatus;
+    final userProfile =
+    userStatus.isSuccess ? userStatus.data?.user : null;
+
     return SliverToBoxAdapter(
       child: Column(
         children: [
@@ -24,9 +30,11 @@ class AvatarNameContainer extends StatelessWidget {
             childPadding: context.setWidth(5),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(100),
-              child:
-              (user?.avatar != null && user!.avatar!.isNotEmpty)
-                  ? Image.network(user.avatar!, fit: BoxFit.cover)
+              child: (userProfile?.avatar?.isNotEmpty ?? false)
+                  ? Image.network(
+                userProfile!.avatar!,
+                fit: BoxFit.cover,
+              )
                   : Container(
                 color: Colors.grey[300],
                 child: const Icon(Icons.person, size: 50),
@@ -37,7 +45,7 @@ class AvatarNameContainer extends StatelessWidget {
           SizedBox(height: context.setHeight(8)),
 
           Text(
-            user?.name ?? "Unknown User",
+            userProfile?.name ?? "",
             style: getBoldStyle(
               color: AppColors.black,
               fontSize: context.setSp(FontSize.s18),
@@ -45,7 +53,7 @@ class AvatarNameContainer extends StatelessWidget {
           ),
 
           Text(
-            user?.email ?? "Unknown User",
+            userProfile?.email ?? "",
             style: getBoldStyle(
               color: AppColors.gray.shade700,
               fontSize: context.setSp(FontSize.s14),

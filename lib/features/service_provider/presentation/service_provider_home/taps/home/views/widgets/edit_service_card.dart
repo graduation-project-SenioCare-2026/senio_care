@@ -164,6 +164,7 @@ class _EditServiceCardState extends State<EditServiceCard> {
                           phoneNumber:
                           state.selectedService?.phoneNumber,
                           id: ProfileManager().serviceProvider?.id,
+                          userId:ProfileManager().serviceProvider?.userId,
                         );
                         bloc.add(
                           EditServiceEvent(

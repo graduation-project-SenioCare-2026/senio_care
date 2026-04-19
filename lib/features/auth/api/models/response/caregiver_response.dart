@@ -17,6 +17,8 @@ class CaregiverResponse {
     fromJson: _elderFromJson,
   )
   final List<ElderResponse>? elderIds;
+  @JsonKey(name: "userId")
+  final String? userId;
 
   static List<ElderResponse>? _elderFromJson(dynamic json) {
     if (json == null) return null;
@@ -38,7 +40,8 @@ class CaregiverResponse {
     this.relationship,
     this.elderIds,
     this.id,
-    this.gender
+    this.gender,
+    this.userId
   });
 
   factory CaregiverResponse.fromJson(Map<String, dynamic> json) {

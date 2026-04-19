@@ -23,8 +23,9 @@ class ElderProfileTap extends StatelessWidget {
 
     return Stack(
       children: [
-        ?isCaregiver?Container(color: Colors.white.withOpacity(0.9)):null,
-
+        isCaregiver
+            ? Container(color: Colors.white.withOpacity(0.9))
+            : const SizedBox.shrink(),
         BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
         Scaffold(
           appBar: isCaregiver

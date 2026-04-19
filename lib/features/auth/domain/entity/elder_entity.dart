@@ -12,6 +12,7 @@ class ElderEntity extends Equatable {
   final List<CaregiverEntity>? caregiverIds;
   final String? bloodType;
   final String? mobilityStatus;
+  final String? userId;
 
   const ElderEntity({
     this.id,
@@ -24,6 +25,7 @@ class ElderEntity extends Equatable {
     this.caregiverIds,
     this.bloodType,
     this.mobilityStatus,
+    this.userId
   });
 
   @override
@@ -38,5 +40,6 @@ class ElderEntity extends Equatable {
     caregiverIds,
     bloodType,
     mobilityStatus,
+    userId
   ];
 }

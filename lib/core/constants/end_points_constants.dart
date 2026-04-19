@@ -21,5 +21,5 @@ abstract class EndPointsConstants {
   static const String deleteReminder="/daily-medicines/{id}";
 
   static const String addMedicine="/daily-medicines/";
-
+  static const String getUser="/users/{user_id}";
 }
