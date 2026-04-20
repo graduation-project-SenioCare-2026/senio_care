@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'run_sse_request.g.dart';
 
 @JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class RunSseRequest {
   @JsonKey(name: 'app_name')
   final String appName;
@@ -34,6 +35,7 @@ class RunSseRequest {
 }
 
 @JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class SseMessage {
   @JsonKey(name: 'role')
   final String role;

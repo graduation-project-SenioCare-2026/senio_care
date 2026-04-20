@@ -6,16 +6,19 @@ import '../../../../core/constants/constants.dart';
 import '../../../../core/constants/end_points_constants.dart';
 import '../models/request/ai_chat/run_sse_request.dart';
 
-/// Handles SSE streaming via Dio directly
-/// Kept as a separate injectable class because Retrofit cannot generate
-/// streaming endpoints (it only supports Future-based responses).
-
 @lazySingleton
 class SseClient {
   late final Dio _dio;
 
   SseClient() {
-    _dio = Dio(BaseOptions(baseUrl: EndPointsConstants.aiBaseUrl));
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: EndPointsConstants.aiBaseUrl,
+        headers: {
+          'ngrok-skip-browser-warning': 'true',
+        },
+      ),
+    );
   }
 
   Stream<String> stream({
@@ -24,37 +27,47 @@ class SseClient {
     required String message,
   }) async* {
     try {
+      print('🔵 SSE: starting request for user=$userId session=$sessionId');
+
       final requestBody = RunSseRequest(
         appName: Constants.appName,
         userId: userId,
         sessionId: sessionId,
         newMessage: SseMessage(parts: [SseMessagePart(text: message)]),
       );
+      print('🔵 SSE JSON: ${jsonEncode(requestBody.toJson())}');
 
-      // ResponseType.stream tells Dio not to buffer the full response —
-      // instead it gives us a ResponseBody whose stream we read chunk by chunk.
+      print('🔵 SSE: request body=${requestBody.toJson()}');
+
       final response = await _dio.post<ResponseBody>(
         EndPointsConstants.runSse,
         data: requestBody.toJson(),
         options: Options(
           responseType: ResponseType.stream,
-          headers: {'Accept': 'text/event-stream', 'Cache-Control': 'no-cache'},
+          headers: {
+            'Content-Type': 'application/json',
+            // 'Accept': 'text/event-stream',
+            // 'Cache-Control': 'no-cache',
+            // 'Connection': 'keep-alive',
+            // 'ngrok-skip-browser-warning': 'true',
+          },
         ),
       );
 
+      print('🟢 SSE: connected, status=${response.statusCode}');
+
       final responseBody = response.data;
-      if (responseBody == null) return;
+      if (responseBody == null) {
+        print('🔴 SSE: response body is null');
+        return;
+      }
 
       final buffer = StringBuffer();
-      // SSE chunks don't always arrive as complete lines — a single TCP packet
-      // may contain half a line, or multiple lines. We accumulate raw bytes
-      // here until we have complete '\n'-terminated lines to process.
 
-      await for (final chunk in responseBody.stream.cast<List<int>>().transform(
-        utf8.decoder,
-      )) {
-        // responseBody.stream is a Stream<Uint8List> (raw bytes).
-        // utf8.decoder transforms it into a Stream<String>.
+      await for (final chunk in responseBody.stream
+          .cast<List<int>>()
+          .transform(utf8.decoder)) {
+        print('📦 SSE raw chunk: $chunk');
 
         buffer.write(chunk);
 
@@ -64,37 +77,39 @@ class SseClient {
         buffer.clear();
         if (!current.endsWith('\n')) {
           buffer.write(lines.removeLast());
-          // Incomplete last line — save it back to combine with next chunk.
         } else {
           lines.removeLast();
-          // Trailing empty string from split — remove it.
         }
 
         for (final line in lines) {
           final trimmed = line.trim();
 
           if (!trimmed.startsWith('data:')) continue;
-          // SSE protocol: only process "data:" lines, ignore "event:", "id:", etc.
 
           final data = trimmed.substring(5).trim();
+
+          print('📨 SSE data line: $data');
 
           if (data.isEmpty || data == '[DONE]') continue;
 
           final extracted = _extractText(data);
+          print('✅ SSE extracted text: $extracted');
+
           if (extracted.isNotEmpty) yield extracted;
         }
       }
+
+      print('🏁 SSE: stream done');
     } on DioException catch (e) {
+      print('🔴 SSE DioError: type=${e.type} | message=${e.message} | response=${e.response?.data}');
       throw Exception('SSE connection failed: ${e.message}');
     } catch (e) {
+      print('🔴 SSE unexpected error: $e');
       throw Exception('Unexpected error: $e');
     }
   }
-}
 
-
-
-String _extractText(String data) {
+  String _extractText(String data) {
     try {
       final json = jsonDecode(data) as Map<String, dynamic>;
 
@@ -120,4 +135,4 @@ String _extractText(String data) {
       return data;
     }
   }
-
+}
