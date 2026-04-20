@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/http.dart';
@@ -17,9 +16,9 @@ abstract class ChatApiServices {
   /// The session is identified by the path params you provide.
   @POST(EndPointsConstants.createSession)
   Future<void> createSession(
-      @Path('app_name') String appName,
-      @Path('user_id') String userId,
-      @Path('session_id') String sessionId,
-      @Body() CreateSessionRequest request,
-      );
+    @Path('app_name') String appName,
+    @Path('user_id') String userId,
+    @Path('session_id') String sessionId,
+    @Body() CreateSessionRequest request,
+  );
 }
