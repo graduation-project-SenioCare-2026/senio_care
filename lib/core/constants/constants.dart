@@ -9,6 +9,6 @@ abstract class Constants {
   static const String serviceProvider = "serviceProvider";
 
 
-  static const String appName = 'seniocare';
+  static const String appName = 'orchestrator_agent';
 
 }

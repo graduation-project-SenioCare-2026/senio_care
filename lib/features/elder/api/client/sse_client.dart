@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/constants/end_points_constants.dart';
 import '../models/request/ai_chat/run_sse_request.dart';
@@ -12,12 +13,17 @@ class SseClient {
 
   SseClient() {
     _dio = Dio(
-      BaseOptions(
-        baseUrl: EndPointsConstants.aiBaseUrl,
-        headers: {
-          'ngrok-skip-browser-warning': 'true',
-        },
-      ),
+        BaseOptions(
+          baseUrl: EndPointsConstants.aiBaseUrl,
+          headers: {
+            'ngrok-skip-browser-warning': 'true',
+          },
+        ))..interceptors.add(PrettyDioLogger(
+      requestHeader: true,
+      requestBody: true,
+      responseBody: true,
+      responseHeader: false,
+    )
     );
   }
 
@@ -41,9 +47,10 @@ class SseClient {
 
       final response = await _dio.post<ResponseBody>(
         EndPointsConstants.runSse,
-        data: requestBody.toJson(),
+        data: jsonEncode(requestBody.toJson()),
         options: Options(
           responseType: ResponseType.stream,
+          validateStatus: (status) => true,
           headers: {
             'Content-Type': 'application/json',
             // 'Accept': 'text/event-stream',
@@ -53,6 +60,16 @@ class SseClient {
           },
         ),
       );
+      if (response.statusCode != 200) {
+        final bytes = await (response.data as ResponseBody)
+            .stream
+            .cast<List<int>>()
+            .expand((x) => x)
+            .toList();
+        final errorBody = utf8.decode(bytes);
+        print('🔴 Server error ${response.statusCode}: $errorBody');
+        throw Exception('Server error: $errorBody');
+      }
 
       print('🟢 SSE: connected, status=${response.statusCode}');
 
@@ -101,11 +118,24 @@ class SseClient {
 
       print('🏁 SSE: stream done');
     } on DioException catch (e) {
-      print('🔴 SSE DioError: type=${e.type} | message=${e.message} | response=${e.response?.data}');
-      throw Exception('SSE connection failed: ${e.message}');
-    } catch (e) {
-      print('🔴 SSE unexpected error: $e');
-      throw Exception('Unexpected error: $e');
+      // Read the error body from the stream
+      String errorBody = '';
+      try {
+        if (e.response?.data is ResponseBody) {
+          final bytes = await (e.response!.data as ResponseBody)
+              .stream
+              .cast<List<int>>()
+              .expand((x) => x)
+              .toList();
+          errorBody = utf8.decode(bytes);
+        } else {
+          errorBody = e.response?.data?.toString() ?? '';
+        }
+      } catch (_) {}
+
+      print('🔴 SSE DioError: ${e.type} | ${e.message}');
+      print('🔴 SSE Error body: $errorBody');
+      throw Exception('SSE connection failed: $errorBody');
     }
   }
 
