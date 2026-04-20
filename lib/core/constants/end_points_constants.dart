@@ -22,4 +22,5 @@ abstract class EndPointsConstants {
 
   static const String addMedicine="/daily-medicines/";
   static const String getUser="/users/{user_id}";
+  static const String notification="/notifications/queue";
 }

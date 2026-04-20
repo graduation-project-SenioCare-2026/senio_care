@@ -1,6 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz_data;
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin _plugin =
@@ -75,5 +76,30 @@ class NotificationService {
         ),
       ),
     );
+  }
+
+  static Future<void> initFCM({
+    required Function(String token) onTokenReceived,
+  }) async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    // 🔐 permission
+    await messaging.requestPermission();
+
+    // 📲 أول token
+    final token = await messaging.getToken();
+    if (token != null) {
+      onTokenReceived(token);
+    }
+
+    // 🔄 لو التوكن اتغير
+    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
+      onTokenReceived(newToken);
+    });
+  }
+
+  // لو عايزة تجيبيه في أي مكان
+  static Future<String?> getToken() async {
+    return await FirebaseMessaging.instance.getToken();
   }
 }

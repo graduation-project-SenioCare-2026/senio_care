@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:senio_care/core/constants/end_points_constants.dart';
 import 'package:senio_care/features/auth/api/models/request/google_sign_in_request.dart';
+import 'package:senio_care/features/auth/api/models/request/notification_request.dart';
 import 'package:senio_care/features/auth/api/models/response/caregiver_response.dart';
 import 'package:senio_care/features/auth/api/models/response/elder_response.dart';
 import 'package:senio_care/features/auth/api/models/response/google_sign_in_response.dart';
@@ -34,5 +35,10 @@ abstract class AuthApiServices {
   @GET(EndPointsConstants.serviceProviderById)
   Future<ServiceProviderResponse> getServiceProviderById(
       @Path('id') String id
+      );
+
+@POST(EndPointsConstants.notification)
+  Future<String> sendNotification(
+      @Body() NotificationRequest request
       );
 }
