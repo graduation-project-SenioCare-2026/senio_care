@@ -1,5 +1,7 @@
 import 'package:senio_care/core/result/result.dart';
 
+import '../../entity/ai_chat/chat_session_entity.dart';
+import '../../entity/ai_chat/chat_turn_entity.dart';
 import '../../entity/ai_chat/session_entity.dart';
 
 abstract interface class ChatRepo {
@@ -14,4 +16,11 @@ abstract interface class ChatRepo {
     required String sessionId,
     required String message,
   });
+
+  Future<Result<ConversationDetailEntity>> getConversation({
+    required String userId,
+    required String sessionId,
+  });
+
+  Future<Result<List<ChatSessionEntity>>> getChatHistory({required String userId});
 }

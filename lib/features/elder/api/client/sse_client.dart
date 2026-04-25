@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../../../../core/constants/constants.dart';
@@ -13,17 +14,17 @@ class SseClient {
 
   SseClient() {
     _dio = Dio(
-        BaseOptions(
-          baseUrl: EndPointsConstants.aiBaseUrl,
-          headers: {
-            'ngrok-skip-browser-warning': 'true',
-          },
-        ))..interceptors.add(PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-      responseBody: true,
-      responseHeader: false,
-    )
+      BaseOptions(
+        baseUrl: EndPointsConstants.aiBaseUrl,
+        headers: {'ngrok-skip-browser-warning': 'true'},
+      ),
+    )..interceptors.add(
+      PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        responseBody: false,
+        responseHeader: false,
+      ),
     );
   }
 
@@ -32,137 +33,145 @@ class SseClient {
     required String sessionId,
     required String message,
   }) async* {
-    try {
-      print('🔵 SSE: starting request for user=$userId session=$sessionId');
+    debugPrint('🚀 [SSE] Starting stream | userId=$userId | sessionId=$sessionId | message=$message');
 
-      final requestBody = RunSseRequest(
-        appName: Constants.appName,
-        userId: userId,
-        sessionId: sessionId,
-        newMessage: SseMessage(parts: [SseMessagePart(text: message)]),
-      );
-      print('🔵 SSE JSON: ${jsonEncode(requestBody.toJson())}');
+    final requestBody = RunSseRequest(
+      appName: Constants.appName,
+      userId: userId,
+      sessionId: sessionId,
+      newMessage: SseMessage(parts: [SseMessagePart(text: message)]),
+    );
 
-      print('🔵 SSE: request body=${requestBody.toJson()}');
+    final response = await _dio.post<ResponseBody>(
+      EndPointsConstants.runSse,
+      data: jsonEncode(requestBody.toJson()),
+      options: Options(
+        responseType: ResponseType.stream,
+        validateStatus: (_) => true,
+        headers: {'Content-Type': 'application/json'},
+      ),
+    );
 
-      final response = await _dio.post<ResponseBody>(
-        EndPointsConstants.runSse,
-        data: jsonEncode(requestBody.toJson()),
-        options: Options(
-          responseType: ResponseType.stream,
-          validateStatus: (status) => true,
-          headers: {
-            'Content-Type': 'application/json',
-            // 'Accept': 'text/event-stream',
-            // 'Cache-Control': 'no-cache',
-            // 'Connection': 'keep-alive',
-            // 'ngrok-skip-browser-warning': 'true',
-          },
-        ),
-      );
-      if (response.statusCode != 200) {
-        final bytes = await (response.data as ResponseBody)
-            .stream
-            .cast<List<int>>()
-            .expand((x) => x)
-            .toList();
-        final errorBody = utf8.decode(bytes);
-        print('🔴 Server error ${response.statusCode}: $errorBody');
-        throw Exception('Server error: $errorBody');
-      }
+    debugPrint('📡 [SSE] Response status: ${response.statusCode}');
 
-      print('🟢 SSE: connected, status=${response.statusCode}');
-
-      final responseBody = response.data;
-      if (responseBody == null) {
-        print('🔴 SSE: response body is null');
-        return;
-      }
-
-      final buffer = StringBuffer();
-
-      await for (final chunk in responseBody.stream
+    if (response.statusCode != 200) {
+      final bytes = await (response.data as ResponseBody)
+          .stream
           .cast<List<int>>()
-          .transform(utf8.decoder)) {
-        print('📦 SSE raw chunk: $chunk');
+          .expand((x) => x)
+          .toList();
+      final errorBody = utf8.decode(bytes);
+      debugPrint('❌ [SSE] Server error ${response.statusCode}: $errorBody');
+      throw Exception('Server error ${response.statusCode}: $errorBody');
+    }
 
-        buffer.write(chunk);
+    final responseBody = response.data;
+    if (responseBody == null) {
+      debugPrint('❌ [SSE] Response body is null — aborting');
+      return;
+    }
 
-        String current = buffer.toString();
-        final lines = current.split('\n');
+    debugPrint('✅ [SSE] Stream started, waiting for chunks...');
 
-        buffer.clear();
-        if (!current.endsWith('\n')) {
-          buffer.write(lines.removeLast());
-        } else {
-          lines.removeLast();
-        }
+    final buffer = StringBuffer();
+    int chunkCount = 0;
+    int lineCount = 0;
+    int yieldCount = 0;
 
-        for (final line in lines) {
-          final trimmed = line.trim();
+    await for (final chunk in responseBody.stream
+        .cast<List<int>>()
+        .transform(utf8.decoder)) {
+      chunkCount++;
+      debugPrint('📦 [SSE] Raw chunk #$chunkCount (${chunk.length} chars): ${chunk.replaceAll('\n', '\\n')}');
 
-          if (!trimmed.startsWith('data:')) continue;
+      buffer.write(chunk);
 
-          final data = trimmed.substring(5).trim();
+      final current = buffer.toString();
+      final lines = current.split('\n');
 
-          print('📨 SSE data line: $data');
+      buffer.clear();
 
-          if (data.isEmpty || data == '[DONE]') continue;
-
-          final extracted = _extractText(data);
-          print('✅ SSE extracted text: $extracted');
-
-          if (extracted.isNotEmpty) yield extracted;
-        }
+      if (!current.endsWith('\n')) {
+        final incomplete = lines.removeLast();
+        buffer.write(incomplete);
+        debugPrint('⏳ [SSE] Holding incomplete line in buffer: "$incomplete"');
+      } else {
+        lines.removeLast();
       }
 
-      print('🏁 SSE: stream done');
-    } on DioException catch (e) {
-      // Read the error body from the stream
-      String errorBody = '';
-      try {
-        if (e.response?.data is ResponseBody) {
-          final bytes = await (e.response!.data as ResponseBody)
-              .stream
-              .cast<List<int>>()
-              .expand((x) => x)
-              .toList();
-          errorBody = utf8.decode(bytes);
-        } else {
-          errorBody = e.response?.data?.toString() ?? '';
-        }
-      } catch (_) {}
+      for (final line in lines) {
+        lineCount++;
+        final trimmed = line.trim();
+        debugPrint('📄 [SSE] Line #$lineCount: "$trimmed"');
 
-      print('🔴 SSE DioError: ${e.type} | ${e.message}');
-      print('🔴 SSE Error body: $errorBody');
-      throw Exception('SSE connection failed: $errorBody');
+        if (!trimmed.startsWith('data:')) {
+          debugPrint('⏭️  [SSE] Skipping non-data line');
+          continue;
+        }
+
+        final data = trimmed.substring(5).trim();
+        debugPrint('🔍 [SSE] Data payload: "$data"');
+
+        if (data.isEmpty) {
+          debugPrint('⏭️  [SSE] Skipping empty data');
+          continue;
+        }
+        if (data == '[DONE]') {
+          debugPrint('🏁 [SSE] Received [DONE]');
+          continue;
+        }
+
+        final extracted = _extractText(data);
+        debugPrint('✏️  [SSE] Extracted text: "$extracted"');
+
+        if (extracted.isNotEmpty) {
+          yieldCount++;
+          debugPrint('➡️  [SSE] Yielding chunk #$yieldCount: "$extracted"');
+          yield extracted;
+        } else {
+          debugPrint('⚠️  [SSE] Extracted text is empty — skipping yield');
+        }
+      }
     }
+
+    debugPrint('🏁 [SSE] Stream ended | chunks=$chunkCount | lines=$lineCount | yielded=$yieldCount');
   }
 
   String _extractText(String data) {
     try {
       final json = jsonDecode(data) as Map<String, dynamic>;
+      debugPrint('🧩 [SSE] Parsed JSON keys: ${json.keys.toList()}');
 
-      // Shape 1 — ADK standard: { "content": { "parts": [ { "text": "..." } ] } }
+      // Shape 1
       final content = json['content'];
       if (content is Map) {
         final parts = content['parts'];
         if (parts is List && parts.isNotEmpty) {
-          return (parts.first as Map)['text']?.toString() ?? '';
+          final text = (parts.first as Map)['text']?.toString() ?? '';
+          debugPrint('🧩 [SSE] Shape 1 matched — text: "$text"');
+          return text;
         }
       }
 
-      // Shape 2 — Flat: { "text": "..." }
+      // Shape 2
       final text = json['text'];
-      if (text != null) return text.toString();
+      if (text != null) {
+        debugPrint('🧩 [SSE] Shape 2 matched — text: "$text"');
+        return text.toString();
+      }
 
-      // Shape 3 — Wrapper: { "response": "..." }
+      // Shape 3
       final resp = json['response'];
-      if (resp is String) return resp;
+      if (resp is String) {
+        debugPrint('🧩 [SSE] Shape 3 matched — response: "$resp"');
+        return resp;
+      }
 
+      debugPrint('⚠️  [SSE] No matching shape — full JSON: $json');
       return '';
-    } catch (_) {
-      return data;
+    } catch (e) {
+      debugPrint('❌ [SSE] JSON parse error: $e | raw data: "$data"');
+      return '';
     }
   }
 }

@@ -1,4 +1,6 @@
 import '../../../../../../core/result/result.dart';
+import '../../../../domain/entity/ai_chat/chat_session_entity.dart';
+import '../../../../domain/entity/ai_chat/chat_turn_entity.dart';
 import '../../../../domain/entity/ai_chat/session_entity.dart';
 
 abstract interface class ChatRemoteDs {
@@ -12,4 +14,11 @@ abstract interface class ChatRemoteDs {
     required String sessionId,
     required String message,
   });
+
+  Future<Result<ConversationDetailEntity>> getConversation({
+    required String userId,
+    required String sessionId,
+  });
+
+  Future<Result<List<ChatSessionEntity>>> getChatHistory({required String userId});
 }

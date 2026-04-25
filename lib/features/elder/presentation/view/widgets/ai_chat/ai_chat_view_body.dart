@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/user/user_manager.dart';
 import 'package:senio_care/features/elder/presentation/view/widgets/ai_chat/ai_chat_body.dart';
+import 'package:senio_care/features/elder/presentation/view/widgets/ai_chat/chat_history_drawer.dart';
 
 import '../../../../../../core/common_widgets/bg_gradient.dart';
 import '../../../../../../core/theme/app_colors.dart';
@@ -21,13 +22,13 @@ class AiChatViewBody extends StatefulWidget {
 class _AiChatViewBodyState extends State<AiChatViewBody> {
   @override
   void initState() {
+    String sessionId=DateTime.now().millisecondsSinceEpoch.toString();
     super.initState();
-    // Dispatch session start — BlocProvider is already provided by app_routes.dart
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ChatBloc>().add(
         ChatSessionStarted(
           UserManager().userId,
-          DateTime.now().millisecondsSinceEpoch.toString(),
+          sessionId,
         ),
       );
     });
@@ -39,6 +40,8 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
       children: [
         BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
         Scaffold(
+          backgroundColor: Colors.transparent,
+          drawer: ChatHistoryDrawer(userId: UserManager().userId??"",),
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             centerTitle: true,
@@ -56,6 +59,15 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
               onPressed: () => Navigator.pop(context),
               icon: const Icon(Icons.arrow_back_ios),
             ),
+            actions: [
+              Builder(
+                builder: (context) => IconButton(
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                  icon: const Icon(Icons.menu),
+                  tooltip: 'Chat History',
+                ),
+              ),
+            ],
           ),
           body: const AiChatBody(),
         ),

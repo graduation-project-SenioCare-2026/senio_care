@@ -1,4 +1,6 @@
 import 'package:injectable/injectable.dart';
+import 'package:senio_care/features/elder/domain/entity/ai_chat/chat_session_entity.dart';
+import 'package:senio_care/features/elder/domain/entity/ai_chat/chat_turn_entity.dart';
 
 import '../../../../../core/result/result.dart';
 import '../../../domain/entity/ai_chat/session_entity.dart';
@@ -16,10 +18,7 @@ class ChatRepoImpl implements ChatRepo {
     required String userId,
     required String sessionId,
   }) {
-    return _chatRemoteDs.createSession(
-      userId: userId,
-      sessionId: sessionId,
-    );
+    return _chatRemoteDs.createSession(userId: userId, sessionId: sessionId);
   }
 
   @override
@@ -33,5 +32,20 @@ class ChatRepoImpl implements ChatRepo {
       sessionId: sessionId,
       message: message,
     );
+  }
+
+  @override
+  Future<Result<List<ChatSessionEntity>>> getChatHistory({
+    required String userId,
+  }) {
+    return _chatRemoteDs.getChatHistory(userId: userId);
+  }
+
+  @override
+  Future<Result<ConversationDetailEntity>> getConversation({
+    required String userId,
+    required String sessionId,
+  }) {
+    return _chatRemoteDs.getConversation(userId: userId, sessionId: sessionId);
   }
 }

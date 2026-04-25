@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:senio_care/features/elder/api/client/sse_client.dart';
+import 'package:senio_care/features/elder/domain/entity/ai_chat/chat_session_entity.dart';
+import 'package:senio_care/features/elder/domain/entity/ai_chat/chat_turn_entity.dart';
 
 import '../../../../../../core/constants/constants.dart';
 import '../../../../../../core/exceptions/response_exception.dart';
@@ -15,16 +17,20 @@ import '../../../models/response/ai_chat/session_response.dart';
 @Injectable(as: ChatRemoteDs)
 class ChatRemoteDsImpl implements ChatRemoteDs {
   final ChatApiServices _chatApiServices;
+  // final GetChatApiServices _getChatApiServices;
   final SseClient _sseClient;
 
-  ChatRemoteDsImpl(this._chatApiServices, this._sseClient);
+  ChatRemoteDsImpl(
+    this._chatApiServices,
+    this._sseClient,
+    // this._getChatApiServices,
+  );
 
   @override
   Future<Result<SessionEntity>> createSession({
     required String userId,
     required String sessionId,
   }) async {
-    // Build the entity from our own params — server returns no body.
     final entity = SessionResponse(
       appName: Constants.appName,
       userId: userId,
@@ -40,7 +46,6 @@ class ChatRemoteDsImpl implements ChatRemoteDs {
           CreateSessionRequest(),
         );
       } on DioException catch (e) {
-        // 409 = session already exists — treat as success, not an error.
         if (e.response?.statusCode == 409) return entity;
         rethrow;
       }
@@ -67,5 +72,48 @@ class ChatRemoteDsImpl implements ChatRemoteDs {
         responseException: ResponseException(message: e.toString()),
       );
     }
+  }
+
+  @override
+  Future<Result<List<ChatSessionEntity>>> getChatHistory({
+    required String userId,
+  }) async {
+    return safeCall(() async {
+      final response = await _chatApiServices.getChatHistory(userId);
+      return response.conversations
+          .map((m) => ChatSessionEntity(
+        sessionId: m.sessionId,
+        headline: m.headline,
+        preview: m.preview,
+        turnCount: m.turnCount,
+      ))
+          .toList();
+    });
+  }
+
+  @override
+  Future<Result<ConversationDetailEntity>> getConversation({
+    required String userId,
+    required String sessionId,
+  }) async {
+    return safeCall(() async {
+      final response = await _chatApiServices.getChatConversation(
+        userId,
+        sessionId,
+      );
+      final entity = ConversationDetailEntity(
+        headline: response.headline,
+        turns: response.turns
+            .map(
+              (t) => ChatTurnEntity(
+                role: t.role,
+                text: t.text,
+                timestamp: t.timestamp,
+              ),
+            )
+            .toList(),
+      );
+      return entity;
+    });
   }
 }
