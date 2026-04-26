@@ -347,10 +347,11 @@
   "cream": "كريم",
   "inhaler": "بخاخ",
   "patch": "لصقة",
-  "startTimeMustBeBeforeEndTime": "وقت البداية يجب أن يكون قبل وقت النهاية",
   "ml": "مل",
   "drop": "نقطه",
   "gm": "جم",
   "noRemindersAdded": "لم يتم إضافة أي تذكيرات بعد",
-  "careMadeSimpleForYourFamily": "رعاية سهلة لعائلتك"
+  "careMadeSimpleForYourFamily": "رعاية سهلة لعائلتك",
+  "startAddFirstService": "ابدأ بإضافة خدمتك الأولى"
+
 }

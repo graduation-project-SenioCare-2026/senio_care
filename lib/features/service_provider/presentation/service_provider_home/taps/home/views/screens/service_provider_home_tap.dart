@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/config/di/di.dart';
+import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/home/view_model/services_bloc.dart';
@@ -24,9 +25,9 @@ class ServiceProviderHomeTap extends StatelessWidget {
             extendBody: true,
             body: DisplayService(),
             floatingActionButton: GradientIconContainer(
-              width: 60,
-              height: 60,
-              radius: 30,
+              width: context.setWidth(55),
+              height: context.setHeight(60),
+              radius: context.setMinSize(30),
               onTap: () {
                 Navigator.pushNamed(
                   context,
@@ -34,7 +35,7 @@ class ServiceProviderHomeTap extends StatelessWidget {
                   arguments: context.read<ServicesBloc>(),
                 );
               },
-              child: Icon(Icons.add, color: Colors.white, size: 35),
+              child: Icon(Icons.add, color: Colors.white, size: 40),
             ),
           );
         },

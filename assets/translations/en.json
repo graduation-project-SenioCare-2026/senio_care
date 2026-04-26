@@ -340,12 +340,12 @@
   "cream": "Cream",
   "inhaler": "Inhaler",
   "patch": "Patch",
-  "pleaseEnterElderId": "Please Enter Elder ID",
   "ml": "ml",
   "drop": "drop",
   "gm": "gm",
   "noRemindersAdded": "No reminders added yet",
   "addMedicine": "Add Medicine",
-  "careMadeSimpleForYourFamily": "Care made simple for your family"
+  "careMadeSimpleForYourFamily": "Care made simple for your family",
+  "startAddFirstService": "Start by adding your first service"
 
 }
