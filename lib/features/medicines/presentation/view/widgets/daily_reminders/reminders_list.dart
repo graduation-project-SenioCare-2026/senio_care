@@ -52,7 +52,7 @@ class _RemindersListState extends State<RemindersList> {
 
               bool canTakeMedicine =
                   reminder.state != "taken" &&
-                      reminder.state != "missed" &&
+
                       state.selectedDate == currentDate;
 
               return MedicationCard(

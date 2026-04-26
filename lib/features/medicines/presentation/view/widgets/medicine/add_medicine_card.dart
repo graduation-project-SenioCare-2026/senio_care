@@ -136,79 +136,85 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
             vertical: context.setHeight(20),
             horizontal: context.setWidth(16),
           ),
-          child: CustomCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+          child: Column(
+            children: [
+              CustomCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
 
-                AppFormField(
-                  label: 'medicineName'.tr(),
-                  controller: _medicineNameController,
-                  hint: 'e.g. Paracetamol',
-                  validator: (val) => Validator.validateRequired(val),
+                    AppFormField(
+                      label: 'medicineName'.tr(),
+                      controller: _medicineNameController,
+                      hint: 'e.g. Paracetamol',
+                      validator: (val) => Validator.validateRequired(val),
+                    ),
+
+                    Text(
+                      'medicineType'.tr(),
+                      style: getBoldStyle(
+                        color: AppColors.black,
+                        fontSize: context.setSp(FontSize.s16),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: context.setHeight(15),
+                      ),
+                      child: MedicineTypePicker(
+                        selectedType: _selectedType,
+                        types: _types,
+                        onSelected: (type) {
+                          setState(() {
+                            _selectedType = type;
+                          });
+                        },
+                      ),
+                    ),
+
+                    AppFormField(
+                      label: 'dosage'.tr(),
+                      controller: _dosageController,
+                      hint: _dosageHint,
+                      validator: (val) => Validator.validateRequired(val),
+                      keyboardType: TextInputType.number,
+                    ),
+
+                    SizedBox(height: context.setHeight(12)),
+
+                    TimesSection(times: state.times ?? []),
+
+                    SizedBox(height: context.setHeight(12)),
+
+                    StartDateField(startDate: state.startDate),
+
+                    SizedBox(height: context.setHeight(12)),
+
+                    EndDateField(state: state, startDate: state.startDate),
+
+                    SizedBox(height: context.setHeight(12)),
+
+                    AppFormField(
+                      label: 'notes(optional)'.tr(),
+                      controller: _notesController,
+                    ),
+
+
+                  ],
                 ),
+              ),
+              SizedBox(height: context.setHeight(20)),
 
-                Text(
-                  'medicineType'.tr(),
-                  style: getBoldStyle(
-                    color: AppColors.black,
-                    fontSize: context.setSp(FontSize.s16),
-                  ),
+              if (state.addMedicineState.isLoading)
+                const LoadingBtn()
+              else
+                CustomElevatedButton(
+                  width: context.setWidth(350),
+                  onPressed: () => _submit(context, state),
+                  buttonLabel: 'addMedicine'.tr(),
                 ),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: context.setHeight(15),
-                  ),
-                  child: MedicineTypePicker(
-                    selectedType: _selectedType,
-                    types: _types,
-                    onSelected: (type) {
-                      setState(() {
-                        _selectedType = type;
-                      });
-                    },
-                  ),
-                ),
-
-                AppFormField(
-                  label: 'dosage'.tr(),
-                  controller: _dosageController,
-                  hint: _dosageHint,
-                  validator: (val) => Validator.validateRequired(val),
-                ),
-
-                SizedBox(height: context.setHeight(12)),
-
-                TimesSection(times: state.times ?? []),
-
-                SizedBox(height: context.setHeight(12)),
-
-                StartDateField(startDate: state.startDate),
-
-                SizedBox(height: context.setHeight(12)),
-
-                EndDateField(state: state, startDate: state.startDate),
-
-                SizedBox(height: context.setHeight(12)),
-
-                AppFormField(
-                  label: 'notes(optional)'.tr(),
-                  controller: _notesController,
-                ),
-
-                SizedBox(height: context.setHeight(20)),
-
-                if (state.addMedicineState.isLoading)
-                  const LoadingBtn()
-                else
-                  CustomElevatedButton(
-                    width: context.setWidth(300),
-                    onPressed: () => _submit(context, state),
-                    buttonLabel: 'addMedicine'.tr(),
-                  ),
-              ],
-            ),
+            ],
           ),
         );
       },

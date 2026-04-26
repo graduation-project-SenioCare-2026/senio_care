@@ -346,6 +346,9 @@
   "noRemindersAdded": "No reminders added yet",
   "addMedicine": "Add Medicine",
   "careMadeSimpleForYourFamily": "Care made simple for your family",
-  "startAddFirstService": "Start by adding your first service"
+  "startAddFirstService": "Start by adding your first service",
+  "continueCaregivingJourney": "Sign in to continue your caregiving journey",
+  "continueProvidingCareServices": "Sign in to continue providing care services",
+  "puff": "puff"
 
 }

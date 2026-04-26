@@ -52,6 +52,7 @@ class ServicesTab extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) => Skeletonizer(
                         enabled: true,
+
                         child: ServiceCard(
                           service: ServicesEntity(
                             userId: "",
@@ -79,7 +80,6 @@ class ServicesTab extends StatelessWidget {
                       ),
                     );
                   }
-
 
                   return ListView.builder(
                     itemCount: services.length,

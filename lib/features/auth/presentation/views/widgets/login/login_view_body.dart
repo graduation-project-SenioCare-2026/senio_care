@@ -8,6 +8,7 @@ import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
 import 'package:senio_care/core/theme/font_style.dart';
+import 'package:senio_care/core/user/user_manager.dart';
 import 'package:senio_care/features/auth/presentation/views/widgets/login/continue_with_google_button.dart';
 
 class LoginViewBody extends StatelessWidget {
@@ -16,6 +17,14 @@ class LoginViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String loginSubTitle = "signInToContinueYourCareJourney";
+    if (role == "caregiver") {
+      loginSubTitle = "continueCaregivingJourney";
+    } else if (role == "serviceProvider") {
+      loginSubTitle = "continueProvidingCareServices";
+    } else {
+      loginSubTitle = "signInToContinueYourCareJourney";
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
@@ -23,15 +32,22 @@ class LoginViewBody extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(width: context.setWidth(10),),
-            IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back_ios,color: AppColors.white,size: context.setWidth(25),)),
+            SizedBox(width: context.setWidth(10)),
+            IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.white,
+                size: context.setWidth(25),
+              ),
+            ),
           ],
         ),
         SizedBox(height: context.setHeight(10)),
         HeaderText(
           title: 'welcomeToSenioCare'.tr(),
           titleSize: FontSize.s32,
-          subTitle: 'signInToContinueYourCareJourney'.tr(),
+          subTitle: loginSubTitle.tr(),
           subTitleSize: FontSize.s20,
           titlePadding: 20,
         ),

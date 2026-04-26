@@ -20,45 +20,34 @@ class EditPersonalInfoViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ElderProfileBloc, ElderProfileState>(
   builder: (context, state) {
-    bool isLoading=state.getElderStatus?.isLoading?? false;
-    if (isLoading) {
-      return const ProfileSkeleton(
-        infoRowsCount: 6,
-        showAvatar: true,
-        showActions: false,
-      );
-    }
+
     return Scaffold(
-      body: Skeletonizer(
-        enabled: state.getElderStatus?.isLoading??true,
-        effect: RawShimmerEffect(colors: [Colors.red,Colors.deepOrangeAccent]),
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              backgroundColor: Colors.transparent,
-              centerTitle: true,
-              elevation: 0,
-              title: Text(
-                "editProfile".tr(),
-                style: getBoldStyle(
-                  color: AppColors.black,
-                  fontSize: context.setSp(FontSize.s24),
-                ),
-              ),
-              leading: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: AppColors.black,
-                  size: context.setWidth(25),
-                ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            backgroundColor: Colors.transparent,
+            centerTitle: true,
+            elevation: 0,
+            title: Text(
+              "editProfile".tr(),
+              style: getBoldStyle(
+                color: AppColors.black,
+                fontSize: context.setSp(FontSize.s24),
               ),
             ),
-            AvatarNameContainer(),
-            EditInfoCard(),
-            EditButton(),
-          ],
-        ),
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.black,
+                size: context.setWidth(25),
+              ),
+            ),
+          ),
+          AvatarNameContainer(),
+          EditInfoCard(),
+          EditButton(),
+        ],
       ),
     );
   },

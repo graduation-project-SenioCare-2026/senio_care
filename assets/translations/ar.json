@@ -352,6 +352,8 @@
   "gm": "جم",
   "noRemindersAdded": "لم يتم إضافة أي تذكيرات بعد",
   "careMadeSimpleForYourFamily": "رعاية سهلة لعائلتك",
-  "startAddFirstService": "ابدأ بإضافة خدمتك الأولى"
-
+  "startAddFirstService": "ابدأ بإضافة خدمتك الأولى",
+  "continueCaregivingJourney": "سجّل الدخول لمواصلة رحلتك في تقديم الرعاية",
+  "continueProvidingCareServices": "سجّل الدخول لمواصلة تقديم خدمات الرعاية",
+  "puff": "بخّة"
 }

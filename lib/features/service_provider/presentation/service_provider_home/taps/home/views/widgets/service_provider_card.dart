@@ -52,14 +52,17 @@ class ServiceProviderCard extends StatelessWidget {
 
               // Location
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(Icons.location_on, color: AppColors.blue, size: 18),
                   SizedBox(width: context.setWidth(4)),
-                  Text(
-                    service?.location ?? '',
-                    style: getRegularStyle(
-                      color: Colors.grey.shade600,
-                      fontSize: context.setSp(12),
+                  Expanded(
+                    child: Text(
+                      service?.location ?? '',
+                      style: getRegularStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: context.setSp(12),
+                      ),
                     ),
                   ),
                 ],
