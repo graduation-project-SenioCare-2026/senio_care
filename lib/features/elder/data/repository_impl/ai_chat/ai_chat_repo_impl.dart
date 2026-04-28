@@ -26,11 +26,17 @@ class ChatRepoImpl implements ChatRepo {
     required String userId,
     required String sessionId,
     required String message,
+    String? imageBase64,
+    String? imageMimeType,
+    String? imageDisplayName,
   }) {
     return _chatRemoteDs.sendMessage(
       userId: userId,
       sessionId: sessionId,
       message: message,
+      imageBase64: imageBase64,
+      imageDisplayName: imageDisplayName,
+      imageMimeType: imageMimeType,
     );
   }
 

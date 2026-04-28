@@ -13,11 +13,17 @@ class SendMessageUseCase {
     required String userId,
     required String sessionId,
     required String message,
+    String? imageBase64,
+    String? imageMimeType,
+    String? imageDisplayName,
   }) {
     return _chatRepo.sendMessage(
       userId: userId,
       sessionId: sessionId,
       message: message,
+      imageBase64: imageBase64,
+      imageMimeType: imageMimeType,
+      imageDisplayName: imageDisplayName,
     );
   }
 }

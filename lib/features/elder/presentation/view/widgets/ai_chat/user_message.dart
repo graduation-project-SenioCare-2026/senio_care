@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
@@ -7,7 +8,9 @@ import '../../../../../../core/theme/font_style.dart';
 
 class UserMessage extends StatelessWidget {
   final String text;
-  const UserMessage({super.key, required this.text});
+  final String? imageBase64;
+
+  const UserMessage({super.key, required this.text, this.imageBase64});
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +45,31 @@ class UserMessage extends StatelessWidget {
             ),
           ],
         ),
-        child: Text(
-          text,
-          style: getRegularStyle(
-            color: AppColors.white,
-            fontSize: context.setSp(FontSize.s18),
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (imageBase64 != null) ...[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.memory(
+                  base64Decode(imageBase64!),
+                  width: context.setWidth(180),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              if (text.isNotEmpty) SizedBox(height: context.setHeight(8)),
+            ],
+
+            if (text.isNotEmpty)
+              Text(
+                text,
+                style: getRegularStyle(
+                  color: AppColors.white,
+                  fontSize: context.setSp(FontSize.s18),
+                ),
+              ),
+          ],
         ),
       ),
     );

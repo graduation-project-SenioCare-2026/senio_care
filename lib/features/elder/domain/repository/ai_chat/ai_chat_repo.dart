@@ -15,6 +15,9 @@ abstract interface class ChatRepo {
     required String userId,
     required String sessionId,
     required String message,
+    String? imageBase64,
+    String? imageMimeType,
+    String? imageDisplayName,
   });
 
   Future<Result<ConversationDetailEntity>> getConversation({

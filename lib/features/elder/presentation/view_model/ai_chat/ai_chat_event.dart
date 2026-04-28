@@ -10,8 +10,18 @@ class ChatSessionStarted extends ChatEvent {
 
 class ChatMessageSent extends ChatEvent {
   final String message;
-  ChatMessageSent(this.message);
+  final String? imageBase64;
+  final String? imageMimeType;
+  final String? imageDisplayName;
+  ChatMessageSent(
+    this.message, {
+    this.imageBase64,
+    this.imageMimeType,
+    this.imageDisplayName,
+  });
 }
+
+class ChatImageCleared extends ChatEvent {}
 
 class ChatChunkReceived extends ChatEvent {
   final String chunk;
@@ -19,7 +29,6 @@ class ChatChunkReceived extends ChatEvent {
   ChatChunkReceived(this.chunk, this.assistantMessageId);
 }
 
-// ✅ Batched flush event for main session
 class ChatChunkFlushed extends ChatEvent {
   final String chunk;
   final String assistantMessageId;
@@ -44,7 +53,7 @@ class ChatHistoryRequested extends ChatEvent {
   ChatHistoryRequested(this.userId);
 }
 
-// ── Resumed session (detail screen) ───────────────────────────────────────────
+// ── Resumed session ────────────────────────────────────────────────────────────
 
 class ChatConversationOpened extends ChatEvent {
   final String userId;
@@ -54,8 +63,18 @@ class ChatConversationOpened extends ChatEvent {
 
 class ResumedMessageSent extends ChatEvent {
   final String message;
-  ResumedMessageSent(this.message);
+  final String? imageBase64;
+  final String? imageMimeType;
+  final String? imageDisplayName;
+  ResumedMessageSent(
+    this.message, {
+    this.imageBase64,
+    this.imageMimeType,
+    this.imageDisplayName,
+  });
 }
+
+class ResumedImageCleared extends ChatEvent {}
 
 class ResumedChunkReceived extends ChatEvent {
   final String chunk;
@@ -63,7 +82,6 @@ class ResumedChunkReceived extends ChatEvent {
   ResumedChunkReceived(this.chunk, this.assistantMessageId);
 }
 
-// ✅ Batched flush event for resumed session
 class ResumedChunkFlushed extends ChatEvent {
   final String chunk;
   final String assistantMessageId;
@@ -79,6 +97,28 @@ class ResumedStreamFailed extends ChatEvent {
   final String error;
   final String assistantMessageId;
   ResumedStreamFailed(this.error, this.assistantMessageId);
+}
+
+class ChatImagePicked extends ChatEvent {
+  final String base64;
+  final String mimeType;
+  final String displayName;
+  ChatImagePicked({
+    required this.base64,
+    required this.mimeType,
+    required this.displayName,
+  });
+}
+
+class ResumedImagePicked extends ChatEvent {
+  final String base64;
+  final String mimeType;
+  final String displayName;
+  ResumedImagePicked({
+    required this.base64,
+    required this.mimeType,
+    required this.displayName,
+  });
 }
 
 class ChatConversationClosed extends ChatEvent {}

@@ -13,33 +13,49 @@ class SseClient {
   late final Dio _dio;
 
   SseClient() {
-    _dio = Dio(
-      BaseOptions(
-        baseUrl: EndPointsConstants.aiBaseUrl,
-        headers: {'ngrok-skip-browser-warning': 'true'},
-      ),
-    )..interceptors.add(
-      PrettyDioLogger(
-        requestHeader: true,
-        requestBody: true,
-        responseBody: false,
-        responseHeader: false,
-      ),
-    );
+    _dio =
+        Dio(
+            BaseOptions(
+              baseUrl: EndPointsConstants.aiBaseUrl,
+              headers: {'ngrok-skip-browser-warning': 'true'},
+            ),
+          )
+          ..interceptors.add(
+            PrettyDioLogger(
+              requestHeader: true,
+              requestBody: true,
+              responseBody: false,
+              responseHeader: false,
+            ),
+          );
   }
 
   Stream<String> stream({
     required String userId,
     required String sessionId,
     required String message,
+    String? imageBase64,
+    String? imageMimeType,
+    String? imageDisplayName,
   }) async* {
-    debugPrint('🚀 [SSE] Starting stream | userId=$userId | sessionId=$sessionId | message=$message');
+    debugPrint(
+      '🚀 [SSE] Starting stream | userId=$userId | sessionId=$sessionId | message=$message',
+    );
+    final parts = <SseMessagePart>[
+      SseMessagePart.text(message),
+      if (imageBase64 != null && imageMimeType != null)
+        SseMessagePart.image(
+          base64Data: imageBase64,
+          mimeType: imageMimeType,
+          displayName: imageDisplayName,
+        ),
+    ];
 
     final requestBody = RunSseRequest(
       appName: Constants.appName,
       userId: userId,
       sessionId: sessionId,
-      newMessage: SseMessage(parts: [SseMessagePart(text: message)]),
+      newMessage: SseMessage(parts: parts),
     );
 
     final response = await _dio.post<ResponseBody>(
@@ -55,34 +71,27 @@ class SseClient {
     debugPrint('📡 [SSE] Response status: ${response.statusCode}');
 
     if (response.statusCode != 200) {
-      final bytes = await (response.data as ResponseBody)
-          .stream
+      final bytes = await (response.data as ResponseBody).stream
           .cast<List<int>>()
           .expand((x) => x)
           .toList();
       final errorBody = utf8.decode(bytes);
-      debugPrint('❌ [SSE] Server error ${response.statusCode}: $errorBody');
       throw Exception('Server error ${response.statusCode}: $errorBody');
     }
 
     final responseBody = response.data;
     if (responseBody == null) {
-      debugPrint('❌ [SSE] Response body is null — aborting');
       return;
     }
 
     debugPrint('✅ [SSE] Stream started, waiting for chunks...');
 
     final buffer = StringBuffer();
-    int chunkCount = 0;
-    int lineCount = 0;
     int yieldCount = 0;
 
-    await for (final chunk in responseBody.stream
-        .cast<List<int>>()
-        .transform(utf8.decoder)) {
-      chunkCount++;
-      debugPrint('📦 [SSE] Raw chunk #$chunkCount (${chunk.length} chars): ${chunk.replaceAll('\n', '\\n')}');
+    await for (final chunk in responseBody.stream.cast<List<int>>().transform(
+      utf8.decoder,
+    )) {
 
       buffer.write(chunk);
 
@@ -94,15 +103,12 @@ class SseClient {
       if (!current.endsWith('\n')) {
         final incomplete = lines.removeLast();
         buffer.write(incomplete);
-        debugPrint('⏳ [SSE] Holding incomplete line in buffer: "$incomplete"');
       } else {
         lines.removeLast();
       }
 
       for (final line in lines) {
-        lineCount++;
         final trimmed = line.trim();
-        debugPrint('📄 [SSE] Line #$lineCount: "$trimmed"');
 
         if (!trimmed.startsWith('data:')) {
           debugPrint('⏭️  [SSE] Skipping non-data line');
@@ -110,7 +116,6 @@ class SseClient {
         }
 
         final data = trimmed.substring(5).trim();
-        debugPrint('🔍 [SSE] Data payload: "$data"');
 
         if (data.isEmpty) {
           debugPrint('⏭️  [SSE] Skipping empty data');
@@ -134,7 +139,6 @@ class SseClient {
       }
     }
 
-    debugPrint('🏁 [SSE] Stream ended | chunks=$chunkCount | lines=$lineCount | yielded=$yieldCount');
   }
 
   String _extractText(String data) {

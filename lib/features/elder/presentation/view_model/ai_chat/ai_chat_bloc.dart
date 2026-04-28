@@ -29,12 +29,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   StreamSubscription<dynamic>? _mainSseSubscription;
   StreamSubscription<dynamic>? _resumedSseSubscription;
 
-  // ✅ Debounce state for main session
+  // Debounce state for main session
   Timer? _mainChunkDebounce;
   String _mainPendingChunk = '';
   String? _mainPendingTargetId;
 
-  // ✅ Debounce state for resumed session
+  // Debounce state for resumed session
   Timer? _resumedChunkDebounce;
   String _resumedPendingChunk = '';
   String? _resumedPendingTargetId;
@@ -48,20 +48,24 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<ChatSessionStarted>(_onSessionStarted);
     on<ChatMessageSent>(_onMessageSent);
     on<ChatChunkReceived>(_onChunkReceived);
-    on<ChatChunkFlushed>(_onChunkFlushed); // ✅
+    on<ChatChunkFlushed>(_onChunkFlushed);
     on<ChatStreamDone>(_onStreamDone);
     on<ChatStreamFailed>(_onStreamFailed);
     on<ChatHistoryRequested>(_onHistoryRequested);
     on<ChatConversationOpened>(_onConversationOpened);
     on<ResumedMessageSent>(_onResumedMessageSent);
     on<ResumedChunkReceived>(_onResumedChunkReceived);
-    on<ResumedChunkFlushed>(_onResumedChunkFlushed); // ✅
+    on<ResumedChunkFlushed>(_onResumedChunkFlushed);
     on<ResumedStreamDone>(_onResumedStreamDone);
     on<ResumedStreamFailed>(_onResumedStreamFailed);
     on<ChatConversationClosed>(_onConversationClosed);
+    on<ChatImagePicked>(_onImagePicked);
+    on<ChatImageCleared>(_onImageCleared);
+    on<ResumedImagePicked>(_onResumedImagePicked);
+    on<ResumedImageCleared>(_onResumedImageCleared);
   }
 
-  // ── Main session ────────────────────────────────────────────────────────────
+  // ── Main session ─────────────────────────────────────────────────────────────
 
   Future<void> _onSessionStarted(
       ChatSessionStarted event,
@@ -97,6 +101,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     final userMsgId = _generateId();
     final assistantMsgId = _generateId();
 
+    // Prefer event-level image (direct call), fall back to state pending image
+    final imageBase64 = event.imageBase64 ?? state.pendingImageBase64;
+    final imageMimeType = event.imageMimeType ?? state.pendingImageMimeType;
+    final imageDisplayName =
+        event.imageDisplayName ?? state.pendingImageDisplayName;
+
     emit(
       state.copyWith(
         messages: [
@@ -104,6 +114,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           ChatMessageEntity(
             id: userMsgId,
             text: event.message,
+            imageBase64: imageBase64,
             role: ChatMessageRole.user,
             status: ChatMessageStatus.done,
           ),
@@ -115,6 +126,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           ),
         ],
         isStreaming: true,
+        // Clear pending image after sending
+        pendingImageBase64: null,
+        pendingImageMimeType: null,
+        pendingImageDisplayName: null,
       ),
     );
 
@@ -124,6 +139,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       userId: session.userId,
       sessionId: session.sessionId,
       message: event.message,
+      imageBase64: imageBase64,
+      imageMimeType: imageMimeType,
+      imageDisplayName: imageDisplayName,
     ).listen(
           (result) => switch (result) {
         Success(:final data) => add(ChatChunkReceived(data, targetId)),
@@ -135,7 +153,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     );
   }
 
-  // ✅ Accumulate chunks and debounce UI updates (50ms batching)
+  // Accumulate chunks and debounce UI updates (50ms batching)
   void _onChunkReceived(ChatChunkReceived event, Emitter<ChatState> emit) {
     _mainPendingChunk += event.chunk;
     _mainPendingTargetId = event.assistantMessageId;
@@ -152,7 +170,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
   }
 
-  // ✅ Actually updates state with batched chunk
+  // Actually updates state with batched chunk
   void _onChunkFlushed(ChatChunkFlushed event, Emitter<ChatState> emit) {
     final updated = state.messages.map((msg) {
       if (msg.id != event.assistantMessageId) return msg;
@@ -164,21 +182,31 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   void _onStreamDone(ChatStreamDone event, Emitter<ChatState> emit) {
-    // Flush any remaining pending chunk immediately
     _mainChunkDebounce?.cancel();
+
+    // Build the final messages list in one shot
+    var messages = state.messages;
+
+    // Flush pending chunk inline BEFORE emitting done
     if (_mainPendingChunk.isNotEmpty && _mainPendingTargetId != null) {
-      add(ChatChunkFlushed(_mainPendingChunk, _mainPendingTargetId!));
+      final pendingChunk = _mainPendingChunk;
+      final pendingId = _mainPendingTargetId!;
+      messages = messages.map((msg) {
+        if (msg.id != pendingId) return msg;
+        return msg.copyWith(text: msg.text + pendingChunk);
+      }).toList();
       _mainPendingChunk = '';
       _mainPendingTargetId = null;
     }
 
-    final updated = state.messages.map((msg) {
+    // Now mark as done — single emit with full final text
+    final updated = messages.map((msg) {
       if (msg.id != event.assistantMessageId) return msg;
       return msg.copyWith(status: ChatMessageStatus.done);
     }).toList();
+
     emit(state.copyWith(messages: updated, isStreaming: false));
   }
-
   void _onStreamFailed(ChatStreamFailed event, Emitter<ChatState> emit) {
     _mainChunkDebounce?.cancel();
     _mainPendingChunk = '';
@@ -194,7 +222,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     emit(state.copyWith(messages: updated, isStreaming: false));
   }
 
-  // ── History ─────────────────────────────────────────────────────────────────
+  // ── History ──────────────────────────────────────────────────────────────────
 
   Future<void> _onHistoryRequested(
       ChatHistoryRequested event,
@@ -207,7 +235,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     switch (result) {
       case Success<List<ChatSessionEntity>>():
-        debugPrint('✅ [History] Success — ${result.data.length} sessions loaded');
+        debugPrint(
+            '✅ [History] Success — ${result.data.length} sessions loaded');
         emit(state.copyWith(historyStatus: StateStatus.success(result.data)));
       case Failure<List<ChatSessionEntity>>():
         debugPrint('❌ [History] Failed — ${result.responseException.message}');
@@ -216,7 +245,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  // ── Resumed session ─────────────────────────────────────────────────────────
+  // ── Resumed session ──────────────────────────────────────────────────────────
 
   Future<void> _onConversationOpened(
       ChatConversationOpened event,
@@ -270,6 +299,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     final userMsgId = _generateId();
     final assistantMsgId = _generateId();
 
+    // ✅ FIX: Prefer event-level image, fall back to state pending image
+    final imageBase64 = event.imageBase64 ?? state.resumedPendingImageBase64;
+    final imageMimeType =
+        event.imageMimeType ?? state.resumedPendingImageMimeType;
+    final imageDisplayName =
+        event.imageDisplayName ?? state.resumedPendingImageDisplayName;
+
     emit(
       state.copyWith(
         resumedMessages: [
@@ -277,6 +313,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           ChatMessageEntity(
             id: userMsgId,
             text: event.message,
+            imageBase64: imageBase64, // ✅ FIX: attach image to user message
             role: ChatMessageRole.user,
             status: ChatMessageStatus.done,
           ),
@@ -288,15 +325,23 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           ),
         ],
         isResumedStreaming: true,
+        // ✅ FIX: clear pending image after sending
+        resumedPendingImageBase64: null,
+        resumedPendingImageMimeType: null,
+        resumedPendingImageDisplayName: null,
       ),
     );
 
     final targetId = assistantMsgId;
 
+    // ✅ FIX: pass image params to the use case
     _resumedSseSubscription = _sendMessageUseCase(
       userId: session.userId,
       sessionId: session.sessionId,
       message: event.message,
+      imageBase64: imageBase64,
+      imageMimeType: imageMimeType,
+      imageDisplayName: imageDisplayName,
     ).listen(
           (result) => switch (result) {
         Success(:final data) => add(ResumedChunkReceived(data, targetId)),
@@ -308,7 +353,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     );
   }
 
-  // ✅ Accumulate resumed chunks and debounce
+  // Accumulate resumed chunks and debounce
   void _onResumedChunkReceived(
       ResumedChunkReceived event,
       Emitter<ChatState> emit,
@@ -328,7 +373,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
   }
 
-  // ✅ Actually updates resumed state with batched chunk
+  // Actually updates resumed state with batched chunk
   void _onResumedChunkFlushed(
       ResumedChunkFlushed event,
       Emitter<ChatState> emit,
@@ -346,18 +391,28 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       ResumedStreamDone event,
       Emitter<ChatState> emit,
       ) {
-    // Flush any remaining pending chunk immediately
     _resumedChunkDebounce?.cancel();
+
+    // Flush pending chunk inline BEFORE emitting done
+    var messages = state.resumedMessages;
+
     if (_resumedPendingChunk.isNotEmpty && _resumedPendingTargetId != null) {
-      add(ResumedChunkFlushed(_resumedPendingChunk, _resumedPendingTargetId!));
+      final pendingChunk = _resumedPendingChunk;
+      final pendingId = _resumedPendingTargetId!;
+      messages = messages.map((msg) {
+        if (msg.id != pendingId) return msg;
+        return msg.copyWith(text: msg.text + pendingChunk);
+      }).toList();
       _resumedPendingChunk = '';
       _resumedPendingTargetId = null;
     }
 
-    final updated = state.resumedMessages.map((msg) {
+    // Mark as done — single emit with full final text
+    final updated = messages.map((msg) {
       if (msg.id != event.assistantMessageId) return msg;
       return msg.copyWith(status: ChatMessageStatus.done);
     }).toList();
+
     emit(state.copyWith(resumedMessages: updated, isResumedStreaming: false));
   }
 
@@ -393,6 +448,42 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         isResumedStreaming: false,
       ),
     );
+  }
+
+  void _onImagePicked(ChatImagePicked event, Emitter<ChatState> emit) {
+    emit(state.copyWith(
+      pendingImageBase64: event.base64,
+      pendingImageMimeType: event.mimeType,
+      pendingImageDisplayName: event.displayName,
+    ));
+  }
+
+  void _onResumedImagePicked(
+      ResumedImagePicked event, Emitter<ChatState> emit) {
+    emit(state.copyWith(
+      resumedPendingImageBase64: event.base64,
+      resumedPendingImageMimeType: event.mimeType,
+      resumedPendingImageDisplayName: event.displayName,
+    ));
+  }
+
+  void _onImageCleared(ChatImageCleared event, Emitter<ChatState> emit) {
+    emit(state.copyWith(
+      pendingImageBase64: null,
+      pendingImageMimeType: null,
+      pendingImageDisplayName: null,
+    ));
+  }
+
+  void _onResumedImageCleared(
+      ResumedImageCleared event,
+      Emitter<ChatState> emit,
+      ) {
+    emit(state.copyWith(
+      resumedPendingImageBase64: null,
+      resumedPendingImageMimeType: null,
+      resumedPendingImageDisplayName: null,
+    ));
   }
 
   @override

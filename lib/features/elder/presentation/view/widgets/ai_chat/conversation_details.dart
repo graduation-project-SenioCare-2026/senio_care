@@ -11,6 +11,7 @@ import 'package:senio_care/features/elder/presentation/view/widgets/ai_chat/inpu
 import 'package:senio_care/features/elder/presentation/view/widgets/ai_chat/user_message.dart';
 
 import '../../../../../../core/common_widgets/bg_gradient.dart';
+import '../../../../../../core/common_widgets/image_picker.dart';
 import '../../../view_model/ai_chat/ai_chat_bloc.dart';
 import '../../../view_model/ai_chat/ai_chat_event.dart';
 import '../../../view_model/ai_chat/ai_chat_state.dart';
@@ -36,12 +37,12 @@ class _ConversationDetailsScreenState
     extends State<ConversationDetailsScreen> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  late ChatBloc _chatBloc; // ✅ saved reference
+  late ChatBloc _chatBloc;
 
   @override
   void initState() {
     super.initState();
-    _chatBloc = context.read<ChatBloc>(); // ✅ save while widget is active
+    _chatBloc = context.read<ChatBloc>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _chatBloc.add(
         ChatConversationOpened(widget.userId, widget.sessionId),
@@ -51,7 +52,7 @@ class _ConversationDetailsScreenState
 
   @override
   void dispose() {
-    _chatBloc.add(ChatConversationClosed()); // ✅ use saved reference, not context.read
+    _chatBloc.add(ChatConversationClosed());
     _controller.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -59,7 +60,8 @@ class _ConversationDetailsScreenState
 
   void _sendMessage() {
     final text = _controller.text.trim();
-    if (text.isEmpty) return;
+    final hasImage = _chatBloc.state.resumedPendingImageBase64 != null;
+    if (text.isEmpty && !hasImage) return;
     _chatBloc.add(ResumedMessageSent(text));
     _controller.clear();
     _scrollToBottom();
@@ -75,6 +77,19 @@ class _ConversationDetailsScreenState
         );
       }
     });
+  }
+
+  Future<void> _showImageSourceSheet() async {
+    await ImagePickerHelper.pickSingleForChat(
+      context: context,
+      onPicked: (base64, mimeType, displayName) {
+        _chatBloc.add(ResumedImagePicked(
+          base64: base64,
+          mimeType: mimeType,
+          displayName: displayName,
+        ));
+      },
+    );
   }
 
   @override
@@ -109,7 +124,9 @@ class _ConversationDetailsScreenState
             prev.conversationDetailStatus !=
                 curr.conversationDetailStatus ||
                 prev.resumedMessages != curr.resumedMessages ||
-                prev.isResumedStreaming != curr.isResumedStreaming,
+                prev.isResumedStreaming != curr.isResumedStreaming ||
+                prev.resumedPendingImageBase64 !=
+                    curr.resumedPendingImageBase64,
             listener: (context, state) {
               if (state.resumedMessages.isNotEmpty) _scrollToBottom();
             },
@@ -120,6 +137,11 @@ class _ConversationDetailsScreenState
                   InputBar(
                     controller: _controller,
                     onSend: state.isResumedStreaming ? null : _sendMessage,
+                    onPickImage:
+                    state.isResumedStreaming ? null : _showImageSourceSheet,
+                    pendingImageBase64: state.resumedPendingImageBase64,
+                    onClearImage: () =>
+                        _chatBloc.add(ResumedImageCleared()),
                   ),
                 ],
               );
@@ -175,7 +197,10 @@ class _ConversationDetailsScreenState
 
         final msg = newMessages[index - oldWidgets.length];
         return msg.role == ChatMessageRole.user
-            ? UserMessage(text: msg.text)
+            ? UserMessage(
+          text: msg.text,
+          imageBase64: msg.imageBase64,
+        )
             : AiMessage(text: msg.text);
       },
     );

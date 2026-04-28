@@ -17,13 +17,11 @@ import '../../../models/response/ai_chat/session_response.dart';
 @Injectable(as: ChatRemoteDs)
 class ChatRemoteDsImpl implements ChatRemoteDs {
   final ChatApiServices _chatApiServices;
-  // final GetChatApiServices _getChatApiServices;
   final SseClient _sseClient;
 
   ChatRemoteDsImpl(
     this._chatApiServices,
     this._sseClient,
-    // this._getChatApiServices,
   );
 
   @override
@@ -58,12 +56,18 @@ class ChatRemoteDsImpl implements ChatRemoteDs {
     required String userId,
     required String sessionId,
     required String message,
+    String? imageBase64,
+    String? imageMimeType,
+    String? imageDisplayName,
   }) async* {
     try {
       await for (final chunk in _sseClient.stream(
         userId: userId,
         sessionId: sessionId,
         message: message,
+        imageMimeType: imageMimeType,
+        imageDisplayName: imageDisplayName,
+        imageBase64: imageBase64
       )) {
         yield Success(chunk);
       }
