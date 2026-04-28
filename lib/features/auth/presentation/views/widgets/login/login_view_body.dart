@@ -8,7 +8,6 @@ import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
 import 'package:senio_care/core/theme/font_style.dart';
-import 'package:senio_care/core/user/user_manager.dart';
 import 'package:senio_care/features/auth/presentation/views/widgets/login/continue_with_google_button.dart';
 
 class LoginViewBody extends StatelessWidget {

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/config/di/di.dart';
 import 'package:senio_care/core/common_widgets/setting_drawer.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/user/user_manager.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/screens/caregiver_graph_tab.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/home/views/screens/caregiver_home_tab.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/views/screen/caregiver_profile_tab.dart';
@@ -33,7 +34,7 @@ class _CaregiverMainLayoutState extends State<CaregiverMainLayout> {
     CaregiverProfileTab(),
   ];
   List<String> get appBarTitles => [
-    'home'.tr(),
+    "${"welcome".tr()}, ${UserManager().name}",
     'vitalsMonitoring'.tr(),
     'myProfile'.tr(),
   ];

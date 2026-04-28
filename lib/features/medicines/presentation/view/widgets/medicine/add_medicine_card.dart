@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/core/common_widgets/loading_btn.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/core/validator/validator.dart';
 import '../../../../../../core/common_widgets/app_form_field.dart';
 import '../../../../../../core/common_widgets/custom_card.dart';
@@ -98,9 +99,10 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
     }
 
     final fmt = DateFormat('yyyy-MM-dd');
-
+print(widget.elderId);
+print("👽👽👽");
     final medicine = MedicineRequest(
-      elderId: widget.elderId,
+      elderId: ProfileManager().selectedElder?.id??ProfileManager().elder?.id??ProfileManager().caregiver?.elders?.first.id,
       medicineName: name,
       dosage: dosage,
       medicineType: _selectedType!,
