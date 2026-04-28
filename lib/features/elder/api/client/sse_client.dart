@@ -111,23 +111,19 @@ class SseClient {
         final trimmed = line.trim();
 
         if (!trimmed.startsWith('data:')) {
-          debugPrint('⏭️  [SSE] Skipping non-data line');
           continue;
         }
 
         final data = trimmed.substring(5).trim();
 
         if (data.isEmpty) {
-          debugPrint('⏭️  [SSE] Skipping empty data');
           continue;
         }
         if (data == '[DONE]') {
-          debugPrint('🏁 [SSE] Received [DONE]');
           continue;
         }
 
         final extracted = _extractText(data);
-        debugPrint('✏️  [SSE] Extracted text: "$extracted"');
 
         if (extracted.isNotEmpty) {
           yieldCount++;
@@ -144,7 +140,12 @@ class SseClient {
   String _extractText(String data) {
     try {
       final json = jsonDecode(data) as Map<String, dynamic>;
-      debugPrint('🧩 [SSE] Parsed JSON keys: ${json.keys.toList()}');
+
+      // ✅ Skip the final summary event — it duplicates the full response
+      if (json.containsKey('finishReason') || json.containsKey('usageMetadata')) {
+        debugPrint('⏭️  [SSE] Skipping final summary event (finishReason present)');
+        return '';
+      }
 
       // Shape 1
       final content = json['content'];
