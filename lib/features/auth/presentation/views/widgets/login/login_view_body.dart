@@ -16,13 +16,13 @@ class LoginViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String loginSubTitle = "signInToContinueYourCareJourney";
+    String loginSubTitle = "signInToContinueYourCareJourney".tr();
     if (role == "caregiver") {
-      loginSubTitle = "continueCaregivingJourney";
+      loginSubTitle = "continueCaregivingJourney".tr();
     } else if (role == "serviceProvider") {
-      loginSubTitle = "continueProvidingCareServices";
+      loginSubTitle = "continueProvidingCareServices".tr();
     } else {
-      loginSubTitle = "signInToContinueYourCareJourney";
+      loginSubTitle = "signInToContinueYourCareJourney".tr();
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,

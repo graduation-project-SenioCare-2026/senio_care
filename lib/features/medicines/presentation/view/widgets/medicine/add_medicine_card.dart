@@ -35,15 +35,15 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
 
   String? _selectedType;
 
-  static const List<String> _typeKeys = [
-    'tablet',
-    'capsule',
-    'syrup',
-    'injection',
-    'drops',
-    'cream',
-    'inhaler',
-    'patch',
+  final List<String> _typeKeys = [
+    'tablet'.tr(),
+    'capsule'.tr(),
+    'syrup'.tr(),
+    'injection'.tr(),
+    'drop'.tr(),
+    'cream'.tr(),
+    'inhaler'.tr(),
+    'patch'.tr(),
   ];
 
   static const Map<String, String> _typeUnits = {
@@ -51,13 +51,13 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
     'capsule':   'e.g. 1 capsule',
     'syrup':     'e.g. 5ml',
     'injection': 'e.g. 1ml',
-    'drops':     'e.g. 2 drops',
+    'drop':     'e.g. 2 drops',
     'cream':     'e.g. 2g',
     'inhaler':   'e.g. 1 puff',
     'patch':     'e.g. 1 patch',
   };
 
-  static List<String> get _types => _typeKeys.map((k) => k.tr()).toList();
+   List<String> get _types => _typeKeys.map((k) => k.tr()).toList();
 
   String get _dosageHint {
     if (_selectedType == null) return 'e.g. 500mg';
