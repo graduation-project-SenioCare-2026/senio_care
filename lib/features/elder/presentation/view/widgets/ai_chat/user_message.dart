@@ -22,8 +22,8 @@ class UserMessage extends StatelessWidget {
           left: context.setWidth(60),
         ),
         padding: EdgeInsets.symmetric(
-          horizontal: context.setWidth(16),
-          vertical: context.setHeight(12),
+          horizontal: context.setWidth(4),
+          vertical: context.setHeight(4),
         ),
         decoration: BoxDecoration(
           gradient: LinearGradient(

@@ -68,6 +68,7 @@ class _AiMessageState extends State<AiMessage> with TickerProviderStateMixin {
 
   MarkdownStyleSheet _buildStyleSheet(BuildContext context) {
     return MarkdownStyleSheet(
+      textAlign: WrapAlignment.center,
       p: TextStyle(
         color: AppColors.black,
         fontSize: context.setSp(FontSize.s18),
@@ -100,8 +101,8 @@ class _AiMessageState extends State<AiMessage> with TickerProviderStateMixin {
       ),
       tableHeadAlign: TextAlign.center,
       tableCellsDecoration: const BoxDecoration(color: Colors.transparent),
-      tableCellsPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      tableColumnWidth: const FlexColumnWidth(),
+      tableCellsPadding: const EdgeInsets.symmetric(horizontal: 3, vertical: 4),
+      tableColumnWidth: const FlexColumnWidth(3),
     );
   }
 
@@ -114,10 +115,7 @@ class _AiMessageState extends State<AiMessage> with TickerProviderStateMixin {
         child: ConstrainedBox(
           constraints: BoxConstraints(
             minWidth: 0,
-            maxWidth: MediaQuery.of(context).size.width -
-                context.setWidth(32) -
-                context.setWidth(10) -
-                context.setWidth(30),
+            maxWidth:600,
           ),
           child: MarkdownBody(
             data: widget.text,
@@ -142,95 +140,101 @@ class _AiMessageState extends State<AiMessage> with TickerProviderStateMixin {
       child: Padding(
         padding: EdgeInsets.only(
           bottom: context.setHeight(16),
-          right: context.setWidth(30),
+          right: context.setWidth(10),
         ),
-        child: Row(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Avatar
-            Container(
-              margin: EdgeInsets.only(
-                top: context.setHeight(2),
-                right: context.setWidth(10),
-              ),
-              width: context.setWidth(32),
-              height: context.setHeight(32),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [AppColors.blue.shade300, AppColors.blue.shade500],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(
+                    bottom: context.setHeight(8),
+                  ),
+                  width: context.setWidth(32),
+                  height: context.setHeight(32),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [AppColors.blue.shade300, AppColors.blue.shade500],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.support_agent_rounded,
+                    color: Colors.white,
+                    size: 18,
+                  ),
                 ),
-              ),
-              child: const Icon(
-                Icons.support_agent_rounded,
-                color: Colors.white,
-                size: 18,
-              ),
+                SizedBox(width: context.setWidth(5),),
+                if(widget.text.isEmpty)
+                  _buildTypingIndicator()
+              ],
             ),
 
             // Message content
-            Flexible(
-              child: widget.text.isEmpty
-                  ? _buildTypingIndicator()
-                  : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildMarkdownContent(context),
-                  const SizedBox(height: 6),
-                  // Copy button
-                  GestureDetector(
-                    onTap: _copyText,
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      child: _copied
-                          ? Icon(
-                        key: const ValueKey('copied'),
-                        Icons.check_rounded,
-                        size: 16,
-                        color: AppColors.blue.shade400,
-                      )
-                          : Icon(
-                        key: const ValueKey('copy'),
-                        Icons.copy_rounded,
-                        size: 20,
-                        color: Colors.grey.shade500,
-                      ),
+            widget.text.isEmpty
+                ? Container()
+                : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildMarkdownContent(context),
+                const SizedBox(height: 6),
+                GestureDetector(
+                  onTap: _copyText,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: _copied
+                        ? Icon(
+                      key: const ValueKey('copied'),
+                      Icons.check_rounded,
+                      size: 16,
+                      color: AppColors.blue.shade400,
+                    )
+                        : Icon(
+                      key: const ValueKey('copy'),
+                      Icons.copy_rounded,
+                      size: 20,
+                      color: Colors.grey.shade500,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
   }
-
   Widget _buildTypingIndicator() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(3, (i) {
-        return AnimatedBuilder(
-          animation: _dotAnimations[i],
-          builder: (context, child) {
-            return Transform.translate(
-              offset: Offset(0, _dotAnimations[i].value),
-              child: child,
-            );
-          },
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 3),
-            width: 7,
-            height: 7,
-            decoration: BoxDecoration(
-              color: AppColors.blue.shade400,
-              shape: BoxShape.circle,
+    return Padding(
+      padding:  EdgeInsets.only(top:context.setHeight(15)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(3, (i) {
+          return AnimatedBuilder(
+            animation: _dotAnimations[i],
+            builder: (context, child) {
+              return Transform.translate(
+                offset: Offset(0, _dotAnimations[i].value),
+                child: child,
+              );
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              width: 7,
+              height: 7,
+              decoration: BoxDecoration(
+                color: AppColors.blue.shade400,
+                shape: BoxShape.circle,
+              ),
             ),
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
   }
 }

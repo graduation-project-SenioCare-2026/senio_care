@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:senio_care/core/theme/app_colors.dart';
 
 import 'package:senio_care/features/elder/presentation/view/widgets/ai_chat/user_message.dart';
 
@@ -111,7 +112,7 @@ class _AiChatBodyState extends State<AiChatBody> {
 
   Widget _buildEmptyState(BuildContext context, ChatState state) {
     if (state.createSessionStatus.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return  Center(child: CircularProgressIndicator(color: AppColors.gradientEnd,));
     }
     if (state.createSessionStatus.isFailure) {
       return const Center(
