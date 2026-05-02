@@ -19,12 +19,14 @@ import 'package:senio_care/features/elder/presentation/view/screens/elder_home/t
 import 'package:senio_care/features/elder/presentation/view/screens/elder_onboarding/elder_onboarding_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/blood_pressure_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/blood_sugar_screen.dart';
+import 'package:senio_care/features/elder/presentation/view/widgets/ai_chat/ai_chat_view_body.dart';
 import 'package:senio_care/features/service_provider/presentation/onboarding/views/screens/service_provider_onboarding_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/onboarding/views/screens/caregiver_onboarding_screen.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/home/views/screens/add_services_screen.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/home/views/screens/edit_service_screen.dart';
 import '../../features/elder/presentation/view/screens/elder_home/elder_profile/edit_personal_info_screen.dart';
 import '../../features/elder/presentation/view/screens/elder_home/elder_profile/elder_personal_info_screen.dart';
+import '../../features/elder/presentation/view_model/ai_chat/ai_chat_bloc.dart';
 import '../../features/medicines/presentation/view/screens/medicine/add_medicine.dart';
 import '../../features/medicines/presentation/view_model/medicine/medicine_bloc.dart';
 import '../../features/service_provider/presentation/service_provider_home/service_provider_main_layout.dart';
@@ -36,7 +38,7 @@ import '../../features/caregiver/presentation/caregiver_home/taps/graph/views/wi
 
 abstract class Routes {
   static final GlobalKey<NavigatorState> navigatorKey =
-  GlobalKey<NavigatorState>();
+      GlobalKey<NavigatorState>();
 
   static Route onGenerate(RouteSettings setting) {
     final url = Uri.parse(setting.name ?? "");
@@ -88,19 +90,15 @@ abstract class Routes {
       case RoutesNames.addServicesScreen:
         final bloc = setting.arguments as ServicesBloc;
         return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: bloc,
-            child: const AddServicesScreen(),
-          ),
+          builder: (_) =>
+              BlocProvider.value(value: bloc, child: const AddServicesScreen()),
         );
 
       case RoutesNames.editServicesScreen:
         final bloc = setting.arguments as ServicesBloc;
         return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: bloc,
-            child: const EditServiceScreen(),
-          ),
+          builder: (_) =>
+              BlocProvider.value(value: bloc, child: const EditServiceScreen()),
         );
 
       case RoutesNames.elderPersonalInfoScreen:
@@ -165,6 +163,14 @@ abstract class Routes {
           builder: (_) => BlocProvider(
             create: (_) => getIt<MedicinesBloc>(),
             child: AddMedicineScreen(),
+          ),
+        );
+
+      case RoutesNames.aiChatScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<ChatBloc>(),
+            child: const AiChatViewBody(),
           ),
         );
 

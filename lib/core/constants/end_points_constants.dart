@@ -1,5 +1,8 @@
 abstract class EndPointsConstants {
   static const String baseUrl = "https://seniocare-backend.onrender.com/";
+  static const String aiBaseUrl="https://unseclusive-katlyn-weakheartedly.ngrok-free.dev/";
+  static const String chatAiBaseUrl="https://unseclusive-katlyn-weakheartedly.ngrok-free.dev/";
+
   static const String googleSignIn="auth/google";
   static const String elder="elders/";
   static const String serviceProvider="/service-providers/";
@@ -21,5 +24,13 @@ abstract class EndPointsConstants {
   static const String deleteReminder="/daily-medicines/{id}";
 
   static const String addMedicine="/daily-medicines/";
+  static const String createSession =
+      '/apps/{app_name}/users/{user_id}/sessions/{session_id}';
+
+  static const String runSse = '/run_sse';
+
+  static const String getChatHistory='/chat-history/{user_id}';
+  static const String getChatConversation='/chat-history/{user_id}/{session_id}';
+
   static const String getUser="/users/{user_id}";
 }

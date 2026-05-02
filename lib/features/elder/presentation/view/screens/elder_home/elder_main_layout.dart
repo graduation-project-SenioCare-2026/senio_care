@@ -7,6 +7,7 @@ import 'package:senio_care/core/common_widgets/gradient_icon_container.dart';
 import 'package:senio_care/core/common_widgets/setting_drawer.dart';
 import 'package:senio_care/core/constants/app_icons.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
 import 'package:senio_care/core/theme/font_style.dart';
@@ -112,14 +113,19 @@ class _ElderHomeState extends State<ElderHome> {
             ),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          floatingActionButton: GradientIconContainer(
-            width: context.setWidth(60),
-            height: context.setHeight(60),
-            radius: context.setMinSize(30),
-            child: Image.asset(
-              AppIcons.chat,
-              width: context.setWidth(50),
-              height: context.setHeight(50),
+          floatingActionButton: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, RoutesNames.aiChatScreen);
+            },
+            child: GradientIconContainer(
+              width: context.setWidth(60),
+              height: context.setHeight(60),
+              radius: context.setMinSize(30),
+              child: Image.asset(
+                AppIcons.chat,
+                width: context.setWidth(50),
+                height: context.setHeight(50),
+              ),
             ),
           ),
         ),
