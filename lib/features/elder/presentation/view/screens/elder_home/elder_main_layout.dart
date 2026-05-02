@@ -28,8 +28,10 @@ class ElderHome extends StatefulWidget {
 class _ElderHomeState extends State<ElderHome> {
   int currentIndex = 0;
   List<Widget> taps = [
-    BlocProvider(create: (context) => getIt<DailyReminderBloc>(),
-    child: ElderDailyRemindersTab()),
+    BlocProvider(
+      create: (context) => getIt<DailyReminderBloc>(),
+      child: ElderDailyRemindersTab(),
+    ),
     SosTab(),
     ServicesTab(),
     ElderProfileTap(),
@@ -48,88 +50,94 @@ class _ElderHomeState extends State<ElderHome> {
       children: [
         Container(color: Colors.white.withOpacity(0.9)),
         BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
-    MediaQuery.removePadding(
-    context: context,
-    removeBottom: true,
-    child:
-        Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            centerTitle: true,
-            elevation: 0,
-            scrolledUnderElevation: 0,
-            surfaceTintColor: Colors.transparent,
-            title: FittedBox(
-              child: Text(
-                appBarTitles[currentIndex],
-                style: getBoldStyle(
-                  color: AppColors.black,
-                  fontSize: context.setSp(FontSize.s24),
+        MediaQuery.removePadding(
+          context: context,
+          removeBottom: true,
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              centerTitle: true,
+              elevation: 0,
+              scrolledUnderElevation: 0,
+              surfaceTintColor: Colors.transparent,
+              title: FittedBox(
+                child: Text(
+                  appBarTitles[currentIndex],
+                  style: getBoldStyle(
+                    color: AppColors.black,
+                    fontSize: context.setSp(FontSize.s24),
+                  ),
+                ),
+              ),
+            ),
+
+            endDrawer: SettingDrawer(),
+            body: taps[currentIndex],
+
+            extendBody: true,
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.all(15),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(25),
+                child: BottomNavigationBar(
+                  currentIndex: currentIndex,
+                  type: BottomNavigationBarType.fixed,
+                  elevation: 10,
+                  backgroundColor: AppColors.white,
+                  selectedItemColor: AppColors.gradientEnd,
+                  unselectedItemColor: AppColors.black.withAlpha(150),
+                  selectedIconTheme: IconThemeData(size: 30),
+                  unselectedIconTheme: IconThemeData(size: 25),
+                  showUnselectedLabels: true,
+                  showSelectedLabels: true,
+                  onTap: (index) {
+                    setState(() {
+                      currentIndex = index;
+                    });
+                  },
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home),
+                      label: "Home",
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Image.asset(
+                        AppIcons.sos,
+                        width: context.setWidth(20),
+                        height: context.setHeight(20),
+                      ),
+                      label: "SOs",
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.medical_services),
+                      label: "services",
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.person),
+                      label: "profile",
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            floatingActionButton: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, RoutesNames.aiChatScreen);
+              },
+              child: GradientIconContainer(
+                width: context.setWidth(60),
+                height: context.setHeight(60),
+                radius: context.setMinSize(30),
+                child: Image.asset(
+                  AppIcons.chat,
+                  width: context.setWidth(50),
+                  height: context.setHeight(50),
                 ),
               ),
             ),
           ),
-
-          endDrawer: SettingDrawer(),
-          body: taps[currentIndex],
-
-          extendBody: true,
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(15),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(25),
-              child: BottomNavigationBar(
-                currentIndex: currentIndex,
-                type: BottomNavigationBarType.fixed,
-                elevation: 10,
-                backgroundColor: AppColors.white,
-                selectedItemColor: AppColors.gradientEnd,
-                unselectedItemColor: AppColors.black.withAlpha(150),
-                selectedIconTheme: IconThemeData(size: 30),
-                unselectedIconTheme: IconThemeData(size: 25),
-                showUnselectedLabels: false,
-                showSelectedLabels: true,
-                onTap: (index) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                },
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: "Home",
-                  ),
-                  BottomNavigationBarItem(icon: Icon(Icons.sos), label: "SOs"),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.medical_services),
-                    label: "services",
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.person),
-                    label: "profile",
-                  ),
-                ],
-              ),
-            ),
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          floatingActionButton: GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, RoutesNames.aiChatScreen);
-            },
-            child: GradientIconContainer(
-              width: context.setWidth(60),
-              height: context.setHeight(60),
-              radius: context.setMinSize(30),
-              child: Image.asset(
-                AppIcons.chat,
-                width: context.setWidth(50),
-                height: context.setHeight(50),
-              ),
-            ),
-          ),
         ),
-    ),
       ],
     );
   }
