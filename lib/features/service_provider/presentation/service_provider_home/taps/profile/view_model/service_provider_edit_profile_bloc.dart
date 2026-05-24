@@ -39,13 +39,7 @@ class ServiceProviderEditProfileBloc
     final result = await _providerByIdUseCase(event.id);
     if (result is Success<ServiceProviderEntity>) {
       ProfileManager().serviceProvider = result.data;
-      // final currentUser = UserManager().user!;
-      // UserManager().setUser(
-      //   currentUser.copyWith(
-      //     id: result.data.id,
-      //     role: UserRole.serviceProvider,
-      //   ),
-      // );
+
       emit(
         state.copyWith(
           getServiceProviderStatus: StateStatus.success(result.data),

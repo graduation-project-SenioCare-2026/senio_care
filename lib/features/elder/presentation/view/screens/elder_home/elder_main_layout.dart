@@ -97,24 +97,42 @@ class _ElderHomeState extends State<ElderHome> {
                   },
                   items: [
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.home),
-                      label: "Home",
+                      icon: Icon(
+                        Icons.home,
+                        color: currentIndex == 0
+                            ? AppColors.blue
+                            : AppColors.gray,
+                      ),
+                      label: "home".tr(),
                     ),
                     BottomNavigationBarItem(
                       icon: Image.asset(
-                        AppIcons.sos,
+                        AppIcons.emergency,
                         width: context.setWidth(20),
                         height: context.setHeight(20),
+                        color: currentIndex == 1
+                            ? AppColors.blue
+                            : AppColors.gray,
                       ),
-                      label: "SOs",
+                      label: "sos".tr(),
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.medical_services),
-                      label: "services",
+                      icon: Icon(
+                        Icons.medical_services,
+                        color: currentIndex == 2
+                            ? AppColors.blue
+                            : AppColors.gray,
+                      ),
+                      label: "services".tr(),
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.person),
-                      label: "profile",
+                      icon: Icon(
+                        Icons.person,
+                        color: currentIndex == 3
+                            ? AppColors.blue
+                            : AppColors.gray,
+                      ),
+                      label: "profile".tr(),
                     ),
                   ],
                 ),
