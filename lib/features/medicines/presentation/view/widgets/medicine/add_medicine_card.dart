@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/core/common_widgets/loading_btn.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/core/validator/validator.dart';
 import '../../../../../../core/common_widgets/app_form_field.dart';
 import '../../../../../../core/common_widgets/custom_card.dart';
@@ -34,15 +35,15 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
 
   String? _selectedType;
 
-  static const List<String> _typeKeys = [
-    'tablet',
-    'capsule',
-    'syrup',
-    'injection',
-    'drops',
-    'cream',
-    'inhaler',
-    'patch',
+  final List<String> _typeKeys = [
+    'tablet'.tr(),
+    'capsule'.tr(),
+    'syrup'.tr(),
+    'injection'.tr(),
+    'drop'.tr(),
+    'cream'.tr(),
+    'inhaler'.tr(),
+    'patch'.tr(),
   ];
 
   static const Map<String, String> _typeUnits = {
@@ -50,13 +51,13 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
     'capsule':   'e.g. 1 capsule',
     'syrup':     'e.g. 5ml',
     'injection': 'e.g. 1ml',
-    'drops':     'e.g. 2 drops',
+    'drop':     'e.g. 2 drops',
     'cream':     'e.g. 2g',
     'inhaler':   'e.g. 1 puff',
     'patch':     'e.g. 1 patch',
   };
 
-  static List<String> get _types => _typeKeys.map((k) => k.tr()).toList();
+   List<String> get _types => _typeKeys.map((k) => k.tr()).toList();
 
   String get _dosageHint {
     if (_selectedType == null) return 'e.g. 500mg';
@@ -98,9 +99,10 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
     }
 
     final fmt = DateFormat('yyyy-MM-dd');
-
+print(widget.elderId);
+print("👽👽👽");
     final medicine = MedicineRequest(
-      elderId: widget.elderId,
+      elderId: ProfileManager().selectedElder?.id??ProfileManager().elder?.id??ProfileManager().caregiver?.elders?.first.id,
       medicineName: name,
       dosage: dosage,
       medicineType: _selectedType!,
@@ -136,79 +138,85 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
             vertical: context.setHeight(20),
             horizontal: context.setWidth(16),
           ),
-          child: CustomCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+          child: Column(
+            children: [
+              CustomCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
 
-                AppFormField(
-                  label: 'medicineName'.tr(),
-                  controller: _medicineNameController,
-                  hint: 'e.g. Paracetamol',
-                  validator: (val) => Validator.validateRequired(val),
+                    AppFormField(
+                      label: 'medicineName'.tr(),
+                      controller: _medicineNameController,
+                      hint: 'e.g. Paracetamol',
+                      validator: (val) => Validator.validateRequired(val),
+                    ),
+
+                    Text(
+                      'medicineType'.tr(),
+                      style: getBoldStyle(
+                        color: AppColors.black,
+                        fontSize: context.setSp(FontSize.s16),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: context.setHeight(15),
+                      ),
+                      child: MedicineTypePicker(
+                        selectedType: _selectedType,
+                        types: _types,
+                        onSelected: (type) {
+                          setState(() {
+                            _selectedType = type;
+                          });
+                        },
+                      ),
+                    ),
+
+                    AppFormField(
+                      label: 'dosage'.tr(),
+                      controller: _dosageController,
+                      hint: _dosageHint,
+                      validator: (val) => Validator.validateRequired(val),
+                      keyboardType: TextInputType.number,
+                    ),
+
+                    SizedBox(height: context.setHeight(12)),
+
+                    TimesSection(times: state.times ?? []),
+
+                    SizedBox(height: context.setHeight(12)),
+
+                    StartDateField(startDate: state.startDate),
+
+                    SizedBox(height: context.setHeight(12)),
+
+                    EndDateField(state: state, startDate: state.startDate),
+
+                    SizedBox(height: context.setHeight(12)),
+
+                    AppFormField(
+                      label: 'notes(optional)'.tr(),
+                      controller: _notesController,
+                    ),
+
+
+                  ],
                 ),
+              ),
+              SizedBox(height: context.setHeight(20)),
 
-                Text(
-                  'medicineType'.tr(),
-                  style: getBoldStyle(
-                    color: AppColors.black,
-                    fontSize: context.setSp(FontSize.s16),
-                  ),
+              if (state.addMedicineState.isLoading)
+                const LoadingBtn()
+              else
+                CustomElevatedButton(
+                  width: context.setWidth(350),
+                  onPressed: () => _submit(context, state),
+                  buttonLabel: 'addMedicine'.tr(),
                 ),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: context.setHeight(15),
-                  ),
-                  child: MedicineTypePicker(
-                    selectedType: _selectedType,
-                    types: _types,
-                    onSelected: (type) {
-                      setState(() {
-                        _selectedType = type;
-                      });
-                    },
-                  ),
-                ),
-
-                AppFormField(
-                  label: 'dosage'.tr(),
-                  controller: _dosageController,
-                  hint: _dosageHint,
-                  validator: (val) => Validator.validateRequired(val),
-                ),
-
-                SizedBox(height: context.setHeight(12)),
-
-                TimesSection(times: state.times ?? []),
-
-                SizedBox(height: context.setHeight(12)),
-
-                StartDateField(startDate: state.startDate),
-
-                SizedBox(height: context.setHeight(12)),
-
-                EndDateField(state: state, startDate: state.startDate),
-
-                SizedBox(height: context.setHeight(12)),
-
-                AppFormField(
-                  label: 'notes(optional)'.tr(),
-                  controller: _notesController,
-                ),
-
-                SizedBox(height: context.setHeight(20)),
-
-                if (state.addMedicineState.isLoading)
-                  const LoadingBtn()
-                else
-                  CustomElevatedButton(
-                    width: context.setWidth(300),
-                    onPressed: () => _submit(context, state),
-                    buttonLabel: 'addMedicine'.tr(),
-                  ),
-              ],
-            ),
+            ],
           ),
         );
       },

@@ -136,7 +136,7 @@ class _ServiceProviderEditProfileBodyState
                       LoadingBtn()
                     else
                       CustomElevatedButton(
-                        width: context.setWidth(300),
+                        width: context.setWidth(350),
                         onPressed: hasChanges
                             ? () {
                                 if (_bloc.formKey.currentState!.validate()) {

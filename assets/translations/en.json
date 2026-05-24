@@ -340,12 +340,16 @@
   "cream": "Cream",
   "inhaler": "Inhaler",
   "patch": "Patch",
-  "pleaseEnterElderId": "Please Enter Elder ID",
   "ml": "ml",
   "drop": "drop",
   "gm": "gm",
   "noRemindersAdded": "No reminders added yet",
   "addMedicine": "Add Medicine",
-  "careMadeSimpleForYourFamily": "Care made simple for your family"
-
+  "careMadeSimpleForYourFamily": "Care made simple for your family",
+  "startAddFirstService": "Start by adding your first service",
+  "continueCaregivingJourney": "Sign in to continue your caregiving journey",
+  "continueProvidingCareServices": "Sign in to continue providing care services",
+  "puff": "puff",
+  "howCanIHelpYou?": "How can I help you ?",
+  "askMeAnything. I'mHereForYou.": "Ask me anything. I'm here for you."
 }

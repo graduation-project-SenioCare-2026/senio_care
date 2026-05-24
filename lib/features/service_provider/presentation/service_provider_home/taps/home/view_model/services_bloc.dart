@@ -52,19 +52,22 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
 
   void _selectedService(SelectedService event, Emitter<ServicesState> emit) {
     final availabilityMap = <String, List<TimeSlot>>{};
+
     for (final avail in event.servicesEntity.availability ?? []) {
       availabilityMap[avail.day] = (avail.time as List<dynamic>)
           .map(
             (t) => TimeSlot(
-              startTime: t.startTime as String,
-              endTime: t.endTime as String,
-            ),
-          )
+          startTime: t.startTime as String,
+          endTime: t.endTime as String,
+        ),
+      )
           .toList();
     }
 
-    descriptionController.text = event.servicesEntity.serviceDescription ?? '';
-    locationController.text = event.servicesEntity.location ?? '';
+    descriptionController.text =
+        event.servicesEntity.serviceDescription ?? '';
+    locationController.text =
+        event.servicesEntity.location ?? '';
 
     emit(
       state.copyWith(
@@ -245,15 +248,10 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
   void _onClearForm(ClearFormEvent event, Emitter<ServicesState> emit) {
     descriptionController.clear();
     locationController.clear();
-    emit(
-      state.copyWith(
-        availability: {},
-        addServiceStatus: StateStatus.initial(),
-        editServiceStatus: StateStatus.initial(),
-        selectedService: null,
-        timeSlotError: null,
-      ),
-    );
+
+    emit(ServicesState(
+      servicesList: state.servicesList, // عشان متخسريش الداتا
+    ));
   }
 
   @override

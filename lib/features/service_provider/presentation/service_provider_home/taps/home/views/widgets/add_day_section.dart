@@ -237,7 +237,7 @@ class _AddDaySectionState extends State<AddDaySection> {
                           // ✅ Validate locally — no bloc state involved
                           if (startMinutes >= endMinutes) {
                             setDialogState(() {
-                              errorMessage = 'startTimeMustBeBeforeEndTime';
+                              errorMessage = 'startTimeMustBeBeforeEndTime'.tr();
                             });
                             return;
                           }

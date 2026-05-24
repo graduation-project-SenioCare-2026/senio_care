@@ -16,6 +16,14 @@ class LoginViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String loginSubTitle = "signInToContinueYourCareJourney".tr();
+    if (role == "caregiver") {
+      loginSubTitle = "continueCaregivingJourney".tr();
+    } else if (role == "serviceProvider") {
+      loginSubTitle = "continueProvidingCareServices".tr();
+    } else {
+      loginSubTitle = "signInToContinueYourCareJourney".tr();
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
@@ -23,15 +31,22 @@ class LoginViewBody extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(width: context.setWidth(10),),
-            IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back_ios,color: AppColors.white,size: context.setWidth(25),)),
+            SizedBox(width: context.setWidth(10)),
+            IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.white,
+                size: context.setWidth(25),
+              ),
+            ),
           ],
         ),
         SizedBox(height: context.setHeight(10)),
         HeaderText(
           title: 'welcomeToSenioCare'.tr(),
           titleSize: FontSize.s32,
-          subTitle: 'signInToContinueYourCareJourney'.tr(),
+          subTitle: loginSubTitle.tr(),
           subTitleSize: FontSize.s20,
           titlePadding: 20,
         ),

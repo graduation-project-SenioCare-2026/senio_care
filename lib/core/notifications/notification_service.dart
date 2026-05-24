@@ -44,6 +44,7 @@ class NotificationService {
           priority: Priority.high,
           playSound: true,
           visibility: NotificationVisibility.public,
+          icon: '@drawable/notification_icon',
         ),
       ),
 

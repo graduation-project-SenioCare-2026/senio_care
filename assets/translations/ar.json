@@ -347,10 +347,15 @@
   "cream": "كريم",
   "inhaler": "بخاخ",
   "patch": "لصقة",
-  "startTimeMustBeBeforeEndTime": "وقت البداية يجب أن يكون قبل وقت النهاية",
   "ml": "مل",
   "drop": "نقطه",
   "gm": "جم",
+  "careMadeSimpleForYourFamily": "رعاية سهلة لعائلتك",
+  "startAddFirstService": "ابدأ بإضافة خدمتك الأولى",
+  "continueCaregivingJourney": "سجّل الدخول لمواصلة رحلتك في تقديم الرعاية",
+  "continueProvidingCareServices": "سجّل الدخول لمواصلة تقديم خدمات الرعاية",
+  "puff": "بخّة",
   "noRemindersAdded": "لم يتم إضافة أي تذكيرات بعد",
-  "careMadeSimpleForYourFamily": "رعاية سهلة لعائلتك"
+  "howCanIHelpYou?": "كيف يمكنني مساعدك ؟",
+  "askMeAnything.I'mHereForYou.": "اسألني أي شيء. أنا هنا لمساعدتك."
 }

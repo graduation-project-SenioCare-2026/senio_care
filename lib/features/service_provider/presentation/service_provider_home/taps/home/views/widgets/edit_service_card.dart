@@ -3,10 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/core/common_widgets/loading_btn.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
-import 'package:senio_care/core/theme/app_colors.dart';
-import 'package:senio_care/core/theme/font_manager.dart';
-import 'package:senio_care/core/theme/font_style.dart';
-
 import '../../../../../../../../core/common_widgets/app_form_field.dart';
 import '../../../../../../../../core/common_widgets/custom_card.dart';
 import '../../../../../../../../core/common_widgets/custom_elevated_button.dart';
@@ -27,14 +23,6 @@ class EditServiceCard extends StatefulWidget {
 }
 
 class _EditServiceCardState extends State<EditServiceCard> {
-  late bool _isAvailable;
-
-  @override
-  void initState() {
-    super.initState();
-    _isAvailable = context.read<ServicesBloc>().state.selectedService?.isAvailable ?? true;
-  }
-
   bool _hasChanges(ServicesState state, ServicesBloc bloc) {
     final service = state.selectedService;
     if (service == null) return false;
@@ -47,19 +35,18 @@ class _EditServiceCardState extends State<EditServiceCard> {
 
     final availabilityChanged = !_listsEqual(
       state.availability.entries
-          .expand((e) => e.value.map((s) => '${e.key}:${s.startTime}-${s.endTime}'))
+          .expand(
+            (e) => e.value.map((s) => '${e.key}:${s.startTime}-${s.endTime}'),
+          )
           .toList(),
       (service.availability ?? [])
-          .expand((a) => a.time.map((s) => '${a.day}:${s.startTime}-${s.endTime}'))
+          .expand(
+            (a) => a.time.map((s) => '${a.day}:${s.startTime}-${s.endTime}'),
+          )
           .toList(),
     );
 
-    final isAvailableChanged = _isAvailable != (service.isAvailable ?? true);
-
-    return descriptionChanged ||
-        locationChanged ||
-        availabilityChanged ||
-        isAvailableChanged;
+    return descriptionChanged || locationChanged || availabilityChanged;
   }
 
   bool _listsEqual(List<String> a, List<String> b) {
@@ -78,7 +65,7 @@ class _EditServiceCardState extends State<EditServiceCard> {
 
     return BlocConsumer<ServicesBloc, ServicesState>(
       listenWhen: (prev, curr) =>
-      prev.editServiceStatus != curr.editServiceStatus,
+          prev.editServiceStatus != curr.editServiceStatus,
       listener: (context, state) {
         if (state.editServiceStatus.isSuccess) {
           bloc.add(ClearFormEvent());
@@ -93,93 +80,76 @@ class _EditServiceCardState extends State<EditServiceCard> {
             vertical: context.setHeight(20),
             horizontal: context.setWidth(16),
           ),
-          child: CustomCard(
-            child: Form(
-              key: bloc.formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppFormField(
-                    label: "description".tr(),
-                    controller: bloc.descriptionController,
-                  ),
-                  AppFormField(
-                    label: "location".tr(),
-                    controller: bloc.locationController,
-
-                  ),
-
-                  AddDaySection(
-                    initialDays: state.availability.keys.toList(),
-                  ),
-
-                  SizedBox(height: context.setHeight(16)),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            children: [
+              CustomCard(
+                child: Form(
+                  key: bloc.formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        'isAvailable'.tr(),
-                        style: getBoldStyle(
-                          color: AppColors.black,
-                          fontSize: context.setSp(FontSize.s16),
-                        ),
+                      AppFormField(
+                        label: "description".tr(),
+                        controller: bloc.descriptionController,
                       ),
-                      Switch(
-                        activeThumbColor: AppColors.blue,
-                        value: _isAvailable,
-                        onChanged: (val) =>
-                            setState(() => _isAvailable = val),
+                      AppFormField(
+                        label: "location".tr(),
+                        controller: bloc.locationController,
+                      ),
+
+                      AddDaySection(
+                        initialDays: state.availability.keys.toList(),
                       ),
                     ],
                   ),
-
-                  SizedBox(height: context.setHeight(20)),
-
-                  state.editServiceStatus.isLoading
-                      ? LoadingBtn()
-                      : CustomElevatedButton(
-                    width: context.setWidth(300),
-                    isLoading: state.editServiceStatus.isLoading,
-                    onPressed: hasChanges
-                        ? () {
-                      if (bloc.formKey.currentState!.validate()) {
-                        final request = ServiceRequest(
-                          availability: state.availability.entries
-                              .map((entry) {
-                            return AvailabilityModel(
-                              day: entry.key,
-                              time: entry.value.map((slot) {
-                                return TimeSlotsModel(
-                                  startTime: slot.startTime,
-                                  endTime: slot.endTime,
-                                );
-                              }).toList(),
-                            );
-                          }).toList(),
-                          isAvailable: _isAvailable,
-                          serviceDescription:
-                          bloc.descriptionController.text,
-                          location: bloc.locationController.text,
-                          phoneNumber:
-                          state.selectedService?.phoneNumber,
-                          id: ProfileManager().serviceProvider?.id,
-                          userId:ProfileManager().serviceProvider?.userId,
-                        );
-                        bloc.add(
-                          EditServiceEvent(
-                            state.selectedService?.id ?? '',
-                            request,
-                          ),
-                        );
-                      }
-                    }
-                        : null,
-                    buttonLabel: 'save'.tr(),
-                  ),
-                ],
+                ),
               ),
-            ),
+              SizedBox(height: context.setHeight(20)),
+
+              state.editServiceStatus.isLoading
+                  ? LoadingBtn()
+                  : CustomElevatedButton(
+                      width: context.setWidth(350),
+                      isLoading: state.editServiceStatus.isLoading,
+                      onPressed: hasChanges
+                          ? () {
+                              if (bloc.formKey.currentState!.validate()) {
+                                final request = ServiceRequest(
+                                  availability: state.availability.entries.map((
+                                    entry,
+                                  ) {
+                                    return AvailabilityModel(
+                                      day: entry.key,
+                                      time: entry.value.map((slot) {
+                                        return TimeSlotsModel(
+                                          startTime: slot.startTime,
+                                          endTime: slot.endTime,
+                                        );
+                                      }).toList(),
+                                    );
+                                  }).toList(),
+                                  isAvailable: true,
+                                  serviceDescription:
+                                      bloc.descriptionController.text,
+                                  location: bloc.locationController.text,
+                                  phoneNumber:
+                                      state.selectedService?.phoneNumber,
+                                  id: ProfileManager().serviceProvider?.id,
+                                  userId:
+                                      ProfileManager().serviceProvider?.userId,
+                                );
+                                bloc.add(
+                                  EditServiceEvent(
+                                    state.selectedService?.id ?? '',
+                                    request,
+                                  ),
+                                );
+                              }
+                            }
+                          : null,
+                      buttonLabel: 'save'.tr(),
+                    ),
+            ],
           ),
         );
       },

@@ -17,8 +17,20 @@ import '../../view_model/services_event.dart';
 import '../../view_model/services_state.dart';
 import 'add_day_section.dart';
 
-class AddServiceCard extends StatelessWidget {
+class AddServiceCard extends StatefulWidget {
   const AddServiceCard({super.key});
+
+  @override
+  State<AddServiceCard> createState() => _AddServiceCardState();
+}
+
+class _AddServiceCardState extends State<AddServiceCard> {
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ServicesBloc>().add(ClearFormEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +38,9 @@ class AddServiceCard extends StatelessWidget {
 
     return BlocConsumer<ServicesBloc, ServicesState>(
       listenWhen: (previous, current) =>
-          previous.addServiceStatus != current.addServiceStatus,
+      previous.addServiceStatus != current.addServiceStatus,
       listener: (context, state) {
         if (state.addServiceStatus.isSuccess) {
-          bloc.descriptionController.clear();
-          bloc.locationController.clear();
           bloc.add(ClearFormEvent());
           Navigator.pop(context);
         }
@@ -41,37 +51,44 @@ class AddServiceCard extends StatelessWidget {
             vertical: context.setHeight(20),
             horizontal: context.setWidth(16),
           ),
-          child: CustomCard(
-            child: Form(
-              key: bloc.formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppFormField(
-                    label: "description".tr(),
-                    controller: bloc.descriptionController,
-                    validator: (val) => Validator.validateRequired(val),
+          child: Form(
+            key: bloc.formKey,
+            child: Column(
+              children: [
+                /// 🔹 CARD
+                CustomCard(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppFormField(
+                        label: "description".tr(),
+                        controller: bloc.descriptionController,
+                        validator: (val) =>
+                            Validator.validateRequired(val),
+                      ),
+                      AppFormField(
+                        label: "location".tr(),
+                        controller: bloc.locationController,
+                        validator: (val) =>
+                            Validator.validateRequired(val),
+                      ),
+                      const AddDaySection(),
+                    ],
                   ),
-                  AppFormField(
-                    label: "location".tr(),
-                    controller: bloc.locationController,
-                    validator: (val) => Validator.validateRequired(val),
-                  ),
+                ),
 
-                  const AddDaySection(),
+                SizedBox(height: context.setHeight(20)),
 
-                  SizedBox(height: context.setHeight(20)),
-
-                  if (state.addServiceStatus.isLoading)
-                    LoadingBtn()
-                  else
-
+                if (state.addServiceStatus.isLoading)
+                  LoadingBtn()
+                else
                   CustomElevatedButton(
-                    width: context.setWidth(300),
+                    width: context.setWidth(350),
                     onPressed: () {
                       if (bloc.formKey.currentState!.validate()) {
                         final request = ServiceRequest(
-                          availability: state.availability.entries.map((entry) {
+                          availability:
+                          state.availability.entries.map((entry) {
                             return AvailabilityModel(
                               day: entry.key,
                               time: entry.value.map((slot) {
@@ -83,20 +100,26 @@ class AddServiceCard extends StatelessWidget {
                             );
                           }).toList(),
                           isAvailable: true,
-                          serviceDescription: bloc.descriptionController.text,
+                          serviceDescription:
+                          bloc.descriptionController.text,
                           location: bloc.locationController.text,
-                          userId: ProfileManager().serviceProvider?.userId,
-                          phoneNumber:
-                              ProfileManager().serviceProvider?.phoneNumber,
-                          id: ProfileManager().serviceProvider?.id,
+                          userId: ProfileManager()
+                              .serviceProvider
+                              ?.userId,
+                          phoneNumber: ProfileManager()
+                              .serviceProvider
+                              ?.phoneNumber,
+                          id: ProfileManager()
+                              .serviceProvider
+                              ?.id,
                         );
+
                         bloc.add(AddServiceEvent(request));
                       }
                     },
                     buttonLabel: 'save'.tr(),
                   ),
-                ],
-              ),
+              ],
             ),
           ),
         );

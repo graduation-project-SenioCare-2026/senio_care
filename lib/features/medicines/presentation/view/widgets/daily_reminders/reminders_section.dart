@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/features/medicines/domain/entity/daily_reminder_entity.dart';
-import 'package:senio_care/features/medicines/presentation/view/widgets/daily_reminders/empty_widget.dart';
+import 'package:senio_care/core/common_widgets/empty_widget.dart';
 import 'package:senio_care/features/medicines/presentation/view/widgets/daily_reminders/error_widget.dart';
 import 'package:senio_care/features/medicines/presentation/view/widgets/daily_reminders/reminders_list.dart';
 import 'package:senio_care/features/medicines/presentation/view_model/daily_reminder/daily_reminder_bloc.dart';
@@ -24,7 +24,8 @@ class RemindersSection extends StatelessWidget {
           }
 
           if (status.isSuccess && (status.data?.isEmpty ?? true)) {
-            return const EmptyView();
+            return const EmptyView(title: "noRemindersAdded",
+            icon: Icons.event_busy,);
           }
 
           final reminders = status.isSuccess
