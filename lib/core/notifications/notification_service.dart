@@ -15,7 +15,6 @@ class NotificationService {
 
     await _plugin.initialize(settings);
 
-    // ✅ السطر ده كان فيه typo - اتصلح دلوقتي
     final androidPlugin = _plugin
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
 
@@ -84,23 +83,15 @@ class NotificationService {
   }) async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-    // 🔐 permission
     await messaging.requestPermission();
 
-    // 📲 أول token
     final token = await messaging.getToken();
     if (token != null) {
       onTokenReceived(token);
     }
 
-    // 🔄 لو التوكن اتغير
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
       onTokenReceived(newToken);
     });
-  }
-
-  // لو عايزة تجيبيه في أي مكان
-  static Future<String?> getToken() async {
-    return await FirebaseMessaging.instance.getToken();
   }
 }

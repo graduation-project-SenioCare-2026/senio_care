@@ -15,6 +15,7 @@ class SecureStorageService {
   static const _elderIdKey = 'elder_id';
   static const _serviceProviderIdKey = 'service_provider_id';
   static const _userIdKey = 'user_id';
+  static const _fcmTokenKey = 'fcm_token';
 
   Future<void> saveToken(String token) async =>
       _storage.write(key: _tokenKey, value: token);
@@ -84,5 +85,13 @@ class SecureStorageService {
     await _storage.delete(key: _emailKey);
     await _storage.delete(key: _avatarKey);
     await _storage.delete(key: _userIdKey);
+  }
+
+  Future<void> saveFcmToken(String token) async {
+    await _storage.write(key: _fcmTokenKey, value: token);
+  }
+
+  Future<String?> getFcmToken() async {
+    return await _storage.read(key: _fcmTokenKey);
   }
 }

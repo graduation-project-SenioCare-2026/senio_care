@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:senio_care/core/cache/secure_storage_service.dart';
+import 'package:senio_care/core/notifications/notification_service.dart';
 import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
@@ -21,12 +23,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final GetElderByIdUseCase _getElderByIdUseCase;
   final GetCaregiverByIdUseCase _getCaregiverByIdUseCase;
   final GetServiceProviderByIdUseCase _getServiceProviderUseCase;
+final SecureStorageService _secureStorage;
 
   AuthBloc(
       this._googleSignInUseCase,
       this._getElderByIdUseCase,
       this._getCaregiverByIdUseCase,
       this._getServiceProviderUseCase,
+      this._secureStorage
       ) : super(AuthState()) {
     on<SignInWithGoogleEvent>(_signInWithGoogle);
     on<GetElderByIdEvent>(_getElderById);
@@ -44,9 +48,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     switch (result) {
       case Success<UserEntity>():
-      // ✅ Pass result.data directly — preserves role and onBoard flag
-      // that were set in auth_remote_ds_impl
         UserManager().setUser(result.data);
+
+        // ── save FCM token after successful sign-in ──────────────────────
+        await NotificationService.initFCM(
+          onTokenReceived: (token) async {
+            print("👽👽👽👽👽👽");
+            print(token);
+            await _secureStorage.saveFcmToken(token);
+
+           /// optionally send token to your backend here
+          },
+        );
 
         emit(state.copyWith(
           loginStatus: StateStatus.success(result.data),
