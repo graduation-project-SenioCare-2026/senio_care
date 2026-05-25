@@ -1,10 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:senio_care/config/di/di.dart';
 import 'package:senio_care/core/common_widgets/bg_gradient.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
 import 'package:senio_care/core/theme/font_style.dart';
+import 'package:senio_care/features/elder/presentation/view/widgets/health_reports/health_report_body.dart';
+import 'package:senio_care/features/elder/presentation/view_model/health_reports/health_reports_bloc.dart';
+import 'package:senio_care/features/elder/presentation/view_model/health_reports/health_reports_event.dart';
 
 class HealthReportsScreen extends StatelessWidget {
   const HealthReportsScreen({super.key});
@@ -39,6 +44,11 @@ class HealthReportsScreen extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+          body: BlocProvider(
+            create: (context) =>
+                getIt<HealthReportsBloc>()..add(GetReports('user_123')),
+            child: HealthReportBody(),
           ),
         ),
       ],

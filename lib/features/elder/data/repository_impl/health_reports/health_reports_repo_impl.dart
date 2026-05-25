@@ -5,7 +5,7 @@ import 'package:senio_care/features/elder/domain/entity/health_report_entity.dar
 import 'package:senio_care/features/elder/domain/repository/health_reports/health_reports_repo.dart';
 
 @Injectable(as: HealthReportsRepo)
-class HealthReportsRepoImpl implements HealthReportsRepo {
+class HealthReportsRepoImpl implements HealthReportsRepo{
   final HealthReportsRemoteDS _healthReportsRemoteDS;
   HealthReportsRepoImpl(this._healthReportsRemoteDS);
 
@@ -13,4 +13,5 @@ class HealthReportsRepoImpl implements HealthReportsRepo {
   Future<Result<List<HealthReportEntity>>> getReports(String id) {
     return _healthReportsRemoteDS.getReports(id);
   }
+
 }
