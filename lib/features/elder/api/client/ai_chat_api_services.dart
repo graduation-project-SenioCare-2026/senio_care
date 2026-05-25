@@ -13,6 +13,7 @@ part 'ai_chat_api_services.g.dart';
 abstract class ChatApiServices {
   @factoryMethod
   factory ChatApiServices(Dio dio) = _ChatApiServices;
+
   @POST(EndPointsConstants.createSession)
   Future<void> createSession(
     @Path('app_name') String appName,
@@ -20,19 +21,13 @@ abstract class ChatApiServices {
     @Path('session_id') String sessionId,
     @Body() CreateSessionRequest request,
   );
+
   @GET(EndPointsConstants.getChatHistory)
   Future<ChatHistoryResponse> getChatHistory(@Path('user_id') String userId);
+
   @GET(EndPointsConstants.getChatConversation)
   Future<ConversationDetailModel> getChatConversation(
       @Path('user_id') String userId,
       @Path('session_id') String sessionId,
       );
 }
-
-// @RestApi(baseUrl: EndPointsConstants.chatAiBaseUrl)
-// @injectable
-// abstract class GetChatApiServices {
-//   @factoryMethod
-//   factory GetChatApiServices(Dio dio) = _GetChatApiServices;
-//
-// }
