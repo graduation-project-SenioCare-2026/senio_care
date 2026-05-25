@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:senio_care/core/common_widgets/profile_skeleton.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
@@ -11,7 +10,6 @@ import 'package:senio_care/features/elder/presentation/view/widgets/elder_profil
 import 'package:senio_care/features/elder/presentation/view/widgets/elder_profile/elder_personal_info/avatar_name_container.dart';
 import 'package:senio_care/features/elder/presentation/view_model/elder_profile/elder_profile_bloc.dart';
 import 'package:senio_care/features/elder/presentation/view_model/elder_profile/elder_profile_state.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class EditPersonalInfoViewBody extends StatelessWidget {
   const EditPersonalInfoViewBody({super.key});

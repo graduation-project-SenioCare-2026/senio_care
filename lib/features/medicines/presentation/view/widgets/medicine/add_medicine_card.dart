@@ -99,8 +99,7 @@ class _AddMedicineCardState extends State<AddMedicineCard> {
     }
 
     final fmt = DateFormat('yyyy-MM-dd');
-print(widget.elderId);
-print("👽👽👽");
+
     final medicine = MedicineRequest(
       elderId: ProfileManager().selectedElder?.id??ProfileManager().elder?.id??ProfileManager().caregiver?.elders?.first.id,
       medicineName: name,

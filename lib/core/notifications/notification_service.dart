@@ -62,21 +62,6 @@ class NotificationService {
     await _plugin.cancel(id);
   }
 
-  static Future<void> showInstantNotification() async {
-    await _plugin.show(
-      0,
-      "Test Notification 🔔",
-      "لو شايفة الرسالة دي يبقى كل حاجة شغالة ✔️",
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'test_channel',
-          'Test Channel',
-          importance: Importance.max,
-          priority: Priority.high,
-        ),
-      ),
-    );
-  }
 
   static Future<void> initFCM({
     required Function(String token) onTokenReceived,

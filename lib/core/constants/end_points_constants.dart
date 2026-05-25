@@ -40,6 +40,7 @@ abstract class EndPointsConstants {
 
   static const String getReports = "/reports/{user_id}";
   static const String getReportsDetails = "/reports/{user_id}/{report_id}";
-  static const String getUser="/users/{user_id}";
-  static const String notification="/notifications/queue";
+
+  static const String notification = "/notifications/queue";
+  static const String registerCaregiverFcm = "/register-caregiver-fcm";
 }

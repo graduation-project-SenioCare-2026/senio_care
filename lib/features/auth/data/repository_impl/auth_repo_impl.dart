@@ -5,6 +5,7 @@ import 'package:senio_care/core/exceptions/response_exception.dart';
 import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/features/auth/api/client/google_auth_services.dart';
 import 'package:senio_care/features/auth/api/models/request/google_sign_in_request.dart';
+import 'package:senio_care/features/auth/api/models/request/register_caregiver_fcm_request.dart';
 import 'package:senio_care/features/auth/data/data_source/remote/auth_remote_ds.dart';
 import 'package:senio_care/features/auth/domain/entity/caregiver_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
@@ -54,5 +55,10 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<Result<ServiceProviderEntity>> getServiceProviderById(String id) {
     return _remoteDs.getServiceProviderById(id);
+  }
+
+  @override
+  Future<Result<String>> registerCaregiverFcm(RegisterCaregiverFcmRequest request) {
+    return _remoteDs.registerCaregiverFcm(request);
   }
 }

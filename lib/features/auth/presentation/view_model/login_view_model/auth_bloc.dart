@@ -6,6 +6,7 @@ import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/core/state_status/state_status.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
 import 'package:senio_care/core/user/user_manager.dart';
+import 'package:senio_care/features/auth/api/models/request/register_caregiver_fcm_request.dart';
 import 'package:senio_care/features/auth/domain/entity/caregiver_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/elder_entity.dart';
 import 'package:senio_care/features/auth/domain/entity/service_provider_entity.dart';
@@ -13,6 +14,7 @@ import 'package:senio_care/features/auth/domain/entity/user_entity.dart';
 import 'package:senio_care/features/auth/domain/use_case/get_caregiver_by_id_use_case.dart';
 import 'package:senio_care/features/auth/domain/use_case/get_elder_by_id_use_case.dart';
 import 'package:senio_care/features/auth/domain/use_case/get_service_provider_by_id_use_case.dart';
+import 'package:senio_care/features/auth/domain/use_case/register_caregiver_fcm_use_case.dart';
 import 'package:senio_care/features/auth/domain/use_case/sign_in_with_google_use_case.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
@@ -23,15 +25,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final GetElderByIdUseCase _getElderByIdUseCase;
   final GetCaregiverByIdUseCase _getCaregiverByIdUseCase;
   final GetServiceProviderByIdUseCase _getServiceProviderUseCase;
-final SecureStorageService _secureStorage;
+  final SecureStorageService _secureStorage;
+  final RegisterCaregiverFcmUseCase _registerCaregiverFcmUseCase;
 
   AuthBloc(
-      this._googleSignInUseCase,
-      this._getElderByIdUseCase,
-      this._getCaregiverByIdUseCase,
-      this._getServiceProviderUseCase,
-      this._secureStorage
-      ) : super(AuthState()) {
+    this._googleSignInUseCase,
+    this._getElderByIdUseCase,
+    this._getCaregiverByIdUseCase,
+    this._getServiceProviderUseCase,
+    this._registerCaregiverFcmUseCase,
+    this._secureStorage,
+  ) : super(AuthState()) {
     on<SignInWithGoogleEvent>(_signInWithGoogle);
     on<GetElderByIdEvent>(_getElderById);
     on<GetCaregiverByIdEvent>(_getCaregiverById);
@@ -39,9 +43,9 @@ final SecureStorageService _secureStorage;
   }
 
   Future<void> _signInWithGoogle(
-      SignInWithGoogleEvent event,
-      Emitter<AuthState> emit,
-      ) async {
+    SignInWithGoogleEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(state.copyWith(loginStatus: StateStatus.loading()));
 
     final result = await _googleSignInUseCase(event.role);
@@ -51,25 +55,38 @@ final SecureStorageService _secureStorage;
         UserManager().setUser(result.data);
 
         // ── save FCM token after successful sign-in ──────────────────────
-        await NotificationService.initFCM(
-          onTokenReceived: (token) async {
-            print("👽👽👽👽👽👽");
-            print(token);
-            await _secureStorage.saveFcmToken(token);
+        if (result.data.role == UserRole.caregiver) {
+          await NotificationService.initFCM(
+            onTokenReceived: (token) async {
+              await _secureStorage.saveFcmToken(token);
 
-           /// optionally send token to your backend here
-          },
-        );
+              final caregiver = ProfileManager().caregiver;
 
-        emit(state.copyWith(
-          loginStatus: StateStatus.success(result.data),
-        ));
+              // send caregiver fcm to backend
+              if (caregiver != null) {
+                await _registerCaregiverFcmUseCase(
+                  RegisterCaregiverFcmRequest(
+                    elderUserId: caregiver.elders?.first.id,
+                    caregiverId: caregiver.id,
+                    name: UserManager().name,
+                    relationship: caregiver.relationship,
+                    fcmToken: token,
+                  ),
+                );
+              }
+            },
+          );
+        }
+
+        emit(state.copyWith(loginStatus: StateStatus.success(result.data)));
         break;
 
       case Failure<UserEntity>():
-        emit(state.copyWith(
-          loginStatus: StateStatus.failure(result.responseException),
-        ));
+        emit(
+          state.copyWith(
+            loginStatus: StateStatus.failure(result.responseException),
+          ),
+        );
         break;
     }
   }
@@ -78,9 +95,9 @@ final SecureStorageService _secureStorage;
   // to fetch and store the newly created profile entity
 
   Future<void> _getElderById(
-      GetElderByIdEvent event,
-      Emitter<AuthState> emit,
-      ) async {
+    GetElderByIdEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(state.copyWith(getElderStatus: StateStatus.loading()));
 
     final result = await _getElderByIdUseCase(event.id);
@@ -91,29 +108,26 @@ final SecureStorageService _secureStorage;
 
         final currentUser = UserManager().user!;
         UserManager().setUser(
-          currentUser.copyWith(
-            id: result.data.id,
-            role: UserRole.elder,
-          ),
+          currentUser.copyWith(id: result.data.id, role: UserRole.elder),
         );
 
-        emit(state.copyWith(
-          getElderStatus: StateStatus.success(result.data),
-        ));
+        emit(state.copyWith(getElderStatus: StateStatus.success(result.data)));
         break;
 
       case Failure<ElderEntity>():
-        emit(state.copyWith(
-          getElderStatus: StateStatus.failure(result.responseException),
-        ));
+        emit(
+          state.copyWith(
+            getElderStatus: StateStatus.failure(result.responseException),
+          ),
+        );
         break;
     }
   }
 
   Future<void> _getCaregiverById(
-      GetCaregiverByIdEvent event,
-      Emitter<AuthState> emit,
-      ) async {
+    GetCaregiverByIdEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(state.copyWith(getCaregiverStatus: StateStatus.loading()));
 
     final result = await _getCaregiverByIdUseCase(event.id);
@@ -124,29 +138,28 @@ final SecureStorageService _secureStorage;
 
         final currentUser = UserManager().user!;
         UserManager().setUser(
-          currentUser.copyWith(
-            id: result.data.id,
-            role: UserRole.caregiver,
-          ),
+          currentUser.copyWith(id: result.data.id, role: UserRole.caregiver),
         );
 
-        emit(state.copyWith(
-          getCaregiverStatus: StateStatus.success(result.data),
-        ));
+        emit(
+          state.copyWith(getCaregiverStatus: StateStatus.success(result.data)),
+        );
         break;
 
       case Failure<CaregiverEntity>():
-        emit(state.copyWith(
-          getCaregiverStatus: StateStatus.failure(result.responseException),
-        ));
+        emit(
+          state.copyWith(
+            getCaregiverStatus: StateStatus.failure(result.responseException),
+          ),
+        );
         break;
     }
   }
 
   Future<void> _getServiceProviderById(
-      GetServiceProviderByIdEvent event,
-      Emitter<AuthState> emit,
-      ) async {
+    GetServiceProviderByIdEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(state.copyWith(getServiceProviderStatus: StateStatus.loading()));
 
     final result = await _getServiceProviderUseCase(event.id);
@@ -163,15 +176,21 @@ final SecureStorageService _secureStorage;
           ),
         );
 
-        emit(state.copyWith(
-          getServiceProviderStatus: StateStatus.success(result.data),
-        ));
+        emit(
+          state.copyWith(
+            getServiceProviderStatus: StateStatus.success(result.data),
+          ),
+        );
         break;
 
       case Failure<ServiceProviderEntity>():
-        emit(state.copyWith(
-          getServiceProviderStatus: StateStatus.failure(result.responseException),
-        ));
+        emit(
+          state.copyWith(
+            getServiceProviderStatus: StateStatus.failure(
+              result.responseException,
+            ),
+          ),
+        );
         break;
     }
   }

@@ -12,8 +12,6 @@ void callbackDispatcher() {
 
     await NotificationService.init();
 
-    await NotificationService.showInstantNotification();
-
     return Future.value(true);
   });
 }

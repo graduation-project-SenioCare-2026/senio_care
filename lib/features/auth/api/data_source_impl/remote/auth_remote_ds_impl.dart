@@ -3,8 +3,10 @@ import 'package:senio_care/core/cache/secure_storage_service.dart';
 import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/core/safe_call/safe_call.dart';
 import 'package:senio_care/core/user/profile_manager.dart';
+import 'package:senio_care/features/auth/api/client/ai_api_services.dart';
 import 'package:senio_care/features/auth/api/client/auth_api_services.dart';
 import 'package:senio_care/features/auth/api/models/request/google_sign_in_request.dart';
+import 'package:senio_care/features/auth/api/models/request/register_caregiver_fcm_request.dart';
 import 'package:senio_care/features/auth/api/models/response/caregiver_response.dart';
 import 'package:senio_care/features/auth/api/models/response/elder_response.dart';
 import 'package:senio_care/features/auth/api/models/response/service_provider_response.dart';
@@ -18,8 +20,9 @@ import 'package:senio_care/features/auth/domain/entity/user_entity.dart';
 class AuthRemoteDsImpl implements AuthRemoteDs {
   final AuthApiServices _authApiServices;
   final SecureStorageService _secureStorage;
+ final  AiApiServices  _aiApiServices;
 
-  AuthRemoteDsImpl(this._authApiServices, this._secureStorage);
+  AuthRemoteDsImpl(this._authApiServices, this._secureStorage,this._aiApiServices);
 
   @override
   Future<Result<UserEntity>> signInWithGoogle(
@@ -129,5 +132,13 @@ class AuthRemoteDsImpl implements AuthRemoteDs {
       final response = await _authApiServices.getServiceProviderById(id);
       return response.toEntity();
     });
+  }
+
+  @override
+  Future<Result<String>> registerCaregiverFcm(RegisterCaregiverFcmRequest request) {
+   return safeCall(() async{
+     final response= await _aiApiServices.registerCaregiverFcm(request);
+     return response;
+   },);
   }
 }
