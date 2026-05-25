@@ -65,8 +65,8 @@ class _ElderHomeState extends State<ElderHome> {
               ),
             ),
 
-            endDrawer: SettingDrawer(),
-            body: taps[currentIndex],
+          endDrawer: SettingDrawer(),
+          body: taps[currentIndex],
 
             extendBody: true,
             bottomNavigationBar: Padding(
