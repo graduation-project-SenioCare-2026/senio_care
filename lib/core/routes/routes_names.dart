@@ -28,5 +28,6 @@ abstract class RoutesNames {
   static const String dailyRemindersScreen="dailyRemindersScreen";
   static const String tipsScreen="tipsScreen";
   static const String healthReportsScreen="healthReportsScreen";
+  static const String healthReportDetailsScreen = 'healthReportDetails';
 
 }

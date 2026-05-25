@@ -28,9 +28,12 @@ import 'package:senio_care/features/service_provider/presentation/onboarding/vie
 import 'package:senio_care/features/caregiver/presentation/onboarding/views/screens/caregiver_onboarding_screen.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/home/views/screens/add_services_screen.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/home/views/screens/edit_service_screen.dart';
+import '../../features/elder/domain/entity/health_report_entity.dart';
 import '../../features/elder/presentation/view/screens/elder_home/elder_profile/edit_personal_info_screen.dart';
 import '../../features/elder/presentation/view/screens/elder_home/elder_profile/elder_personal_info_screen.dart';
+import '../../features/elder/presentation/view/widgets/health_reports/health_report_details_screen.dart';
 import '../../features/elder/presentation/view_model/ai_chat/ai_chat_bloc.dart';
+import '../../features/elder/presentation/view_model/health_reports/health_reports_bloc.dart';
 import '../../features/medicines/presentation/view/screens/medicine/add_medicine.dart';
 import '../../features/medicines/presentation/view_model/medicine/medicine_bloc.dart';
 import '../../features/service_provider/presentation/service_provider_home/service_provider_main_layout.dart';
@@ -192,6 +195,14 @@ abstract class Routes {
       case RoutesNames.healthReportsScreen:
         return MaterialPageRoute(
           builder: (_) => HealthReportsScreen(),
+        );
+      case RoutesNames.healthReportDetailsScreen:
+        final report = setting.arguments as HealthReportEntity;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<HealthReportsBloc>(),
+            child: HealthReportDetailsScreen(report: report),
+          ),
         );
       default:
         return MaterialPageRoute(
