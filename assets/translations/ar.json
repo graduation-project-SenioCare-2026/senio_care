@@ -357,5 +357,12 @@
   "puff": "بخّة",
   "noRemindersAdded": "لم يتم إضافة أي تذكيرات بعد",
   "howCanIHelpYou?": "كيف يمكنني مساعدك ؟",
-  "askMeAnything.I'mHereForYou.": "اسألني أي شيء. أنا هنا لمساعدتك."
+  "askMeAnything.I'mHereForYou.": "اسألني أي شيء. أنا هنا لمساعدتك.",
+  "medicineSchedule": "جدول الأدوية",
+  "medicinesDescription": "تابع أدويتك اليومية",
+  "aiHealthTipsDescription": "احصل على نصائح صحية مخصصة",
+  "aiReportsDescription": "اطلع على تقاريرك الصحية",
+  "medicines": "جدول الأدوية",
+  "aiHealthTips": "نصائح صحية ذكية",
+  "aiReports": "التقارير الصحية"
 }

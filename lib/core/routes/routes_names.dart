@@ -25,4 +25,8 @@ abstract class RoutesNames {
   static const String elderProfileTabScreen="elderProfileTabScreen";
   static const String addNewMedicineScreen="addNewMedicine";
   static const String aiChatScreen="aiChatScreen";
+  static const String dailyRemindersScreen="dailyRemindersScreen";
+  static const String tipsScreen="tipsScreen";
+  static const String healthReportsScreen="healthReportsScreen";
+
 }

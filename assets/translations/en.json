@@ -351,5 +351,12 @@
   "continueProvidingCareServices": "Sign in to continue providing care services",
   "puff": "puff",
   "howCanIHelpYou?": "How can I help you ?",
-  "askMeAnything. I'mHereForYou.": "Ask me anything. I'm here for you."
+  "askMeAnything. I'mHereForYou.": "Ask me anything. I'm here for you.",
+  "medicineSchedule": "Medicine Schedule",
+  "medicinesDescription": "Track your daily medications",
+  "aiHealthTipsDescription": "Get personalized health advice",
+  "aiReportsDescription": "View your health insights",
+  "medicines": "Medication Schedule",
+  "aiHealthTips": "Smart Health Tips",
+  "aiReports": "Health Reports"
 }

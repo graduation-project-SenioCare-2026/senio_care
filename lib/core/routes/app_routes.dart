@@ -11,15 +11,19 @@ import 'package:senio_care/features/caregiver/presentation/caregiver_home/caregi
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/views/screen/caregiver_edit_profile.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/profile/views/screen/caregiver_profile.dart';
 import 'package:senio_care/features/elder/domain/entity/medical_document_entity.dart';
+import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_home/health_reports_screen.dart';
+import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_home/tips_screen.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_main_layout.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_profile/create_document_screen.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_profile/document_details_screen.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_profile/medical_documents_screen.dart';
+import 'package:senio_care/features/elder/presentation/view/screens/elder_home/elder_home/elder_daily_reminders_screen.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/taps/elder_profile_tab.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_onboarding/elder_onboarding_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/blood_pressure_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/caregiver_home/taps/graph/views/widgets/blood_sugar_screen.dart';
 import 'package:senio_care/features/elder/presentation/view/widgets/ai_chat/ai_chat_view_body.dart';
+import 'package:senio_care/features/medicines/presentation/view_model/daily_reminder/daily_reminder_bloc.dart';
 import 'package:senio_care/features/service_provider/presentation/onboarding/views/screens/service_provider_onboarding_screen.dart';
 import 'package:senio_care/features/caregiver/presentation/onboarding/views/screens/caregiver_onboarding_screen.dart';
 import 'package:senio_care/features/service_provider/presentation/service_provider_home/taps/home/views/screens/add_services_screen.dart';
@@ -174,6 +178,21 @@ abstract class Routes {
           ),
         );
 
+      case RoutesNames.dailyRemindersScreen:
+        return MaterialPageRoute(builder:(context) =>  BlocProvider(
+          create: (context) => getIt<DailyReminderBloc>(),
+          child: ElderDailyRemindersScreen(),
+        ),);
+
+      case RoutesNames.tipsScreen:
+        return MaterialPageRoute(
+          builder: (_) => TipsScreen(),
+        );
+
+      case RoutesNames.healthReportsScreen:
+        return MaterialPageRoute(
+          builder: (_) => HealthReportsScreen(),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) =>

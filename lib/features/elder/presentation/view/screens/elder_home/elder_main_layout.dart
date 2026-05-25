@@ -12,7 +12,7 @@ import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
 import 'package:senio_care/core/theme/font_style.dart';
 import 'package:senio_care/core/user/user_manager.dart';
-import 'package:senio_care/features/elder/presentation/view/screens/elder_home/taps/elder_daily_reminders_tab.dart';
+import 'package:senio_care/features/elder/presentation/view/screens/elder_home/taps/elder_home_tab.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/taps/elder_profile_tab.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/taps/services_tab.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/taps/sos_tab.dart';
@@ -28,10 +28,7 @@ class ElderHome extends StatefulWidget {
 class _ElderHomeState extends State<ElderHome> {
   int currentIndex = 0;
   List<Widget> taps = [
-    BlocProvider(
-      create: (context) => getIt<DailyReminderBloc>(),
-      child: ElderDailyRemindersTab(),
-    ),
+    ElderHomeTab(),
     SosTab(),
     ServicesTab(),
     ElderProfileTap(),
