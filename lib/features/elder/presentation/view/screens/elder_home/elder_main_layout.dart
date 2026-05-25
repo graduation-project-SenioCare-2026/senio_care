@@ -1,7 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:senio_care/config/di/di.dart';
 import 'package:senio_care/core/common_widgets/bg_gradient.dart';
 import 'package:senio_care/core/common_widgets/gradient_icon_container.dart';
 import 'package:senio_care/core/common_widgets/setting_drawer.dart';
@@ -16,7 +14,6 @@ import 'package:senio_care/features/elder/presentation/view/screens/elder_home/t
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/taps/elder_profile_tab.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/taps/services_tab.dart';
 import 'package:senio_care/features/elder/presentation/view/screens/elder_home/taps/sos_tab.dart';
-import 'package:senio_care/features/medicines/presentation/view_model/daily_reminder/daily_reminder_bloc.dart';
 
 class ElderHome extends StatefulWidget {
   const ElderHome({super.key});

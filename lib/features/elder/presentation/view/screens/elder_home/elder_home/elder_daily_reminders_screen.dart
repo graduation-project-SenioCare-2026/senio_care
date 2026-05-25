@@ -2,10 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:senio_care/core/common_widgets/bg_gradient.dart';
-import 'package:senio_care/core/common_widgets/gradient_icon_container.dart';
-import 'package:senio_care/core/constants/app_icons.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
-import 'package:senio_care/core/routes/routes_names.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
 import 'package:senio_care/core/theme/font_style.dart';
@@ -79,22 +76,6 @@ class _ElderDailyRemindersScreen extends State<ElderDailyRemindersScreen> {
             ),
           ),
           body: DailyRemindersViewBody(onDateChanged: _onDateChanged),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          floatingActionButton: GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, RoutesNames.aiChatScreen);
-            },
-            child: GradientIconContainer(
-              width: context.setWidth(60),
-              height: context.setHeight(60),
-              radius: context.setMinSize(30),
-              child: Image.asset(
-                AppIcons.chat,
-                width: context.setWidth(50),
-                height: context.setHeight(50),
-              ),
-            ),
-          ),
         ),
       ],
     );

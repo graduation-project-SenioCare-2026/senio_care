@@ -33,10 +33,10 @@ class HomeNavigationItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               GradientIconContainer(
-                width: 75,
-                height: 75,
+                width: 65,
+                height: 65,
                 radius: 10,
-                childPadding: 10,
+                childPadding: 12,
                 child: Image.asset(itemIcon),
               ),
               SizedBox(width: context.setWidth(10)),
