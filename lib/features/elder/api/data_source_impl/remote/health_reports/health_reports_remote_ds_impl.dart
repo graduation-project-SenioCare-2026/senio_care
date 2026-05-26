@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:senio_care/core/result/result.dart';
 import 'package:senio_care/features/elder/api/client/health_reports_services.dart';
+import 'package:senio_care/features/elder/api/models/request/health_reports/create_report_request.dart';
 import 'package:senio_care/features/elder/data/data_source/remote/health_reports/health_reports_remote_ds.dart';
 import 'package:senio_care/features/elder/domain/entity/health_report_details_entity.dart';
 import 'package:senio_care/features/elder/domain/entity/health_report_entity.dart';
@@ -26,5 +27,13 @@ class HealthReportsRemoteDSImpl implements HealthReportsRemoteDS {
       await _healthReportsServices.getReportDetails(userId,reportId);
       return response.toEntity();
     });
+  }
+
+  @override
+  Future<Result<String>> createReport(CreateReportRequest request) {
+    return safeCall(() async{
+      final response= await _healthReportsServices.createReport(request);
+      return response;
+    },);
   }
 }

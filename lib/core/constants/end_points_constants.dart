@@ -43,4 +43,5 @@ abstract class EndPointsConstants {
 
   static const String notification = "/notifications/queue";
   static const String registerCaregiverFcm = "/register-caregiver-fcm";
+  static const String createReport="/reports/generate";
 }
