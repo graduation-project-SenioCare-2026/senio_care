@@ -1,18 +1,35 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:senio_care/config/di/di.dart';
 import 'package:senio_care/core/common_widgets/bg_gradient.dart';
 import 'package:senio_care/core/responsive/size_helper.dart';
 import 'package:senio_care/core/theme/app_colors.dart';
 import 'package:senio_care/core/theme/font_manager.dart';
 import 'package:senio_care/core/theme/font_style.dart';
-import 'package:senio_care/features/elder/presentation/view/widgets/health_reports/health_report_body.dart';
-import 'package:senio_care/features/elder/presentation/view_model/health_reports/health_reports_bloc.dart';
-import 'package:senio_care/features/elder/presentation/view_model/health_reports/health_reports_event.dart';
+import 'package:senio_care/core/user/user_manager.dart';
+import 'package:senio_care/features/elder/domain/entity/health_report_entity.dart';
 
-class HealthReportsScreen extends StatelessWidget {
-  const HealthReportsScreen({super.key});
+import '../../../view_model/health_reports/health_reports_bloc.dart';
+import '../../../view_model/health_reports/health_reports_event.dart';
+import 'health_report_detailed_body.dart';
+
+class HealthReportDetailsScreen extends StatefulWidget {
+  final HealthReportEntity report;
+
+  const HealthReportDetailsScreen({required this.report, super.key});
+
+  @override
+  State<HealthReportDetailsScreen> createState() =>
+      _HealthReportDetailsScreenState();
+}
+
+class _HealthReportDetailsScreenState extends State<HealthReportDetailsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<HealthReportsBloc>().add(
+      GetReportDetails(UserManager().userId!, widget.report.reportId),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +38,7 @@ class HealthReportsScreen extends StatelessWidget {
         Container(color: Colors.white.withOpacity(0.9)),
         BgGradient(midGradientColor: AppColors.white, midGradientAlpha: 100),
         Scaffold(
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             centerTitle: true,
@@ -37,19 +55,15 @@ class HealthReportsScreen extends StatelessWidget {
             ),
             title: FittedBox(
               child: Text(
-                "aiReports".tr(),
+                widget.report.title,
                 style: getBoldStyle(
                   color: AppColors.black,
-                  fontSize: context.setSp(FontSize.s24),
+                  fontSize: context.setSp(FontSize.s20),
                 ),
               ),
             ),
           ),
-          body: BlocProvider(
-            create: (context) =>
-                getIt<HealthReportsBloc>()..add(GetReports('user_123')),
-            child: HealthReportBody(),
-          ),
+          body: const HealthReportDetailsBody(),
         ),
       ],
     );
