@@ -1,5 +1,9 @@
 # 🩺 SenioCare
 
+<p align="center">
+  <img src="assets/icons/app_icon.png" width="180" alt="SenioCare Logo">
+</p>
+
 <p>
   <b>AI-Powered Smart Companion for Enhancing Elderly Health, Independence, and Quality of Life</b>
 </p>
