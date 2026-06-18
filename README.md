@@ -55,7 +55,6 @@ The Caregiver module enables remote elderly monitoring and support.
 - Elder profile management
 - Health information monitoring
 - Medication adherence tracking
-- Missed medication notifications
 - Health statistics visualization
 - Multi-elder management
 - Emergency SOS alerts
@@ -98,7 +97,6 @@ The AI system analyzes:
 - Medical profile
 - Health records
 - Medication information
-- Health measurements
 
 Provides:
 
