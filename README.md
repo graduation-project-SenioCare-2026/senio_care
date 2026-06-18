@@ -1,7 +1,7 @@
 # 🩺 SenioCare
 
 <p align="center">
-  <b>An AI-Powered Healthcare Management Platform for Elderly Support</b>
+  <b>AI-Powered Smart Companion for Enhancing Elderly Health, Independence, and Quality of Life</b>
 </p>
 
 ---
