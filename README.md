@@ -1,6 +1,6 @@
 # 🩺 SenioCare
 
-<p align="center">
+<p>
   <b>AI-Powered Smart Companion for Enhancing Elderly Health, Independence, and Quality of Life</b>
 </p>
 
