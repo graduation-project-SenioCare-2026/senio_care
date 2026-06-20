@@ -1,45 +1,40 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:senio_care/core/user/profile_manager.dart';
-import 'package:senio_care/features/medicines/presentation/view/widgets/daily_reminders/daily_reminders_view_body.dart';
-import 'package:senio_care/features/medicines/presentation/view_model/daily_reminder/daily_reminder_bloc.dart';
-import 'package:senio_care/features/medicines/presentation/view_model/daily_reminder/daily_reminder_event.dart';
+import 'package:senio_care/core/constants/app_icons.dart';
+import 'package:senio_care/core/responsive/size_helper.dart';
+import 'package:senio_care/core/routes/routes_names.dart';
+import 'package:senio_care/features/elder/presentation/view/widgets/elder_home_tab/home_navigation_item.dart';
 
-class CaregiverHomeTab extends StatefulWidget {
+class CaregiverHomeTab extends StatelessWidget {
   const CaregiverHomeTab({super.key});
 
   @override
-  State<CaregiverHomeTab> createState() => _ElderDailyRemindersTabState();
-}
-
-class _ElderDailyRemindersTabState extends State<CaregiverHomeTab> {
-  final elderId =
-      ProfileManager().selectedElder?.id ??
-      ProfileManager().caregiver!.elders![0].id;
-  @override
-  void initState() {
-    super.initState();
-
-    final today = context.read<DailyReminderBloc>().state.selectedDate;
-
-    context.read<DailyReminderBloc>().add(
-      GetDailyReminderEvent(elderId ?? "", today),
-    );
-  }
-
-  void _onDateChanged(DateTime date) {
-    final formatted =
-        '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-    context.read<DailyReminderBloc>().add(
-      ChangeDateEvent(date: formatted, elderId: elderId ?? ""),
-    );
-    context.read<DailyReminderBloc>().add(
-      GetDailyReminderEvent(elderId!, formatted),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return DailyRemindersViewBody(onDateChanged: _onDateChanged);
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: context.setWidth(26),
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            height: context.setHeight(50),
+          ),
+
+          HomeNavigationItem(
+            itemIcon: AppIcons.pills,
+            itemLable: "medicines".tr(),
+            description: "medicinesDescription".tr(),
+            screenToNavigate: RoutesNames.dailyRemindersScreen,
+          ),
+
+          HomeNavigationItem(
+            itemIcon: AppIcons.report,
+            itemLable: "aiReports".tr(),
+            description: "aiReportsDescription".tr(),
+            screenToNavigate: RoutesNames.healthReportsScreen,
+          ),
+        ],
+      ),
+    );
   }
 }

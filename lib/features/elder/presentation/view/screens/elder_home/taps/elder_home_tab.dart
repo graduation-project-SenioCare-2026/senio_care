@@ -28,13 +28,13 @@ class _ElderHomeTab extends State<ElderHomeTab> {
             screenToNavigate: RoutesNames.dailyRemindersScreen,
 
           ),
-          HomeNavigationItem(
-              itemIcon: AppIcons.stars,
-              itemLable: "aiHealthTips".tr(),
-              description: "aiHealthTipsDescription".tr(),
-            screenToNavigate: RoutesNames.tipsScreen,
-
-          ),
+          // HomeNavigationItem(
+          //     itemIcon: AppIcons.stars,
+          //     itemLable: "aiHealthTips".tr(),
+          //     description: "aiHealthTipsDescription".tr(),
+          //   screenToNavigate: RoutesNames.tipsScreen,
+          //
+          // ),
           HomeNavigationItem(
               itemIcon: AppIcons.report,
               itemLable: "aiReports".tr(),

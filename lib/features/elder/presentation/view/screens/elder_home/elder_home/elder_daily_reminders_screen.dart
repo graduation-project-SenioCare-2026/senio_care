@@ -21,7 +21,7 @@ class ElderDailyRemindersScreen extends StatefulWidget {
 
 class _ElderDailyRemindersScreen extends State<ElderDailyRemindersScreen> {
   final elderId =
-      ProfileManager().selectedElder?.id ?? ProfileManager().elder?.id;
+      ProfileManager().selectedElder?.id ?? ProfileManager().elder?.id ?? ProfileManager().caregiver!.elders![0].id;
   @override
   void initState() {
     super.initState();
